@@ -1,0 +1,1 @@
+// Hook para manejar autenticación en componentes
