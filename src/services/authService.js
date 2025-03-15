@@ -24,7 +24,7 @@ export async function loginUser(credentials) {
         console.error("Error en login:", error);
         return { error: error.response?.data?.detail || "Error desconocido" };
     }
-  }
+}
   
   export async function registerUser(userData) {
     try {
@@ -34,6 +34,16 @@ export async function loginUser(credentials) {
     } catch (error) {
         console.error("Error en registro:", error.response?.data || error.message);
         return error.response?.data || { error: "Error desconocido en registro" };
+    }
+}
+
+export async function mostrarProductos(){
+    try {
+        const respuesta = await axios.get('http://localhost:8000/mostrarimagenes_Categoria/ropa');
+        return respuesta.data.slice(0,6)
+    } catch (error) {
+        console.error("Error obteniendo productos:", error);
+        return [];
     }
 }
   
