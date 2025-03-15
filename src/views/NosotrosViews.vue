@@ -9,15 +9,12 @@
     <CarruselComp />
     
     <!-- PARALLAX VERSION 1 -->
-    <article ref="animatable" class="publicidad_class" :class="{ 'visible': isVisible }">
-      <div 
-        class="parallax" 
-        :style="{ backgroundPositionY: parallaxOffset + 'px' }"
-      >
+    <article class="publicidad_class">
+      <div class="parallax" >
         <h3>Trabajemos juntos</h3>
         <h1>¿Buscas Productos de Tejido Únicos?</h1>
         <p>No hay una fórmula mágica para crear artesanías perfectas...</p>
-        <button><router-link class="link" to="/Clases">¡Ingresa a clases!</router-link></button>
+        <button><router-link class="link" to="/">¡Ingresa a clases!</router-link></button>
       </div>
     </article>
     
@@ -25,7 +22,7 @@
     <div class="contenedor_text">
         <h1 class="cont_part1_text">Tejidos únicos, diseñados con amor y atención al detalle</h1>
     </div> 
-    <div ref="animatable" :class="{'animate': isVisible2}" class="contenedor_animacion">
+    <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version1">
         <div class="conten">
             <article class="cont_part1">
                 <ProductCardVersion1 
@@ -38,6 +35,45 @@
         <BotonProductos/>
     </div>
 
+    <!-- MOSTRAR PRODUCTOS VERSION 2 -->
+    <section>
+    <div class="TituloProducto">
+      <h1>Nuestros Productos</h1>
+      <p>Productos realizados por la pagina divido en categorias, puedes buscar mas variadad en nuestro Productos</p>
+    </div>
+    <h2 class="titulos">Lanas</h2>
+    <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
+      <div class="product">
+        <ProductCardVersion2  
+          v-for="(producto, index) in productosCategoria.lana" 
+          :key="index"
+          :producto="producto" 
+        />
+      </div>
+    </div>
+    <h2 class="titulos">Agujas</h2>
+    <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
+      <div class="product">
+        <ProductCardVersion2  
+          v-for="(producto, index) in productosCategoria.lana" 
+          :key="index"
+          :producto="producto" 
+        />
+      </div>
+    </div>
+    <h2 class="titulos">Piedras</h2>
+    <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
+      <div class="product">
+        <ProductCardVersion2  
+          v-for="(producto, index) in productosCategoria.lana" 
+          :key="index"
+          :producto="producto" 
+        />
+      </div>
+    </div>
+
+  </section>
+
 </template>
   
 <script setup>
@@ -45,57 +81,42 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import CarruselComp from '@/components/CarruselComp.vue';
 import ProductCardVersion1 from '@/components/ProductCard(Version-1).vue';
 import BotonProductos from '@/components/Botones/BotonProductos.vue';
-import { mostrarProductos } from '@/services/authService';
+import ProductCardVersion2 from '@/components/ProductCard(Version-2).vue';
+import { mostrarProductosIniciales } from '@/services/authService';
+import { obtenerProductosCategoria } from '@/services/authService';
+import { aparicionAbajo } from '@/composables/animation';
 
-const isVisible = ref([]);
-const isVisible2 = ref(false);
-const animatable = ref(null);
+// Usar el composable correctamente
+const { isVisible0, animatable } = aparicionAbajo();
 
-const animatables = ref([]);
-const parallaxOffsets = ref([]);
 const productos = ref([]);
-
-
-const handleScroll2 = () => {
-    if (!animatable.value) return;
-
-    const rect = animatable.value.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom >= 1000) {
-        isVisible2.value = true;
-    }
-};
-
-
-const handleScroll = () => {
-  animatables.value.forEach((el, index) => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom >= 0) {
-      isVisible.value[index] = true;
-    }
-
-    parallaxOffsets.value[index] = window.scrollY * 0.3;
-  });
-};
-
-onMounted(async() => {
-  productos.value = await mostrarProductos();
-
-  animatables.value = Array.from(document.querySelectorAll('.publicidad_class'));
-  isVisible.value = new Array(animatables.value.length).fill(false);
-  parallaxOffsets.value = new Array(animatables.value.length).fill(0);
-
-  window.addEventListener('scroll', handleScroll);
-  window.addEventListener('scroll', handleScroll2);
-
-  handleScroll();
-  handleScroll2();
+const categorias = ['lana', 'piedras', 'agujas'];
+const productosCategoria = ref({
+  lana: [],
+  piedras: [],
+  agujas: []
 });
 
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-  window.removeEventListener('scroll', handleScroll2);
+const obtenerProductos = async () => {
+  try {
+    const respuesta = await Promise.all(
+      categorias.map(categoria => obtenerProductosCategoria(categoria))
+    );
+
+    categorias.forEach((categoria, index) => {
+      productosCategoria.value[categoria] = respuesta[index].slice(0, 4);
+    });
+  } catch (error) {
+    console.error("Error obteniendo productos:", error);
+  }
+};
+
+onMounted(async () => {
+  productos.value = await mostrarProductosIniciales();
+  obtenerProductos();
 });
 
+onUnmounted(() => {});
 </script>
   
   <style scoped>
@@ -111,8 +132,13 @@ onUnmounted(() => {
     flex-direction: column;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     margin: 0px 5px;
+    text-align: center;
   }
-  
+  .cont_nosotros h2{
+    text-align: center;
+    padding: 20px;
+  }
+
   .publicidad_class {
     height: 350px;
     width: 100%;
@@ -122,25 +148,16 @@ onUnmounted(() => {
     overflow: hidden;
     color: #000000;
     background-color: #e2dfdf56;
-    opacity: 0;
-    transform: translateY(20px);
+    opacity: 1;
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   }
   
-  .publicidad_class.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
   
   .parallax {
     background-image: url('@/assets/vecteezy_ai-generated-knitting-advertisment-background-with-copy-space_37246648.jpg');
-    background-repeat: no-repeat;
+    background-position: bottom center;
     background-size: cover;
-    background-position: center center; 
-    transform: translateZ(0); 
-    background-attachment: scroll; 
-    height: 80%;
-    width: 98%;
+    background-attachment: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -148,6 +165,9 @@ onUnmounted(() => {
     color: #ffffff;
     box-shadow: 2px 4px 18px rgba(0, 0, 0, 0.1);
     font-weight: bold;
+    width: 100%;
+    height: 80%;
+    color: #000000;
   }
   
   .publicidad_class .parallax h1 {
@@ -156,17 +176,21 @@ onUnmounted(() => {
     color: #ebebeb;
   }
   
-  .publicidad_class div h3 {
+  .publicidad_class .parallax h3 {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     font-size: 20px;
     text-transform: uppercase;
     letter-spacing: 2px;
+    color: #ebebeb;
+
   }
   
-  .publicidad_class div p {
+  .publicidad_class .parallax p {
     font-size: 25px;
     margin-bottom: 10px;
+    color: #ebebeb;
+
   }
   
   .publicidad_class .parallax button {
@@ -192,14 +216,16 @@ onUnmounted(() => {
 
 
 
-  .contenedor_animacion {
-    opacity: 0;
+
+
+.contenedor_animacion_version1 {
+    opacity: 1;
     transform: translateY(50px);
     transition: opacity 1s ease, transform 1s ease;
     transform: scale(0.7);
 }
 
-.contenedor_animacion.animate {
+.contenedor_animacion_version1.animate {
     opacity: 1;
     transform: translateY(0);
     transform: scale(1) ;
@@ -240,6 +266,116 @@ onUnmounted(() => {
     width: 70%;
 }
 
+.cont_part1_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
 
+.cont_part1_button .link {
+    text-decoration: none;
+    border: none;
+    background-color: transparent;
+    font-size: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    border-bottom: 1px solid rgb(95, 94, 94);
+    transition: text-shadow 0.3s ease;
+    color: black;
+}
+
+.cont_part1_button .link:hover {
+    border-bottom: 2px solid black;
+    text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.74);
+}
+
+
+
+
+
+
+  .contenedor_animacion_version2 {
+  opacity: 1;
+  transform: translateY(50px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.contenedor_animacion_version2.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.TituloProducto {
+  text-align: center;
+  padding: 30px;
+  font-size: 30px;
+  color: rgb(66, 65, 65);
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  flex-direction: column;
+  gap: 10px;
+  height: 150px;
+}
+
+.TituloProducto h1 {
+  color: rgb(0, 0, 0);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: none;
+}
+
+.TituloProducto p {
+  width: 60%;
+  font-size: 25px;
+  font-family: 'Playfair Display', serif;
+}
+
+.product {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  padding: 30px;
+}
+
+.card {
+  border: 2px solid black;
+  margin: 20px;
+}
+
+.titulos {
+  font-size: 40px;
+  font-family: serif;
+  font-weight: bold;
+  color: #e9e9e9;
+  text-shadow: 0 1px 0 #a5a0a0, 0 2px 0 #aaa2a2, 0 3px 0 #928f8f, 0 4px 0 #aaa, 0 5px 0 #acacac, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+  margin-left: 55px;
+}
+
+@media (max-width: 1440px) {
+  .TituloProducto p {
+    width: 80%;
+    font-size: 25px;
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@media (min-width: 1441px) and (max-width: 1600px) {
+  .TituloProducto h1 {
+    color: rgb(0, 0, 0);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 40px;
+  }
+  .TituloProducto p {
+    width: 90%;
+    font-size: 25px;
+    font-family: 'Playfair Display', serif;
+  }
+}
   </style>
   

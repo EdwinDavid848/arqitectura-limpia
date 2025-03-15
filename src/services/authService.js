@@ -37,12 +37,23 @@ export async function loginUser(credentials) {
     }
 }
 
-export async function mostrarProductos(){
+export async function mostrarProductosIniciales(){
     try {
         const respuesta = await axios.get('http://localhost:8000/mostrarimagenes_Categoria/ropa');
         return respuesta.data.slice(0,6)
     } catch (error) {
         console.error("Error obteniendo productos:", error);
+        return [];
+    }
+}
+
+
+export async function obtenerProductosCategoria(categoria){
+    try{
+        const respuesta = await axios.get(`http://localhost:8000/mostrarProductos/${categoria}`);
+        return respuesta.data.slice(0,4);
+    }catch(error){
+        console.error("Error al obtener Productos categoria",error);
         return [];
     }
 }
