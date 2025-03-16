@@ -4,6 +4,7 @@
         <div class="card_text1">
             <h2>{{ producto.nombre }}</h2>
             <h3>$ {{ producto.precio }}</h3>
+            <h1>{{ producto.id }}</h1>
         </div>
     </div>
 </template>
@@ -69,8 +70,15 @@
 
 <script setup>
 import { defineProps } from 'vue';
+import { useRouter } from 'vue-router';
 
-defineProps({
+const router = useRouter();
+
+const productoDetalles = () =>{
+    router.push({ name: 'solicitarProducto', params: {id: props.producto.id}})
+}
+
+const props = defineProps({
     producto: Object
 });
 /*

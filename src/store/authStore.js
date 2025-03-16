@@ -1,17 +1,29 @@
-import { defineStore } from 'pinia';
-import { loginUser, registerUser } from '@/services/authService';
-import { saveToken, getToken, removeToken } from '@/utils/localStorage';
+import { defineStore } from "pinia";
+import { loginUser, registerUser } from "@/services/authService";
+import { saveToken, getToken, removeToken } from "@/utils/localStorage";
+import { jwtDecode } from "jwt-decode";
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
     state: () => ({
         user: null,
-        token: getToken() || null,  
+        token: getToken() || null,
+        tokenExpiration: null, // Guardamos la fecha de expiración
     }),
 
     getters: {
-        isAuthenticated: (state) => !!state.token,
-    },
+        isAuthenticated: (state) => {
+            if (!state.token) return false;
 
+            try {
+                const decodedToken = jwtDecode(state.token);
+                const currentTime = Date.now() / 1000; 
+                return decodedToken.exp > currentTime; 
+            } catch (error) {
+                console.error("Error al decodificar el token:", error);
+                return false;
+            }
+        }
+    },
     actions: {
         async login(credentials) {
             try {
@@ -35,15 +47,30 @@ export const useAuthStore = defineStore('auth', {
         },
 
         async logout() {
-            this.token = null;
+            console.log("Ejecutando logout...");
             removeToken();
-            console.log("Usuario deslogeado, token eliminado");
+            this.token = null;
+            this.tokenExpiration = null;
+            this.user = null;
+        },
+        
+        setToken(newToken) {
+            try {
+                const decodedToken = jwtDecode(newToken);
+                this.token = newToken;
+                this.tokenExpiration = decodedToken.exp * 1000; 
+                saveToken(newToken);
+                console.log("Token actualizado en authStore:", newToken);
+            } catch (error) {
+                console.error("Error al decodificar el token:", error);
+            }
         },
 
-        setToken(newToken) {
-            this.token = newToken;
-            saveToken(newToken);
-            console.log("Token actualizado en authStore:", newToken);
-        }
-    }
+        checkTokenExpiration() {
+            if (this.token && Date.now() >= this.tokenExpiration) {
+                console.log("Token expirado, cerrando sesión...");
+                this.logout();
+            }
+        },
+    },
 });

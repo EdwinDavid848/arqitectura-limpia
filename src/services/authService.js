@@ -26,20 +26,25 @@ export async function loginUser(credentials) {
     }
 }
   
-  export async function registerUser(userData) {
+export async function registerUser(userData) {
     try {
         const response = await axios.post(`${API_URL}/register`, userData);
-        console.log("Respuesta del backend (registro):", response.data);  // 👈 Verifica la respuesta
-        return response.data;  
+        console.log("Respuesta del backend (registro):", response.data);  
+        return { success: true, data: response.data };
+        
     } catch (error) {
         console.error("Error en registro:", error.response?.data || error.message);
-        return error.response?.data || { error: "Error desconocido en registro" };
+        return { 
+            success: false, 
+            error: error.response?.data?.detail || "Error desconocido en registro" 
+        };
     }
 }
 
+
 export async function mostrarProductosIniciales(){
     try {
-        const respuesta = await axios.get('http://localhost:8000/mostrarimagenes_Categoria/ropa');
+        const respuesta = await axios.get(`${API_URL}/mostrarimagenes_Categoria/ropa`);
         return respuesta.data.slice(0,6)
     } catch (error) {
         console.error("Error obteniendo productos:", error);
@@ -50,11 +55,22 @@ export async function mostrarProductosIniciales(){
 
 export async function obtenerProductosCategoria(categoria){
     try{
-        const respuesta = await axios.get(`http://localhost:8000/mostrarProductos/${categoria}`);
+        const respuesta = await axios.get(`${API_URL}/mostrarProductos/${categoria}`);
         return respuesta.data.slice(0,4);
     }catch(error){
         console.error("Error al obtener Productos categoria",error);
         return [];
+    }
+}
+
+
+export async function SolicitarProductos(producto){
+    try{
+        const respuesta = await axios.get(`${API_URL}/productosNombre/${producto}`);
+        return respuesta.data;
+    }catch(error){
+        console.error("Error al solicitar Productos ",error);
+        return { error: error.response?.data?.detail || "Error desconocido" };
     }
 }
   

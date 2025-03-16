@@ -9,5 +9,7 @@ export function getToken() {
 }
 
 export function removeToken() {
-    return localStorage.removeItem('auth_token');
+    console.log("Se está ejecutando removeToken() inesperadamente");
+    localStorage.removeItem('auth_token');
+
 }

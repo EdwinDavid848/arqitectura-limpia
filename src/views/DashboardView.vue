@@ -7,6 +7,7 @@
 </template>
   
   <script setup>
+  import { onMounted } from "vue";
   import { useAuthStore } from '@/store/authStore';
   import { useRouter } from 'vue-router';
   
@@ -17,12 +18,24 @@
     authStore.logout();
     router.push('/');
   };
+
+  onMounted(() => {
+    if (!authStore.isAuthenticated) {
+        console.log("Acceso denegado, redirigiendo al login...");
+        router.push("/");
+      }
+  });
+
+
   </script>
 
   <style scoped>
   .height{
     background-color: aqua;
     height: 200pc;
+  }
+  div{
+    margin-top: 50px;
   }
   </style>
   

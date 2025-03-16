@@ -1,37 +1,70 @@
 <template>
     <header :class="{ 'scrolled': isScrolled }">
-        <logo-comp/>
+        <logo-comp />
         <nav class="rutasViwes">
             <router-link class="ruta" to="/principa">Nosotros</router-link>
             <router-link class="ruta" to="">Productos</router-link>
             <router-link class="ruta" to="">Clases</router-link>
-            <router-link class="ruta" to="/">Login</router-link>
-            <router-link class="ruta" to="/register">Registro</router-link>
-        </nav>
-        <nav class="rutasPerfil">
-            <router-link class="ruta" to="/register">Registro</router-link>
-            <router-link class="ruta" to="/">Login</router-link>
+            
+            <!-- Si el usuario NO está autenticado, mostrar Login y Registro -->
+            <template v-if="!isAuthenticated">
+                <router-link class="ruta" to="/">Login</router-link>
+                <router-link class="ruta" to="/register">Registro</router-link>
+            </template>
+
+            <!-- Si el usuario está autenticado, mostrar Dashboard y Cerrar Sesión -->
+            <template v-else>
+                <router-link class="ruta" to="/dashboard">Dashboard</router-link>
+                <button class="ruta" @click="logout">Cerrar sesión</button>
+            </template>
         </nav>
     </header>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed, watch } from "vue";
+import { useAuthStore } from "@/store/authStore"; 
+import { useRouter } from "vue-router";
 import LogoComp from "@/components/LogoComp.vue";
 
-const isScrolled = ref(false);
+const authStore = useAuthStore();
+const router = useRouter();
 
+const isAuthenticated = computed(() => authStore.isAuthenticated);
+
+// Si el usuario ya no está autenticado, redirigirlo al login
+    watch(isAuthenticated, (newVal) => {
+        if (!newVal) {
+            console.log("Token expirado, redirigiendo al login...");
+            router.push("/");
+        }
+    });
+
+const logout = () => {
+    authStore.logout();
+    router.push("/");  
+};
+
+const isScrolled = ref(false);
 const handleScroll = () => {
-    isScrolled.value = window.scrollY > 10; 
+    isScrolled.value = window.scrollY > 10;
 };
 
 onMounted(() => {
     window.addEventListener("scroll", handleScroll);
+    
+    authStore.checkTokenExpiration();
+    
+    setInterval(() => {
+        authStore.checkTokenExpiration();
+    }, 10000); // 10 segundos
 });
+
 onUnmounted(() => {
     window.removeEventListener("scroll", handleScroll);
 });
 </script>
+
 
 <style scoped>
 header {

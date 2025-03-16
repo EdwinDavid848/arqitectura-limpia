@@ -36,7 +36,7 @@
     </div>
 
     <!-- MOSTRAR PRODUCTOS VERSION 2 -->
-    <section>
+  <section>
     <div class="TituloProducto">
       <h1>Nuestros Productos</h1>
       <p>Productos realizados por la pagina divido en categorias, puedes buscar mas variadad en nuestro Productos</p>
@@ -55,7 +55,7 @@
     <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
       <div class="product">
         <ProductCardVersion2  
-          v-for="(producto, index) in productosCategoria.lana" 
+          v-for="(producto, index) in productosCategoria.piedras" 
           :key="index"
           :producto="producto" 
         />
@@ -71,8 +71,19 @@
         />
       </div>
     </div>
-
   </section>
+
+  <!-- PARALLAX VERSION 2 -->
+
+  <div class="Anuncio">
+        <div class="parallax_version2">
+            <h1>Explora el Mundo del Tejido</h1>
+            <p>Tejer no es solo una técnica, es una expresión creativa. En nuestra tienda encontrarás todo lo que necesitas para hacer realidad tus proyectos, desde hilos y agujas hasta piezas únicas como ropa, peluches, y accesorios hechos a mano. También ofrecemos clases para que aprendas a tejer como un experto y lleves tus creaciones al siguiente nivel.</p>
+            <button> <router-link class="link" to="/mural">¡Unete a Nosotros!</router-link>
+            </button>
+        </div>
+  </div>
+
 
 </template>
   
@@ -139,6 +150,8 @@ onUnmounted(() => {});
     padding: 20px;
   }
 
+
+  /* PARALLAX VERSION 1 */
   .publicidad_class {
     height: 350px;
     width: 100%;
@@ -195,7 +208,8 @@ onUnmounted(() => {});
   
   .publicidad_class .parallax button {
     background-color: #ffffffbe;
-    padding: 10px;
+    padding: 13px;
+    border-radius: 5px;
     font-size: 28px;
     font-family: 'Montserrat', sans-serif;
     border: none;
@@ -205,6 +219,9 @@ onUnmounted(() => {});
   .link {
     text-decoration: none;
     color: #000000;
+  }
+  .link:hover{
+    color: white;
   }
   
   .publicidad_class div button:hover {
@@ -216,6 +233,7 @@ onUnmounted(() => {});
 
 
 
+/* MOSTRAR PRODUCTOS VERSION 1 */
 
 
 .contenedor_animacion_version1 {
@@ -294,6 +312,7 @@ onUnmounted(() => {});
 
 
 
+/* MOSTRAR PRODUCTOS VERSION 2 */
 
 
   .contenedor_animacion_version2 {
@@ -377,5 +396,86 @@ onUnmounted(() => {});
     font-family: 'Playfair Display', serif;
   }
 }
+
+
+/* PARALLAX VERSION 2 */
+.Anuncio {
+  margin-top: 50px;
+  height: 100vh; 
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;  
+  color: #000000;
+}
+
+.parallax_version2 {
+  background-image: url('@/assets/vecteezy_ai-generated-crafts-advertisment-background-with-copy-space_372450692.jpg'); /* Usa ruta relativa para la imagen */
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;  
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #ffffff;
+  font-weight: bold;
+  background-position: center;
+}
+
+.Anuncio h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 50px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: white;
+}
+
+.Anuncio p {
+  font-size: 20px;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  width: 70%;
+  margin-bottom: 10px;
+  color: rgb(231, 231, 231);
+}
+
+.Anuncio button  {
+  padding: 15px 20px;
+  font-size: 28px;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  transition: all 0.5s ease;
+}
+.link{
+  text-decoration: none;
+  width: 100%;
+  color: #000000;
+  transition: all 0.5s ease;
+}
+    
+.Anuncio button:hover {
+  background-color: rgb(206, 127, 9);
+  color: white;
+}
+.Anuncio button .link:hover {
+  color: white;
+}
+
+@media (max-width: 1440px) {
+  .Anuncio button {
+    width: 30%;
+      }
+    }
+@media (min-width: 1280px) and (max-width: 1440px) {
+  .Anuncio button {
+    padding: 20px 10px;
+      }
+    }
+
+
   </style>
   

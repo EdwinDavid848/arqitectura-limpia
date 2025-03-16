@@ -1,7 +1,10 @@
 <template>
-	<div 
-      class="mi_card_producto" 
-      :style="{ backgroundImage: `url(${encodeURI(producto.imagen_url)})` }">
+	<div class="mi_card_producto" 
+		:style="{
+			backgroundImage: `url(${encodeURI(producto.imagen_url)})`,
+			backgroundPosition: 'bottom center'
+		}"
+		>
 		<div class="card_content">
 			<div class="card_header">
 				<h2 class="card_title">{{ producto.nombre }}</h2>

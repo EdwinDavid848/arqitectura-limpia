@@ -2,11 +2,13 @@
   <div id="app">
     <Header/>
     <router-view /> 
+    <Footer/>
   </div>
 </template>
 
 <script setup>
 import Header from './layouts/HeaderLayouts.vue';
+import Footer from './layouts/FooterLayouts.vue';
 </script>
 
 <style>
