@@ -3,15 +3,16 @@ import UserLogin from '@/views/LoginView.vue';
 import UserRegister from '@/views/RegisterView.vue';
 import UserDashboard from '@/views/DashboardView.vue';
 import NosotrosViews from '@/views/NosotrosViews.vue';
-import SolicitarProdcutosView from '@/views/SolicitarProdcutosView.vue';
+import SolicitarProdcutosView from '@/views/SolicitarProductosView.vue';
+import TiendaView from '@/views/TiendaView.vue';
 import { useAuthStore } from '@/store/authStore'; 
-import { getToken } from '@/utils/localStorage'; 
 
 
 const routes = [
     { path: '/', component: UserLogin },
     { path: '/register', component: UserRegister },
     { path: '/principa', component: NosotrosViews },
+    { path: '/tienda', component: TiendaView },
     { path: '/solicitarProducto/:id', name: 'solicitarProducto', component: SolicitarProdcutosView },
     {
       path: "/dashboard",
@@ -31,16 +32,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
 
-    // Corregir la obtención del token
-    const token = getToken(); // Usa la función en lugar de localStorage directamente
-
-    if (!authStore.token && token) {
-        authStore.setToken(token);
-    }
-
     console.log("Token en authStore antes de navegar:", authStore.token);
 
-    if (to.meta.requiresAuth && !authStore.token) {
+    if (to.meta.requiresAuth && !authStore.isAuthenticated) {
         console.warn("Acceso denegado, redirigiendo al login...");
         next('/');
     } else {

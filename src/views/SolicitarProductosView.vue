@@ -74,52 +74,81 @@
     <div class="similar-section">
         <h1>Productos Similares</h1>
     </div>
+    <div class="cont_P_relacionados">
+        <ProductCardVersion2 
+            v-for="(producto, index) in producto_similares.slice(0, 10)" 
+            :key="index" 
+            :producto="producto" 
+            :estilo="estilo" 
+        />
+    </div>
 </template>
 
-
 <script setup>
-import { ref,onMounted } from 'vue';
-import { SolicitarProductos } from '@/services/authService';
+import { ref, onMounted } from 'vue';
+import { SolicitarProductos, obtenerProductosCategoria } from '@/services/authService';
 import { useRoute } from 'vue-router';
-
+import ProductCardVersion2 from '@/components/ProductCard(Version-2).vue';
 
 const route = useRoute();
 const producto = ref({});
+const producto_similares = ref([]);
 
+const obtenerProductosSimilares = async (category) => {
+    try {
+        const respuesta = await obtenerProductosCategoria(category);
+        console.log("Respuesta del backend:", respuesta); 
+        if (respuesta && Array.isArray(respuesta)) {
+            producto_similares.value = respuesta.slice(0, 4);
+            console.log("Productos similares:", producto_similares.value);
+        } else {
+            console.warn("No se encontraron productos similares.");
+        }
+    } catch (error) {
+        console.error("Error obteniendo productos:", error);
+    }
+};
 
-onMounted(async() =>{
+onMounted(async () => {
     producto.value = await SolicitarProductos(route.params.id);
-})
-
-
+    
+    if (producto.value && producto.value.category) {
+        console.log(producto.value.category)
+        await obtenerProductosSimilares(producto.value.category); 
+    }
+});
 </script>
 
 
 <style scoped>
 
 .contedor_detalleProducto {
-    background-color: #f9f9f9;
+    background-color: #f1f0f0;
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: 2fr 1fr;
     gap: 50px;
     padding: 50px;
     align-items: center;
     padding-top: 120px;
     padding-bottom: 50px;
+    height: 100vh;
 }
 
 .contenedor_img {
+    background-color: #c5610300;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: auto;
+    justify-content: center;
 }
 
 .contenedor_img img {
     min-width:auto; 
     max-width: 100%;
-    min-height: 200px;
-    max-height: 500px;
+    height: auto;
+    max-height: 450px;
     border-radius: 10px;
 }
 
@@ -138,13 +167,15 @@ onMounted(async() =>{
     letter-spacing: 2px;
     font-weight: bold;
     margin-bottom: 10px;
+    color: #2e2d2d;
+    text-transform: uppercase;
 }
 
 .producto_detalles h2 {
-    font-size: 25px;
+    font-size: 30px;
     font-family: Arial, Helvetica, sans-serif;
 	color: #c56103;
-    font-weight: normal;
+    font-weight: bold;
     margin-bottom: 20px;
 }
 
@@ -156,7 +187,7 @@ onMounted(async() =>{
 
 
 .product-section {
-    margin-top: 40px;
+    margin-top: 50px;
     height: 300px;
     display: flex;
     align-items: flex-start;
@@ -281,5 +312,17 @@ onMounted(async() =>{
     width: 92%;
     font-size: 30px;
 }
+
+.cont_P_relacionados{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 40px;
+        padding: 10px;
+        gap: 25px; 
+        
+    }
+
 
 </style>

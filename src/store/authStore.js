@@ -6,30 +6,27 @@ import { jwtDecode } from "jwt-decode";
 export const useAuthStore = defineStore("auth", {
     state: () => ({
         user: null,
-        token: getToken() || null,
-        tokenExpiration: null, // Guardamos la fecha de expiración
+        token: null, // No inicializamos aquí para evitar problemas de sincronización
+        tokenExpiration: null,
     }),
 
     getters: {
         isAuthenticated: (state) => {
             if (!state.token) return false;
-
             try {
                 const decodedToken = jwtDecode(state.token);
-                const currentTime = Date.now() / 1000; 
-                return decodedToken.exp > currentTime; 
+                return decodedToken.exp > Date.now() / 1000;
             } catch (error) {
                 console.error("Error al decodificar el token:", error);
                 return false;
             }
         }
     },
+
     actions: {
         async login(credentials) {
             try {
                 const response = await loginUser(credentials);
-                console.log("Datos recibidos en login:", response);
-
                 if (response.access_token) {
                     this.setToken(response.access_token);
                 } else {
@@ -72,5 +69,27 @@ export const useAuthStore = defineStore("auth", {
                 this.logout();
             }
         },
+
+        initializeAuth() {
+            const token = getToken();
+            if (token) {
+                try {
+                    const decodedToken = jwtDecode(token);
+                    const currentTime = Date.now() / 1000;
+                    
+                    if (decodedToken.exp > currentTime) {
+                        this.token = token;
+                        this.tokenExpiration = decodedToken.exp * 1000;
+                        console.log("Token restaurado correctamente");
+                    } else {
+                        console.warn("Token expirado al iniciar la app");
+                        this.logout();
+                    }
+                } catch (error) {
+                    console.error("Error al decodificar el token al iniciar:", error);
+                    this.logout();
+                }
+            }
+        }
     },
 });
