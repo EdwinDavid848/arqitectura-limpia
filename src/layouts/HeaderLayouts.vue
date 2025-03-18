@@ -11,6 +11,7 @@
         <nav class="rutasPerfil">
             <router-link class="ruta" to="/register">Registro</router-link>
             <router-link class="ruta" to="/">Login</router-link>
+            <router-link class="ruta" to="/" @click.prevent="logout">Cerrar sesión</router-link>
         </nav>
     </header>
 </template>

@@ -73,4 +73,3 @@ export async function SolicitarProductos(producto){
         return { error: error.response?.data?.detail || "Error desconocido" };
     }
 }
-  

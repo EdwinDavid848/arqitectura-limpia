@@ -1,43 +1,61 @@
 <template>
-  <article class="cards">
-    <div>
-      <!-- Agendar Button -->
-      <button id="butn" class="button">Agendar</button>
+  <section class="cards" v-if="Clases.length">
+    <article v-for="clase in Clases" :key="clase.id" class="card" >
+      <div>
+        <!-- Agendar Button -->
+        <BotonAgregarClase text="Agendar" v-if="clase.habilitado"></BotonAgregarClase>
+
         <!-- Imagen de fondo -->
-        <div :style="{ backgroundImage: `url(https://pearlknitter.com/wp-content/uploads/2015/10/0082-800x458.jpg)` }"
-          class="prueba1">
-
-          <!-- Overlay for Disabled Cards -->
-          <div class="overlayclase"></div>
-
-          <!--Menu de botones-->
+        <div class="prueba1" :style="{ backgroundImage: `url(${clase.imagen})`}">
+          
           <div class="menuButton">
-            <BotonClases></BotonClases>
+            <BotonClases :clase="clase" />
           </div>
 
-          <!-- Card Content -->
           <div class="prueba2">
             <div class="prueba3">
-              <h2 class="title">Titulo</h2>
-              <h3 class="prex"><span>precio:</span> Precio</h3>
+              <h2 class="title">{{ clase.titulo }}</h2>
+              <h3 class="prex"><span>Precio:</span> {{ clase.precio }}</h3>
             </div>
-  
-            <!-- Eliminamos <p> que no era necesario -->
-            <h3 class="dexcrip">Descripcion</h3>
-            <h3 class="infor"><span>profesor:</span> Profesor</h3>
-            <h3 class="infor"><span>horarios:</span> 15-03-2025 12:19 - 1:30</h3>
+
+            <h3 class="dexcrip">{{ clase.descripcion }}</h3>
+            <h3 class="infor"><span>Profesor:</span> {{ clase.profesor }}</h3>
+            <h3 class="infor"><span>Horarios:</span> {{ clase.fecha }} de {{ clase.inicio }} - {{ clase.final }}</h3>
           </div>
         </div>
       </div>
     </article>
-  </template>
-  
-  <script setup>
-  import BotonClases from './Botones/BotonClases.vue';
-  </script>
+  </section>
+</template>
+
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import { VerClases } from '@/services/ClassServices';
+import BotonClases from './Botones/BotonClases.vue';
+import BotonAgregarClase from './Botones/BotonAgregarClase.vue';
+
+const Clases = ref([]); // 🔹 Ahora se inicializa como un array vacío
+
+onMounted(async () => {
+  try {
+    const data = await VerClases();
+    if (Array.isArray(data)) {
+      Clases.value = data; // 🔹 Asignamos el array correctamente
+    } else {
+      console.error("Error: La API no devolvió un array.", data);
+    }
+  } catch (error) {
+    console.error("Error al obtener clases:", error);
+  }
+});
+</script>
+
+
   
 <style scoped>
 .prueba1 {
+  overflow: hidden;
   width: 420px;
   height: 26rem;
   margin-bottom: 40px;
@@ -45,6 +63,7 @@
   flex-direction: column-reverse;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   border-radius: 2rem;
   -webkit-box-shadow: 1px 1px 12px #000;
   box-shadow: 1px 1px 12px #000;

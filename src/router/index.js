@@ -5,7 +5,7 @@ import UserDashboard from '@/views/DashboardView.vue';
 import NosotrosViews from '@/views/NosotrosViews.vue';
 import SolicitarProdcutosView from '@/views/SolicitarProdcutosView.vue';
 import ClassView from '@/views/ClassView.vue';
-
+import { getToken } from "@/utils/localStorage";
 import { useAuthStore } from '@/store/authStore'; 
 
 
@@ -15,6 +15,7 @@ const routes = [
     { path: '/register', component: UserRegister },
     {path: '/clases', component:ClassView},
     {path: '/principa', component:NosotrosViews},
+    {path: '/productos', component: SolicitarProdcutosView},
     {
       path: "/dashboard",
       component: UserDashboard,
