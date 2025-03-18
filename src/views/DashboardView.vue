@@ -19,6 +19,7 @@
                   <div v-else-if="divActual === 'Publications'" >
                   </div>
                   <div v-else-if="divActual === 'Configuration'" >
+                    <ConfigurarPerfilComp  v-if="authStore.user"  :nombre="authStore.user.nombre" :email="authStore.user.email" :rol="authStore.user.rol" :telefono="authStore.user.telefono" :password="authStore.user.password"/>
                   </div>
                   <div v-else>
                   </div>
@@ -29,9 +30,9 @@
           <div class="cont_img">
               <img src="@/assets/Producto 1 part1.jpeg" alt="">
           </div>
-          <div class="opciones_Perfil">
-              <h1 style="text-transform: uppercase;">Nombre</h1>
-              <h1 class="correo">Email</h1>
+          <div v-if="authStore.user" class="opciones_Perfil">
+              <h1 style="text-transform: uppercase;">{{authStore.user.nombre}}</h1>
+              <h1 class="correo">{{authStore.user.email}}</h1>
               <h2>Info</h2>
               <button id="logout" @click="logout">Logout</button>
           </div>
@@ -44,6 +45,7 @@
   import { onMounted } from "vue";
   import { useAuthStore } from '@/store/authStore';
   import { useRouter } from 'vue-router';
+  import ConfigurarPerfilComp from "@/views/ConfigurarPerfilComp.vue";
 
   import { ref } from 'vue';
 
@@ -65,6 +67,8 @@
     if (!authStore.isAuthenticated) {
         console.log("Acceso denegado, redirigiendo al login...");
         router.push("/");
+      }else{
+        authStore.fetchUserInfo();
       }
   });
 

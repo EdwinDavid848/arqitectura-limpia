@@ -5,7 +5,6 @@
         <h2>Bienvenido de nuevo!</h2>
         <p>No tienes una cuenta? <span class="highlight">Crea tu cuenta</span>, solo toma unos minutos.</p>
         <FormRegistroComp modo="login" buttonText="Login" @submit="handleLogin"/>
-
       </div>
     </div>
   </article>  
@@ -14,7 +13,7 @@
 <script setup>
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'vue-router';
-import FormRegistroComp from '@/components/FormRegistroComp.vue';
+import FormRegistroComp from '@/components/FormUserComp.vue';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -47,7 +46,7 @@ const handleLogin = async (credentials) => {
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    width: 400px;
+    width: 500px;
 }
 .welcome-section h2 {
     color: white;
