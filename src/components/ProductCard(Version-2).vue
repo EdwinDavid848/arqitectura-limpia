@@ -18,10 +18,18 @@
 
 <script setup>
 import { defineProps } from 'vue';
+import { useRouter } from 'vue-router';
 
-defineProps({
+const router = useRouter();
+
+const props = defineProps({
     producto: Object
 });
+
+const productoDetalles = () =>{
+    router.push({ name: 'solicitarProducto', params: {id: props.producto.id}})
+}
+
 
 </script>
 

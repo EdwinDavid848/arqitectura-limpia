@@ -65,7 +65,7 @@
     <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
       <div class="product">
         <ProductCardVersion2  
-          v-for="(producto, index) in productosCategoria.lana" 
+          v-for="(producto, index) in productosCategoria.agujas" 
           :key="index"
           :producto="producto" 
         />
@@ -101,17 +101,18 @@ import { aparicionAbajo } from '@/composables/animation';
 const { isVisible0, animatable } = aparicionAbajo();
 
 const productos = ref([]);
-const categorias = ['lana', 'piedras', 'agujas'];
+const categorias = ['lana', 'agujas', 'piedras', 'peluche'];
 const productosCategoria = ref({
   lana: [],
   piedras: [],
-  agujas: []
+  agujas: [],
+  peluche: []
 });
 
 const obtenerProductos = async () => {
   try {
     const respuesta = await Promise.all(
-      categorias.map(categoria => obtenerProductosCategoria(categoria))
+      categorias.map(categoria => obtenerProductosCategoria(categoria,))
     );
 
     categorias.forEach((categoria, index) => {
