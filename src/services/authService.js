@@ -62,6 +62,17 @@ export async function informacionPerfil(access_token){
 }
 
 
+export async function recuperarPassword(email){
+    try{
+        const respuesta = await axios.post("http://localhost:8000/forgot-password", {
+            email,
+        })
+        return respuesta.data;
+    }catch(error){
+        this.message = error.response?.data?.detail || "Error al enviar la solicitud.";
+    }
+}
+
 
 export async function mostrarProductosIniciales(){
     try {

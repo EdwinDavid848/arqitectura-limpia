@@ -5,6 +5,10 @@
         <h2>Bienvenido de nuevo!</h2>
         <p>No tienes una cuenta? <span class="highlight">Crea tu cuenta</span>, solo toma unos minutos.</p>
         <FormRegistroComp modo="login" buttonText="Login" @submit="handleLogin"/>
+        <button @click="loginWithGoogle" class="google-btn">
+            <img src="" alt="Google Logo" class="google-logo" /> Iniciar sesión con Google
+        </button>
+        <router-link class="solicitar_recuperacion" to="/solicitar_recuperacion">Recuperar Contraseña</router-link>
       </div>
     </div>
   </article>  
@@ -27,6 +31,10 @@ const handleLogin = async (credentials) => {
   } else {
     alert(response.error || "Error desconocido");
   }
+};
+
+const loginWithGoogle = () => {
+    window.location.href = "http://127.0.0.1:8000/auth/login";
 };
 </script>
 
@@ -62,5 +70,14 @@ const handleLogin = async (credentials) => {
 .highlight {
     font-weight: bold;
     color: #d39103;
+}
+
+.solicitar_recuperacion{
+    font-size: 19px;
+    color: white;
+}
+.solicitar_recuperacion:hover{
+    color: rgb(235, 183, 40);
+    transition: all 0.3s ease;
 }
 </style>
