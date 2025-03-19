@@ -13,12 +13,11 @@
                 <p><strong>Tipo de cantidad:</strong> {{ producto.tipo_unidad }}</p>
                 <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
             </div>
-            <!--
             <div class="botones_comprar">
                 <button @click="agregarAlCarrito">Agregar al carrito</button>
                 <input v-model="amount" type="number" min="1" value="1">
             </div>
-            -->
+
         </div>
     </div>
     <div class="product-section">
@@ -89,10 +88,21 @@ import { ref, onMounted } from 'vue';
 import { SolicitarProductos, obtenerProductosCategoria } from '@/services/authService';
 import { useRoute } from 'vue-router';
 import ProductCardVersion2 from '@/components/ProductCard(Version-2).vue';
+import { useCartStore } from '@/store/cartStore';
+import { useAuthStore } from '@/store/authStore';
+import ProductCardVersion2 from '@/components/ProductCard(Version-2).vue';
+import Swal from 'sweetalert2';
+
+
+
+const cartStore = useCartStore();
+const authStore = useAuthStore();
 
 const route = useRoute();
 const producto = ref({});
 const producto_similares = ref([]);
+
+const amount = ref(1);
 
 const obtenerProductosSimilares = async (category) => {
     try {
@@ -108,6 +118,43 @@ const obtenerProductosSimilares = async (category) => {
         console.error("Error obteniendo productos:", error);
     }
 };
+
+const obtenerProductosSimilares = async (category) => {
+    try {
+        const respuesta = await obtenerProductosCategoria(category);
+        console.log("Respuesta del backend:", respuesta); 
+        if (respuesta && Array.isArray(respuesta)) {
+            producto_similares.value = respuesta.slice(0, 4);
+            console.log("Productos similares:", producto_similares.value);
+        } else {
+            console.warn("No se encontraron productos similares.");
+        }
+    } catch (error) {
+        console.error("Error obteniendo productos:", error);
+    }
+};
+
+const agregarAlCarrito = async () => {
+    const email_User = authStore.email; 
+    console.log(email_User);
+
+    if (!email_User) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Inicie sesión para continuar'
+        });
+        return;
+    } else {
+        await cartStore.addToCart(producto.value.id, amount.value, email_User);
+        Swal.fire({
+            icon: 'success',
+            title: 'Producto agregado',
+            text: 'El producto se ha agregado correctamente al carrito'
+        });
+    }
+};
+
 
 onMounted(async () => {
     producto.value = await SolicitarProductos(route.params.id);
@@ -324,5 +371,39 @@ onMounted(async () => {
         
     }
 
+<<<<<<< HEAD
+
+=======
+    .botones_comprar {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.botones_comprar button {
+    background-color: #000;
+    color: #fff;
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border: 1px solid black;
+
+}
+
+.botones_comprar button:hover {
+    background-color: #fcf4f4;
+    color: black;
+}
+
+.botones_comprar input {
+    width: 60px;
+    height: 40px;
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
 
 </style>
