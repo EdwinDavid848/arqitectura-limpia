@@ -5,7 +5,6 @@ import UserDashboard from '@/views/DashboardView.vue';
 import NosotrosViews from '@/views/NosotrosViews.vue';
 import SolicitarProdcutosView from '@/views/SolicitarProdcutosView.vue';
 import { useAuthStore } from '@/store/authStore'; 
-import { getToken } from '@/utils/localStorage'; 
 
 
 const routes = [
