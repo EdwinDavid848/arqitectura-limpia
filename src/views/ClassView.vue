@@ -374,10 +374,11 @@ const cambio= async()=>{
 }
 
 /* Cuando el checkbox está marcado, muestra el contenido */
-.toggle:checked + .button + .content {
+.toggle:checked + .buttonReserva + .content {
   max-height: 500px; /* Ajusta según el contenido */
   opacity:1;
 }
+
 /* PARALLAX VERSION 2 */
 .Anuncio {
   margin-top: 50px;

@@ -1,17 +1,21 @@
 <template>
-    <header :class="{ 'scrolled': isScrolled }">
-        <logo-comp />
+    <header :class="headerEstilos">
+        <logo-comp class="logo" />
         <nav class="rutasViwes">
-            <router-link class="ruta" to="/principa">Nosotros</router-link>
-            <router-link class="ruta" to="">Productos</router-link>
-            <router-link class="ruta" to="/clases">Clases</router-link>
-            <router-link class="ruta" to="/">Login</router-link>
-            <router-link class="ruta" to="/register">Registro</router-link>
-        </nav>
-        <nav class="rutasPerfil">
-            <router-link class="ruta" to="/register">Registro</router-link>
-            <router-link class="ruta" to="/">Login</router-link>
-            <router-link class="ruta" to="/" @click.prevent="logout">Cerrar sesión</router-link>
+            <section class="contRutas">
+                <router-link class="ruta" to="/principa">Nosotros</router-link>
+                <router-link class="ruta" to="/tienda">Productos</router-link>
+                <router-link class="ruta" to="/clases">Clases</router-link>  
+                <router-link class="ruta" to="/mural">Mural</router-link>  
+            </section>
+            <section class="rutasPerfil" v-if="!isAuthenticated">
+                <router-link class="ruta" to="/register">Registro</router-link>
+                <router-link class="ruta" to="/">Login</router-link>
+            </section>
+
+            <section class="rutasPerfil" v-else>
+                <router-link class="ruta" to="/dashboard">Perfl</router-link>
+            </section>
         </nav>
     </header>
 </template>
@@ -19,15 +23,15 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, watch } from "vue";
 import { useAuthStore } from "@/store/authStore"; 
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import LogoComp from "@/components/LogoComp.vue";
 
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 const isAuthenticated = computed(() => authStore.isAuthenticated);
 
-// Si el usuario ya no está autenticado, redirigirlo al login
     watch(isAuthenticated, (newVal) => {
         if (!newVal) {
             console.log("Token expirado, redirigiendo al login...");
@@ -35,15 +39,22 @@ const isAuthenticated = computed(() => authStore.isAuthenticated);
         }
     });
 
-const logout = () => {
-    authStore.logout();
-    router.push("/");  
-};
+
 
 const isScrolled = ref(false);
 const handleScroll = () => {
     isScrolled.value = window.scrollY > 10;
 };
+
+const headerEstilos =computed(() =>{
+    if (route.path === "/principa") {
+        return { 'scrolled': isScrolled.value, 'header-principa': true };
+    } else if (route.path === "/tienda"  || route.name === "solicitarProducto") {
+        return { 'scrolled': isScrolled.value, 'header-tienda': true };
+    } else {
+        return { 'scrolled': isScrolled.value };
+    }
+})
 
 onMounted(() => {
     window.addEventListener("scroll", handleScroll);
@@ -52,7 +63,7 @@ onMounted(() => {
     
     setInterval(() => {
         authStore.checkTokenExpiration();
-    }, 10000); // 10 segundos
+    }, 10000); 
 });
 
 onUnmounted(() => {
@@ -62,12 +73,16 @@ onUnmounted(() => {
 
 
 <style scoped>
+.logo {
+    flex-shrink: 0;
+}
 header {
     background-color: rgba(255, 0, 0, 0);
     color: #f0f8ff;
     padding: 5px 10px;
     display: flex;
-    align-items: center;  
+    align-items: center;
+    justify-content: space-between; 
     position: fixed; 
     top: 0; 
     left: 0;
@@ -76,45 +91,60 @@ header {
     z-index: 1000; 
 }
 
-.scrolled {
-    background-color: rgb(255, 255, 255);
-    padding: 8px; 
-}
-
-.scrolled .rutasViwes .ruta {
-    color: black;
-}
-.scrolled .rutasPerfil .ruta {
-    color: black;
-}
-
 logo-comp {
-    flex-shrink: 0;  
+    flex-shrink: 0; 
 }
 
 .rutasViwes {
-    display: flex;
-    flex-grow: 2;  /* Ocupa el espacio disponible */
+    display: grid;
+    flex-grow: 2;  
+    grid-template-columns: 2fr 1fr;
     justify-content: space-around;
     align-items: center;
     padding: 10px;
+    transition: all 0.4s ease-in-out;
+
+}
+
+.contRutas {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
 }
 
 .rutasPerfil {
     display: flex;
-    justify-content: flex-end; 
-    flex-grow: 0.5;  
-    background-color: rgba(0, 255, 255, 0);
+    justify-content: flex-end;
+    width: 100%;
 }
 
 .ruta {
     color: white;
     text-decoration: none;
     font-family: "Maven Pro", sans-serif;
-    position: relative;
     transition: color 0.3s;
     font-weight: 500;
     margin: 0 10px;
 }
+.scrolled {
+    background-color: rgb(255, 255, 255); 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s ease-in-out;
+}
+.scrolled .rutasViwes{
+    padding: 20px;
+}
+.scrolled .rutasViwes .ruta{
+    color: black;
+}
+.header-tienda {
+    background-color: rgb(255, 255, 255); 
+    color: black;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 
+}
+.header-tienda .rutasViwes .ruta{
+    color: black;
+    padding: 15px;
+}
 </style>

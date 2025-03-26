@@ -24,11 +24,12 @@
       <div class="text">Eliminar</div>
     </button>
 
-    <ClassForm v-if="claseEditando" :clase="claseEditando" @closeForm="cerrarFormulario" @claseActualizada="recargarClases" />
 
 
     </div>
   </div>
+  <ClassForm v-if="claseEditando" :clase="claseEditando" @closeForm="cerrarFormulario" @claseActualizada="recargarClases" />
+
 </template>
 
 <script setup>
@@ -141,10 +142,10 @@ const cerrarFormulario = () => {
 }
 .menuHamburguesa{
   position: absolute;
-  right: 0;
+  
   margin-top: 2px;
   width: 40%;
-  
+  z-index: 5;
 }
 
 /* From Uiverse.io by vinodjangid07 */ 
