@@ -55,7 +55,7 @@ export async function mostrarProductosIniciales(){
 
 export async function obtenerProductosCategoria(categoria){
     try{
-        const respuesta = await axios.get(`${API_URL}/mostrarProductos/${categoria}`);
+        const respuesta = await axios.get(`${API_URL}/mostrarimagenes_Categoria/${categoria}`);
         return respuesta.data.slice(0,4);
     }catch(error){
         console.error("Error al obtener Productos categoria",error);
@@ -64,9 +64,9 @@ export async function obtenerProductosCategoria(categoria){
 }
 
 
-export async function SolicitarProductos(producto){
+export async function SolicitarProductos(id){
     try{
-        const respuesta = await axios.get(`${API_URL}/productosNombre/${producto}`);
+        const respuesta = await axios.get(`${API_URL}/buscar_producto/${id}`);
         return respuesta.data;
     }catch(error){
         console.error("Error al solicitar Productos ",error);
