@@ -1,11 +1,14 @@
 <template>
-<div v-if="props.data" class="cards-container">
+<div v-if="props.data" id="cards-container">
   <div class="card">
     <!-- Imagen de fondo -->
     <div 
       class="card-image" 
-      :style="props.data.foto ? { backgroundImage: `url(${encodeURI(props.data.foto)})` } : {}"
-    ></div>
+      :style="props.data.foto ? { backgroundImage: `url(${props.data.foto})` } : {}"
+    >
+    <img v-if="props.data.foto" :src="props.data.foto" alt="Imagen de publicación" class="card-img-test" />
+
+  </div>
 
     <!-- Contenido de la tarjeta -->
     <div class="card-content">
@@ -16,8 +19,6 @@
   </div>
 </div>
 
-
-
 </template>
 
 <script setup>
@@ -25,17 +26,19 @@ import { defineProps } from 'vue';
 
 const props = defineProps({
   data: Object,
+  
 });
 
 </script>
 
 <style scoped>
    
-   .cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+ 
+   
+#cards-container {
+
+  margin: 10px;
+  
 }
 
 /* Tarjeta individual */
@@ -57,13 +60,17 @@ const props = defineProps({
 
 /* Imagen de la tarjeta */
 .card-image {
-  height: 60%;
+  width: 100%;
+  height: 80%; /* Ajusta según el diseño */
   background-size: cover;
   background-position: center;
-  position: relative;
 }
 
-
+.card-img-test {
+  width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
 
 /* Contenido de la tarjeta */
 .card-content {

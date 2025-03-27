@@ -1,48 +1,73 @@
-<script setup>
-import { ref } from 'vue';
-import { useInfiniteScroll } from '@vueuse/core';
-import MuralCard from './MuralCard.vue';
-import { fetchPublications } from '@/services/MuralServices';
-
-
-const posts = ref([]);
-const container = ref(null);
-
-const loadMore = async () => {
-  try {
-    const response = await fetchPublications();
-    console.log("Datos recibidos:", response); // Verifica que `foto` tiene valores correctos
-
-    if (Array.isArray(response) && response.length) {
-      posts.value.push(...response);
-    } else {
-      console.warn("No hay más datos para cargar");
-    }
-  } catch (error) {
-    console.error("Error al cargar los posts:", error);
-  }
-};
-
-useInfiniteScroll(container, async () => {
-  if (!posts.value.length) return; // Evita cargar si no hay posts aún
-  await loadMore();
-}, { distance: 50 }); // Asegura que solo cargue cuando el usuario esté cerca del final
-
-
-</script>
-
 <template>
-  <div ref="container">
-    <MuralCard v-for="post in posts" :key="post.id" :data="post" />
+  <div ref="container" class="publication-list" @scroll="handleScroll">
+    <div ref="container" class="mural-container">
+      <MuralCard v-for="post in publications" :key="post.id" :data="post" />
+    </div>
+
+    <div v-if="loading" class="loading">Cargando más publicaciones...</div>
   </div>
 </template>
 
 
+<script setup>
+import { ref, onMounted } from "vue";
+import MuralCard from "./MuralCard.vue";
+import { fetchPublications } from '@/services/MuralServices';
+const publications = ref([]);
+const page = ref(1);
+const loading = ref(false);
+const container = ref(null);
+
+const loadMore = async () => {
+  if (loading.value) return;
+  loading.value = true;
+
+  // Simulación de carga de datos (reemplázalo con tu API real)
+  try {
+    const response = fetchPublications()
+    console.log("Datos recibidos:", response);
+    const data = await response;
+    
+    if (data.length) {
+      publications.value.push(...data);
+      page.value++;
+    }
+  } catch (error) {
+    console.error("Error al cargar publicaciones:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleScroll = () => {
+  if (!container.value) return;
+  if (container.value.scrollTop + container.value.clientHeight >= container.value.scrollHeight - 10) {
+    loadMore();
+  }
+};
+
+onMounted(() => {
+  loadMore();
+});
+</script>
 <style scoped>
-.grid-container {
+.publication-list {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.mural-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-  padding: 16px;
+  grid-template-columns: repeat(4, 1fr); /* 5 columnas */
+  gap: 1rem; /* Espaciado entre tarjetas */
+  justify-content: center;
+}
+
+.loading {
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  color: #666;
 }
 </style>

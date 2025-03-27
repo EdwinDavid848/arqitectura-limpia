@@ -5,20 +5,21 @@
             <input type="text" placeholder="Buscar" class="inputbusc">
             <button type="submit" class="gradient-button">Buscar</button>
         </form> 
-        <button class="gradient-button">Mis publicaciones</button>
+        <button class="gradient-button" >Mis publicaciones</button>
         <button class="gradient-button">Subir Publicación</button>
     </div>
+    <section class="conten">
       <galeriaMural></galeriaMural>
+    </section>
 
 </div>
-
-
 
 </template>
 <script setup>
 import galeriaMural from '@/components/galeriaMural.vue';
 </script>
 <style scoped>
+
 .box {
       height:100%;
       width:100%;
@@ -52,7 +53,7 @@ import galeriaMural from '@/components/galeriaMural.vue';
 .formulary{
 
 padding: 20px;
-padding-top: 170px;
+padding-top: 100px;
 display: flex;
 justify-content: space-between;
 }

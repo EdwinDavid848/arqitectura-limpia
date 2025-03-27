@@ -6,7 +6,7 @@
 
         <ReservaModal :clase="claseSeleccionada" :visible="mostrarModal" @closeForm="mostrarModal = false" />
 
-        <div class="prueba1" :style="{ backgroundImage: `url(${clase.imagen})` }">
+        <div class="prueba1" :style="{ backgroundImage: `url(${encodeURI(clase.imagen)})` }">
           <div class="menuButton">
             <BotonClases :clase="clase" />
           </div>
@@ -43,8 +43,6 @@ const abrirModal = (clase) => {
   mostrarModal.value = true;
 };
 
-
-
 onMounted(async () => {
   try {
     const data = await VerClases();
@@ -57,6 +55,7 @@ onMounted(async () => {
     console.error("Error al obtener clases:", error);
   }
 });
+
 </script>
 
 
@@ -82,7 +81,7 @@ onMounted(async () => {
 .menuButton {
   position: absolute; /* 🔹 Se posiciona sobre .prueba1 */
   top: 15px; /* 🔹 Lo sube al borde superior */
-  right: 5px; /* 🔹 Lo alinea a la derecha */
+  left: 5px; /* 🔹 Lo alinea a la derecha */
   z-index: 5; /* 🔹 Asegura que esté por encima de otros elementos */
   
 }
