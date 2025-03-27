@@ -81,6 +81,88 @@
          :estilo="estilo" 
      />
  </div>
+       <div class="contedor_detalleProducto">
+        <div class="contenedor_img">
+            <img :src="producto.imagen_url " alt="">
+        </div>
+        <div class="producto_detalles">
+            <div>
+                <h1>{{ producto.nombre }}</h1>
+                <h2>$ {{ producto.precio }}</h2>
+                <p><strong>Categoría:</strong> {{ producto.category }}</p>
+                <p><strong>Precio:</strong> {{ producto.precio }} €</p>
+                <p><strong>Color:</strong> {{ producto.color }}</p>
+                <p><strong>Tipo de cantidad:</strong> {{ producto.tipo_unidad }}</p>
+                <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
+            </div>
+            <div class="botones_comprar">
+                <button @click="agregarAlCarrito">Agregar al carrito</button>
+                <input v-model="amount" type="number" min="1" value="1">
+            </div>
+
+        </div>
+    </div>
+    <div class="product-section">
+        <div>
+            <h2>Descripción del Producto</h2>
+            <p>
+                Eleva tus creaciones con nuestra selección de lana premium. Proveniente de las mejores granjas, nuestra lana es suave, duradera y perfecta para todo tipo de proyectos de tejido y manualidades. Con un enfoque en la sostenibilidad y calidad, nuestra lana garantiza que tus creaciones perduren en el tiempo.
+            </p>
+            <ul>
+                <li>Material natural y transpirable, ideal para prendas de invierno.</li>
+                <li>Rica en textura y color para un acabado lujoso.</li>
+                <li>Fuente sostenible para creadores conscientes del medio ambiente.</li>
+                <li>Disponible en una amplia gama de colores para cada proyecto.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="care-instructions">
+        <div>
+            <h2>Instrucciones de Cuidado</h2>
+            <p>
+                El cuidado adecuado es esencial para preservar la suavidad y durabilidad de tus creaciones de lana. Lava a mano con agua fría y detergente suave, y déjala secar en posición horizontal. Evita la luz solar directa para mantener la vitalidad de los colores. Almacena en un lugar fresco y seco para evitar daños por polillas.
+            </p>
+        </div>
+    </div>
+    <div class="socialMural-section">
+        <h2>¡Comparte tus momentos con estilo usando nuestro Mural!</h2>
+        <p>
+          Captura tus creaciones de lana y sé parte de nuestra comunidad de tejedores. Comparte tus momentos más estilosos usando nuestro <strong>Mural</strong>.
+        </p>
+    </div>
+    <div class="social-section">
+        <div class="socialIMG-mural">
+            <div>
+                <img src="@/assets/Producto 1 part1.jpeg" alt="">
+            </div>
+            <div>
+                <img src="@/assets/Producto 1 part1.jpeg" alt="">
+            </div>
+            <div>
+                <img src="@/assets/Producto 1 part1.jpeg" alt="">
+            </div>
+            <div>
+                <img src="@/assets/Producto 1 part1.jpeg" alt="">
+            </div>
+            <div>
+                <img src="@/assets/Producto 1 part1.jpeg" alt="">
+            </div>
+            <div>
+                <img src="@/assets/Producto 1 part1.jpeg" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="similar-section">
+        <h1>Productos Similares</h1>
+    </div>
+    <div class="cont_P_relacionados">
+        <ProductCardVersion2 
+            v-for="(producto, index) in producto_similares.slice(0, 10)" 
+            :key="index" 
+            :producto="producto" 
+            :estilo="estilo" 
+        />
+    </div>
 </template>
 
 <script setup>
@@ -103,42 +185,43 @@ const producto_similares = ref([]);
 
 const amount = ref(1);
 
+
+
 const obtenerProductosSimilares = async (category) => {
- try {
-     const respuesta = await obtenerProductosCategoria(category);
-     console.log("Respuesta del backend:", respuesta); 
-     if (respuesta && Array.isArray(respuesta)) {
-         producto_similares.value = respuesta.slice(0, 4);
-         console.log("Productos similares:", producto_similares.value);
-     } else {
-         console.warn("No se encontraron productos similares.");
-     }
- } catch (error) {
-     console.error("Error obteniendo productos:", error);
- }
+    try {
+        const respuesta = await obtenerProductosCategoria(category);
+        console.log("Respuesta del backend:", respuesta); 
+        if (respuesta && Array.isArray(respuesta)) {
+            producto_similares.value = respuesta.slice(0, 4);
+            console.log("Productos similares:", producto_similares.value);
+        } else {
+            console.warn("No se encontraron productos similares.");
+        }
+    } catch (error) {
+        console.error("Error obteniendo productos:", error);
+    }
 };
 
 
-
 const agregarAlCarrito = async () => {
- const email_User = authStore.email; 
- console.log(email_User);
+    const email_User = authStore.email; 
+    console.log(email_User);
 
- if (!email_User) {
-     Swal.fire({
-         icon: 'error',
-         title: 'Error',
-         text: 'Inicie sesión para continuar'
-     });
-     return;
- } else {
-     await cartStore.addToCart(producto.value.id, amount.value, email_User);
-     Swal.fire({
-         icon: 'success',
-         title: 'Producto agregado',
-         text: 'El producto se ha agregado correctamente al carrito'
-     });
- }
+    if (!email_User) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Inicie sesión para continuar'
+        });
+        return;
+    } else {
+        await cartStore.addToCart(producto.value.id, amount.value, email_User);
+        Swal.fire({
+            icon: 'success',
+            title: 'Producto agregado',
+            text: 'El producto se ha agregado correctamente al carrito'
+        });
+    }
 };
 
 
@@ -373,6 +456,23 @@ onMounted(async () => {
  cursor: pointer;
  transition: background-color 0.2s ease;
  border: 1px solid black;
+}
+
+.botones_comprar {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.botones_comprar button {
+    background-color: #000;
+    color: #fff;
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border: 1px solid black;
 
 }
 

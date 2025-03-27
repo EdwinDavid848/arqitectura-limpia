@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import { ref } from 'vue'; 
 import productService from '@/services/productService'; 
 
+
 const API_URL = 'http://127.0.0.1:8000';
 
 export const getProductosPorCategoria = async (categoria, limit, offset) => {
@@ -24,6 +25,8 @@ const datos = ref([]);
 const SelectOpcion = ref('');
 const canLoadMore = ref(false);
 const limit = ref(10); 
+// Variables reactivas
+
 
 export async function obtenerDatosCategoria() {
   try {

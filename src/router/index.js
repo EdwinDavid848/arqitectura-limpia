@@ -10,6 +10,7 @@ import InventarioProductos from '@/views/InventarioProductos.vue';
 import InventarioProductos2 from '@/views/InventarioProductos2.vue';
 import ResetePasswordView from '@/views/ResetePasswordView.vue';
 import SolicitarRecuperacionPasswordViews from '@/views/SolicitarRecuperacionPasswordViews.vue';
+import SolicitarProdcutosView from '@/views/SolicitarProdcutosView.vue';
 import { useAuthStore } from '@/store/authStore'; 
 
 
@@ -30,6 +31,7 @@ const routes = [
         component: ComprarProductoView,
         meta: { requiresAuth: true }
     },
+    { path: '/solicitarProducto/:id', name: 'solicitarProducto', component: SolicitarProdcutosView },
     {
       path: "/dashboard",
       component: UserDashboard,
