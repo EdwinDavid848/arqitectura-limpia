@@ -10,6 +10,7 @@
             />
             <label :for="key">{{ label }}</label>
         </div>
+  
         <BotonUser :buttonText="buttonText"/>
     </form>
 </template>
@@ -18,6 +19,7 @@
 import { ref, defineEmits, defineProps, computed } from 'vue';
 import BotonUser from './Botones/BotonUser.vue';
 import Swal from 'sweetalert2';
+
 
 const props = defineProps({
     modo: String, 
@@ -34,7 +36,6 @@ const formData = ref({
     rol: 'cliente' 
 });
 
-// Etiquetas para los inputs
 const labels = {
     nombre: 'Nombre',
     email: 'Email ID',
@@ -81,7 +82,6 @@ const submit = () => {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 350px;
     margin: auto;
 }
 

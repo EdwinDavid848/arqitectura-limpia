@@ -15,7 +15,7 @@ export async function loginUser(credentials) {
         console.log("Respuesta del backend (login):", response.data);
   
         if (response.data.access_token) {
-            localStorage.setItem("token", response.data.access_token); // Guarda el token en localStorage
+            localStorage.setItem("token", response.data.access_token); 
             console.log("Token guardado en localStorage:", localStorage.getItem("token"));
         }
   
@@ -38,6 +38,38 @@ export async function registerUser(userData) {
             success: false, 
             error: error.response?.data?.detail || "Error desconocido en registro" 
         };
+    }
+}
+
+export async function informacionPerfil(access_token){
+    try{
+        const respuesta_Usuario = await axios.get(`http://127.0.0.1:8000/usuarios`, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        });
+        return respuesta_Usuario.data;
+
+    }catch(error){
+        console.error('Error al obtener información del usuario:', error);
+        if (error.response && error.response.status === 401) {
+            console.log('Tu sesión ha expirado o no tienes permisos para acceder a esta información.')
+        } else{
+            console.log('Hubo un problema al obtener la información del usuario.')
+        }
+    }
+
+}
+
+
+export async function recuperarPassword(email){
+    try{
+        const respuesta = await axios.post("http://localhost:8000/forgot-password", {
+            email,
+        })
+        return respuesta.data;
+    }catch(error){
+        this.message = error.response?.data?.detail || "Error al enviar la solicitud.";
     }
 }
 

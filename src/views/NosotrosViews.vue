@@ -44,7 +44,7 @@
     <h2 class="titulos">Lanas</h2>
     <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
       <div class="product">
-        <ProductCardVersion2  
+        <ProductCardVersion2 
           v-for="(producto, index) in productosCategoria.lana" 
           :key="index"
           :producto="producto" 
@@ -55,7 +55,7 @@
     <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
       <div class="product">
         <ProductCardVersion2  
-          v-for="(producto, index) in productosCategoria.piedras" 
+          v-for="(producto, index) in productosCategoria.agujas" 
           :key="index"
           :producto="producto" 
         />
@@ -65,7 +65,7 @@
     <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
       <div class="product">
         <ProductCardVersion2  
-          v-for="(producto, index) in productosCategoria.agujas" 
+          v-for="(producto, index) in productosCategoria.lana" 
           :key="index"
           :producto="producto" 
         />
@@ -316,7 +316,7 @@ onUnmounted(() => {});
 /* MOSTRAR PRODUCTOS VERSION 2 */
 
 
-  .contenedor_animacion_version2 {
+.contenedor_animacion_version2 {
   opacity: 1;
   transform: translateY(50px);
   transition: opacity 1s ease, transform 1s ease;
@@ -359,12 +359,13 @@ onUnmounted(() => {});
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-around;
-  padding: 30px;
+  padding: 20px;
 }
 
 .card {
+  width: auto;
+  height: auto;
   border: 2px solid black;
-  margin: 20px;
 }
 
 .titulos {

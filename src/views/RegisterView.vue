@@ -13,7 +13,7 @@
 
 <script setup>
 import { useAuthStore } from '@/store/authStore';
-import FormRegistroComp from '@/components/FormRegistroComp.vue';
+import FormRegistroComp from '@/components/FormUserComp.vue';
 import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
 
@@ -60,7 +60,7 @@ const handleRegister = async (useData) => {
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    width: 400px;
+    width: 500px;
 }
 .welcome-section h2 {
     color: white;

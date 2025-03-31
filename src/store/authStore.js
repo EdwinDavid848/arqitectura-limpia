@@ -1,13 +1,14 @@
 import { defineStore } from "pinia";
-import { loginUser, registerUser } from "@/services/authService";
-import { saveToken, getToken, removeToken } from "@/utils/localStorage";
+import { loginUser, registerUser, informacionPerfil } from "@/services/authService";
+import { saveToken, getToken, removeToken, saveEmail, removeEmail } from "@/utils/localStorage";
 import { jwtDecode } from "jwt-decode";
 
 export const useAuthStore = defineStore("auth", {
     state: () => ({
         user: null,
-        token: null, // No inicializamos aquí para evitar problemas de sincronización
+        token: null, 
         tokenExpiration: null,
+        email: null,
     }),
 
     getters: {
@@ -29,6 +30,10 @@ export const useAuthStore = defineStore("auth", {
                 const response = await loginUser(credentials);
                 if (response.access_token) {
                     this.setToken(response.access_token);
+
+                    const userInfo = await informacionPerfil(response.access_token);
+                    this.user = userInfo;
+                    console.log("Información del usuario obtenida:", userInfo);
                 } else {
                     console.error("No se recibió un token válido:", response);
                 }
@@ -46,9 +51,22 @@ export const useAuthStore = defineStore("auth", {
         async logout() {
             console.log("Ejecutando logout...");
             removeToken();
+            removeEmail();
             this.token = null;
             this.tokenExpiration = null;
             this.user = null;
+            this.email = null;
+        },
+        async fetchUserInfo() {
+            try {
+                if (!this.token) return;
+
+                const userData = await informacionPerfil(this.token);
+                this.user = userData;
+                console.log("Información del usuario obtenida:", this.user);
+            } catch (error) {
+                console.error("Error al obtener información del usuario:", error);
+            }
         },
         
         setToken(newToken) {
@@ -56,8 +74,12 @@ export const useAuthStore = defineStore("auth", {
                 const decodedToken = jwtDecode(newToken);
                 this.token = newToken;
                 this.tokenExpiration = decodedToken.exp * 1000; 
+                this.email = decodedToken.email || null; 
+
                 saveToken(newToken);
-                console.log("Token actualizado en authStore:", newToken);
+                saveEmail(this.email)
+                console.log("Token y email guardados:", newToken, this.email);
+
             } catch (error) {
                 console.error("Error al decodificar el token:", error);
             }
@@ -80,7 +102,10 @@ export const useAuthStore = defineStore("auth", {
                     if (decodedToken.exp > currentTime) {
                         this.token = token;
                         this.tokenExpiration = decodedToken.exp * 1000;
+                        this.email = decodedToken.email || localStorage.getItem("user_email"); // Restaurar email
                         console.log("Token restaurado correctamente");
+                        console.log("Token y email restaurados correctamente:", this.email);
+
                     } else {
                         console.warn("Token expirado al iniciar la app");
                         this.logout();

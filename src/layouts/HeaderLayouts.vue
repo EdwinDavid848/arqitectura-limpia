@@ -6,7 +6,7 @@
                 <router-link class="ruta" to="/principa">Nosotros</router-link>
                 <router-link class="ruta" to="/tienda">Productos</router-link>
                 <router-link class="ruta" to="/clases">Clases</router-link>  
-                <router-link class="ruta" to="/mural">Mural</router-link>  
+                <router-link class="ruta" to="">Mural</router-link>  
             </section>
             <section class="rutasPerfil" v-if="!isAuthenticated">
                 <router-link class="ruta" to="/register">Registro</router-link>
@@ -16,6 +16,21 @@
             <section class="rutasPerfil" v-else>
                 <router-link class="ruta" to="/dashboard">Perfl</router-link>
             </section>
+            <router-link class="ruta" to="/principa">Nosotros</router-link>
+            <router-link class="ruta" to="">Productos</router-link>
+            <router-link class="ruta" to="">Clases</router-link>
+            
+            <!-- Si el usuario NO está autenticado, mostrar Login y Registro -->
+            <template v-if="!isAuthenticated">
+                <router-link class="ruta" to="/">Login</router-link>
+                <router-link class="ruta" to="/register">Registro</router-link>
+            </template>
+
+            <!-- Si el usuario está autenticado, mostrar Dashboard y Cerrar Sesión -->
+            <template v-else>
+                <router-link class="ruta" to="/dashboard">Dashboard</router-link>
+                <button class="ruta" @click="logout">Cerrar sesión</button>
+            </template>
         </nav>
     </header>
 </template>
@@ -49,8 +64,10 @@ const handleScroll = () => {
 const headerEstilos =computed(() =>{
     if (route.path === "/principa") {
         return { 'scrolled': isScrolled.value, 'header-principa': true };
-    } else if (route.path === "/tienda"  || route.name === "solicitarProducto") {
+    } else if (route.path === "/tienda"  || route.name === "solicitarProducto" ) {
         return { 'scrolled': isScrolled.value, 'header-tienda': true };
+    } else if (route.path === "/inventario_productos"){
+        return{  'header-inventario': true}
     } else {
         return { 'scrolled': isScrolled.value };
     }
@@ -144,6 +161,13 @@ logo-comp {
 
 }
 .header-tienda .rutasViwes .ruta{
+    color: black;
+    padding: 15px;
+}
+.header-inventario{
+    background-color: rgba(214, 211, 211, 0.822);
+}
+.header-inventario .rutasViwes .ruta{
     color: black;
     padding: 15px;
 }

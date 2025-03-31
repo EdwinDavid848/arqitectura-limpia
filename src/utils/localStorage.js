@@ -13,3 +13,17 @@ export function removeToken() {
     localStorage.removeItem('auth_token');
 
 }
+
+
+export function saveEmail(email){
+    localStorage.setItem("user_email", email); 
+}
+
+export function getEmail(){
+    return localStorage.getItem('user_email')
+}
+
+export function removeEmail(){
+    console.log("Se está ejecutando removeEmail() inesperadamente");
+    localStorage.removeItem('user_email');
+}
