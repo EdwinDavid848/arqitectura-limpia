@@ -1,23 +1,49 @@
 <template>
 <div class="box gradDynamic">
     <div class="formulary">
-        <form action="" class="buscar">
-            <input type="text" placeholder="Buscar" class="inputbusc">
+        <form action="" class="buscar" @submit.prevent="buscar">
+            <input type="text" placeholder="Buscar" class="inputbusc" v-model="search">
             <button type="submit" class="gradient-button">Buscar</button>
         </form> 
-        <button class="gradient-button" >Mis publicaciones</button>
-        <button class="gradient-button">Subir Publicación</button>
-    </div>
+        <button class="gradient-button" @click="encontrar">Mis publicaciones</button>
+        <button class="gradient-button" @click="subir()">Subir Publicación</button>
+        <MuralForms v-show="Booleanvalue" @close="Booleanvalue = false"></MuralForms>
+      </div>
     <section class="conten">
-      <galeriaMural></galeriaMural>
+      <galeriaMural :buscador="search" :buscadorUser="buscadorUsuario"></galeriaMural>
     </section>
+    <p v-if="Booleanvalue">Formulario activado</p>
 
 </div>
 
 </template>
 <script setup>
 import galeriaMural from '@/components/galeriaMural.vue';
+import { ref } from 'vue';
+import MuralForms from '@/components/MuralForms.vue';
+
+const search = ref('');
+const buscadorUsuario = ref(null);
+
+const buscar = () => {
+  // La búsqueda ya está ligada a `search`, no necesitas parámetros
+};
+
+const encontrar = () => {
+  if (buscadorUsuario.value) {
+    buscadorUsuario.value = null; // Si ya estaba activo, lo desactiva
+  } else {
+    buscadorUsuario.value = 'david@gmail.com'; // Activa la búsqueda por usuario
+  }
+};
+
+const Booleanvalue=ref(false)
+const subir = () =>{
+  Booleanvalue.value=true;
+}
 </script>
+
+
 <style scoped>
 
 .box {
@@ -100,5 +126,7 @@ justify-content: space-between;
   transform: translateY(2px); /* Baja ligeramente al hacer clic */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra reducida */
 }
-  
+ 
+
+
 </style>
