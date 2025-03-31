@@ -1,6 +1,5 @@
 <template>
-    <div class="principalIMG-section"></div>
-    <div class="inf-section">
+    <div class="box gradDynamic">
       <div>
         <div class="tit-opcionPago">
           <h2>Opciones de Pago</h2>
@@ -9,7 +8,7 @@
           <div>
             <button @click="mostrarDiv('PRESENCIAL')">PRESENCIAL</button>
             <button @click="mostrarDiv('NEQUI')">NEQUI</button>
-            <button @click="mostrarDiv('TARJETA')">daviplata</button>
+            <button @click="mostrarDiv('DAVIPLATA')">DAVIPLATA</button>
           </div>
         </div>
         <div v-if="divActual === 'NEQUI'" class="div-contenido" id="cont-nequi">
@@ -34,9 +33,13 @@
             <div class="tab-inf">
               <h2>INFORMACION PERSONAL</h2>
             </div>
-            <div>
-              <strong>Email</strong>
-              <p>{{ email_client }}</p>
+            <div  v-if="authStore.user" class="infoCompraUsuario">
+                <strong>Nombre</strong>
+                <p>{{ authStore.user.nombre }}</p>
+                <strong>Email</strong>
+                <p>{{ authStore.user.email }}</p>
+                <strong>Teléfono</strong>
+                <p>{{ authStore.user.telefono }}</p>
             </div>
             <div> 
             </div>
@@ -66,16 +69,19 @@
 
 
 <script setup>
-import {ref, computed,onMounted, watch, nextTick} from 'vue';
+import {ref,onMounted, nextTick} from 'vue';
 import { useAuthStore } from "@/store/authStore";
 import { useCartStore } from '@/store/cartStore';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const cartStore = useCartStore();
 const authStore = useAuthStore();
 
 
 const divActual = ref('PRESENCIAL')
-const email_client = computed(() => authStore.email);
+
 
 
 const mostrarDiv = (div) => {
@@ -83,17 +89,16 @@ const mostrarDiv = (div) => {
 };
 
 
-watch(email_client, async (newEmail) => {
-  if (newEmail) {
-    await cartStore.fetchCarrito(newEmail);
-  }
-});
+
 
 onMounted(async () => {
   await nextTick();
-  if (email_client.value) {
-    await cartStore.fetchCarrito(email_client.value);
-  }
+  if (!authStore.isAuthenticated) {
+        console.log("Acceso denegado, redirigiendo al login...");
+        router.push("/");
+      }else{
+        authStore.fetchUserInfo();
+      }
 });
 
 
@@ -101,11 +106,49 @@ onMounted(async () => {
 
 
 <style scoped>
-.principalIMG-section {
-    background-image: url('@/assets/78950467_l_normal_none.jpg');
-    height:55vh;
-    background-size: cover;
+  .box {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    min-height: 100vh;
+    padding-bottom: 20px;
+    padding-top: 100px;
+  }
+ 
+  .gradDynamic {
+    position: relative;
+  }
+ 
+  .gradDynamic:after,
+  .gradDynamic:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content: "";
+    z-index: -1;
+  }
+ 
+  .gradDynamic:after {
+    background: linear-gradient(to right, rgb(235, 218, 125), rgb(255, 255, 255));
+    background-size: 200% 100%;
+    animation: colorSlide 5s infinite alternate ease-in-out;
 }
+  .gradDynamic:before {
+    background-color: rgb(192, 191, 190);
+  }
+ 
+  @keyframes colorSlide {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+
 .tit-opcionPago{
     height: 20vh;
     display: flex;
@@ -171,17 +214,6 @@ onMounted(async () => {
     justify-content: center;
   }
   
-  .inf-section {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    
-  }
-
-
-
 
 
 
@@ -320,4 +352,11 @@ onMounted(async () => {
     color: white;
     background-color: rgb(6, 163, 6);
   }
+
+  .infoCompraUsuario{
+    display: grid;
+    gap: 10px;
+  }
+
+
 </style>

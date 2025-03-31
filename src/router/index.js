@@ -10,7 +10,8 @@ import InventarioProductos from '@/views/InventarioProductos.vue';
 import InventarioProductos2 from '@/views/InventarioProductos2.vue';
 import ResetePasswordView from '@/views/ResetePasswordView.vue';
 import SolicitarRecuperacionPasswordViews from '@/views/SolicitarRecuperacionPasswordViews.vue';
-import SolicitarProdcutosView from '@/views/SolicitarProdcutosView.vue';
+import SolicitarProdcutosView from '@/views/SolicitarProductosView.vue';
+import ClassView from '@/views/ClassView.vue';
 import { useAuthStore } from '@/store/authStore'; 
 
 

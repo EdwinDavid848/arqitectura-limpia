@@ -57,7 +57,6 @@ transition: all 0.3s ease;
 
 .sidebar ul li:hover {
 background-color: lightgray;
-font-size: 18px;
 }
 
 .sidebar ul li.active {

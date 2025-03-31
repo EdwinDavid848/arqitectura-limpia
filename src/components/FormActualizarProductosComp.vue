@@ -9,54 +9,46 @@
                         :id="key"
                         required
                         rows="4"
-                        @focus="focusedFields[key] = true"
-                        @blur="focusedFields[key] = formData[key].length > 0"
                     ></textarea>
                 </template>
-            
                 <template v-else>
-                    <input
-                        v-model="formData[key]"
-                        :id="key"
-                        required
-                        placeholder=" "
-                        @focus="focusedFields[key] = true"
-                        @blur="focusedFields[key] = formData[key].length > 0"
-                    />            
+                    <input v-model="formData[key]" :id="key" required />
                 </template>
-                <label :for="key" :class="{ 'active': focusedFields[key] }">{{ labe }}</label>
+                <label :for="key">{{ labe }}</label>
             </div>
 
             <select v-model="category" class="input" id="categoria" required>
-                <option value="Categoria" disabled>Selecciona una categoría</option>
+                <option value="" disabled>Selecciona una categoría</option>
                 <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
             </select>
 
             <div class="form-group">
-                <input type="file" class="input" @change="onFileChange" required>
+                <input type="file" class="input" @change="onFileChange">
             </div>
         </section>
 
         <div class="cont_preview-image">
-            <img :src="imageUrl" alt="Imagen seleccionada" class="preview-image">
+            <img v-if="imageUrl" :src="imageUrl" alt="Imagen seleccionada" class="preview-image">
         </div>
         <div class="cont-button">
-            <button type="submit">Ingresar</button>
+            <button type="submit">Actualizar</button>
+            <button type="button" @click="$emit('close')" class="cancel-button">Cancelar</button>
         </div>
     </form>
 </template>
 
 <script setup>
-import { defineEmits, ref, reactive } from 'vue';
+import { defineProps, defineEmits, ref, reactive, watch } from 'vue';
 
-const emit = defineEmits(['submit']);
+const props = defineProps(['producto']);
+const emit = defineEmits(['submit', 'close']);
 
 const categories = ref(["lana", "piedras", "agujas", "peluche", "ropa"]);
-const category = ref();
+const category = ref('');
 const imagenFile = ref(null);
 const imageUrl = ref(null);
 
-const formData = ref({
+const formData = reactive({
     nombre: '',
     descripcion: '',
     precio: '',
@@ -64,21 +56,21 @@ const formData = ref({
     color: '',
 });
 
-const label = ref({
+const label = {
     nombre: 'Nombre',
     descripcion: 'Descripción',
     precio: 'Precio',
     tipo_unidad: 'Unidad',
     color: 'Color',
-});
+};
 
-const focusedFields = reactive({
-    nombre: false,
-    descripcion: false,
-    precio: false,
-    tipo_unidad: false,
-    color: false,
-});
+watch(() => props.producto, (nuevoProducto) => {
+    if (nuevoProducto) {
+        Object.assign(formData, nuevoProducto);
+        category.value = nuevoProducto.category || '';
+        imageUrl.value = nuevoProducto.imagen || null;
+    }
+}, { immediate: true });
 
 const onFileChange = (event) => {
     const file = event.target.files[0];
@@ -89,20 +81,8 @@ const onFileChange = (event) => {
 };
 
 const submit = () => {
-    const payload = {
-        nombre: formData.value.nombre,
-        descripcion: formData.value.descripcion,
-        category: category.value,
-        precio: formData.value.precio,
-        tipo_unidad: formData.value.tipo_unidad,
-        color: formData.value.color,
-        url: imagenFile.value
-    };
-
-    emit('submit', payload);
+    emit('submit', { ...formData, category: category.value, url: imagenFile.value });
 };
-
-
 </script>
 
 <style scoped>
@@ -111,7 +91,6 @@ const submit = () => {
     grid-template-columns: 2.5fr 2fr;
     width: 100%;
     margin: auto;
-    padding-top: 50px;
 }
 
 section {
@@ -120,7 +99,7 @@ section {
 
 .form-group {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     width: 100%;
 }
 
@@ -159,21 +138,6 @@ label {
 #categoria{
     margin-bottom: 20px;
 }
-.cont-button{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0px 25px;
-}
-button{
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #424141;
-    border-radius: 5px;
-    font-size: 1rem;
-    background: rgba(129, 128, 128, 0.548);
-    outline: none;
-}
 
 input:focus + label,
 input:not(:placeholder-shown) + label,
@@ -207,6 +171,31 @@ textarea:focus + label,
     height: auto;
     width: auto;
     object-fit: contain; 
+}
+
+
+
+.cancel-button {
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.cont-button{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0px 25px;
+}
+button{
+    width: 40%;
+    padding: 10px;
+    border: 2px solid #424141;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.548);
+    outline: none;
+    cursor: pointer;
 }
 
 </style>

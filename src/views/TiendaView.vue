@@ -72,7 +72,7 @@ import ProductCardVersion3 from '@/components/ProductCard(Version-3).vue';
 
 .product {
   display: grid;
-  grid-template-columns: auto auto auto auto ; 
+  grid-template-columns: repeat(4, 1fr); 
   gap: 20px;
   background-color: rgba(0, 255, 255, 0);
   padding: 10px;
@@ -126,8 +126,6 @@ import ProductCardVersion3 from '@/components/ProductCard(Version-3).vue';
 .cont_botones button:hover {
   background-color: #ffffff; 
   color: black;
-
-  transform: scale(1.05); 
 }
 
 .cont_botones button.active {

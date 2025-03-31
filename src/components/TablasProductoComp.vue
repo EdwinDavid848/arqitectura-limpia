@@ -1,60 +1,130 @@
 <template>
-    <div class="cont_tab">
-      <table class="tab">
-        <thead>
-          <tr class="thead_tabla">
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Categoría</th>
-            <th>Precio</th>
-            <th>Tipo de Unidad</th>
-            <th>Color</th>
-            <th>Funciones</th>
-          </tr>
-        </thead>
-        <tbody class="tb_tabla">
-          <tr v-for="d in visibleDatos" :key="d.id" class="tbody_tb">
-            <td>{{ d.nombre }}</td>
-            <td class="descripcion-tabla">{{ d.descripcion }}</td>
-            <td>{{ d.category }}</td>
-            <td>{{ d.precio }}</td>
-            <td>{{ d.tipo_unidad }}</td>
-            <td>{{ d.color }}</td>
-            <td class="botoness">
-              <button @click="$emit('editar', d)" class="editar">Editar</button>
-              <button @click="eliminarProductos(d.id)" class="eliminar">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button v-if="canLoadMore" @click="loadMore" class="load-more-btn">
-        Cargar más
-      </button>
-    </div>
+  <div class="opciones">
+    <article>
+        <input 
+          type="text" 
+          v-model="searchQuery" 
+          placeholder="Buscar producto por nombre..." 
+          class="input-search"
+        />
+      <section>
+        <select id="categoryUno" v-model="SelectOpcion" class="input">
+          <option id="category" value="">Todas las categorías</option>
+          <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
+        </select>
+        <button class="opciones_button" @click="obtenerDatosCategoria(SelectOpcion)">Buscar</button>
+      </section>
+    </article>
+  </div>
+  <div class="cont_tab">
+    <table class="tab">
+      <thead>
+        <tr class="thead_tabla">
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Tipo de Unidad</th>
+          <th>Color</th>
+          <th>Funciones</th>
+        </tr>
+      </thead>
+      <tbody class="tb_tabla">
+        <tr v-for="d in visibleDatos" :key="d.id" class="tbody_tb">
+          <td>{{ d.nombre }}</td>
+          <td class="descripcion-tabla">{{ d.descripcion }}</td>
+          <td>{{ d.category }}</td>
+          <td>{{ d.precio }}</td>
+          <td>{{ d.tipo_unidad }}</td>
+          <td>{{ d.color }}</td>
+          <td class="botoness">
+            <button @click="$emit('editar', d)" class="editar">Editar</button>
+            <button @click="eliminarProductos(d.id)" class="eliminar">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button v-if="canLoadMore" @click="loadMore" class="load-more-btn">
+      Cargar más
+    </button>
+  </div>
 </template>
 
 <script setup>
 import { onMounted, computed, ref } from 'vue';
-import { obtenerProductos } from '@/services/productService';
+import { obtenerProductos, eliminarProducto, obtenerProductosPorCategoria } from '@/services/productService';
+import Swal from 'sweetalert2';
 
 const datos = ref([]); 
-const limit = ref(5);
+const searchQuery = ref(""); // Input de búsqueda
+const limit = ref(4);
+const categories = ref(["lana", "piedras", "agujas", "peluche", "ropa"]);
+const SelectOpcion = ref("");
+const canLoadMore = ref(true);
 
-const visibleDatos = computed(() => {
-    return datos.value ? datos.value.slice(0, limit.value) : []; 
+// Computed para filtrar productos mientras escribe
+const filteredDatos = computed(() => {
+  if (!searchQuery.value) {
+    return datos.value; 
+  }
+  return datos.value.filter(producto => 
+    producto.nombre.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
 });
 
-onMounted(async () => {
-    try {
-        const response = await obtenerProductos();
-        if (Array.isArray(response)) {
-            datos.value = response; 
-        } else {
-            console.error("Error: obtenerProductos no devolvió un array", response);
-        }
-    } catch (error) {
-        console.error("Error al obtener productos:", error);
+// Computed para mostrar datos paginados después del filtro
+const visibleDatos = computed(() => filteredDatos.value.slice(0, limit.value));
+
+const loadMore = () => {
+  if (limit.value + 5 <= filteredDatos.value.length) {
+    limit.value += 5;
+  } else {
+    limit.value = filteredDatos.value.length; 
+    canLoadMore.value = false; 
+  }
+};
+
+const obtenerDatosCategoria = async () => {
+  try {
+    datos.value = await obtenerProductosPorCategoria(SelectOpcion.value);
+    canLoadMore.value = datos.value.length > limit.value;
+  } catch (error) {
+    Swal.fire("Error", "No se pudieron cargar la categorias de productos", "error");
+  }
+};
+
+const eliminarProductos = async (id) => {
+  const confirmacion = await Swal.fire({
+    title: "¿Estás seguro?",
+    text: "Esta acción no se puede deshacer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+  });
+
+  if (confirmacion.isConfirmed) {
+    const eliminado = await eliminarProducto(id);
+    if (eliminado) {
+      Swal.fire("Eliminado", "El producto ha sido eliminado", "success");
+      datos.value = datos.value.filter(producto => producto.id !== id); 
+    } else {
+      Swal.fire("Error", "No se pudo eliminar el producto", "error");
     }
+  }
+};
+
+onMounted(async () => {
+  try {
+      const response = await obtenerProductos();
+      if (Array.isArray(response)) {
+          datos.value = response; 
+      } else {
+          console.error("Error: obtenerProductos no devolvió un array", response);
+      }
+  } catch (error) {
+      console.error("Error al obtener productos:", error);
+  }
 });
 </script>
 
@@ -162,5 +232,45 @@ onMounted(async () => {
   background-color: #219150;
 }
 
-
+.opciones{
+  display: flex;
+  align-items: center;
+  justify-content:center;
+}
+.opciones article{
+      height: 80px;
+      display: flex;
+      justify-content:space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+  }
+#categoryUno{
+  height: 40px;
+  border-radius: 5px;
+  padding: 0px 5px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.input-search{
+  height: 40px;
+  width: 500px;
+  border-radius: 5px;
+  padding: 0px 5px;
+  font-weight: bold;
+}
+.opciones_button{
+      background-color: #000000;
+      color: white;
+      width: 100px;
+      height: 40px;
+      border-radius: 5px;
+      margin-left: 10px;
+      margin-right: 10px;
+      transition: all 0.5s ease;
+    }
+.opciones_button:hover{
+      background-color: #ffffff;
+      color: black;
+    }
 </style>
