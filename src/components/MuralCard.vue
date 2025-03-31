@@ -1,35 +1,37 @@
 <template>
-<div v-if="props.data" id="cards-container">
-  <div class="card">
-    <!-- Imagen de fondo -->
-    <div 
-      class="card-image" 
-      :style="props.data.foto ? { backgroundImage: `url(${props.data.foto})` } : {}"
-    >
-    <img v-if="props.data.foto" :src="props.data.foto" alt="Imagen de publicación" class="card-img-test" />
+  <div v-if="props.data" id="cards-container">
+    <div class="card">
 
-  </div>
+      <div 
+        class="card-image" 
+        :style="props.data.foto ? { backgroundImage: `url(${props.data.foto})` } : {}"
+      >
+        <img v-if="props.data.foto" :src="props.data.foto" alt="Imagen de publicación" class="card-img-test" />
+      </div>
 
-    <!-- Contenido de la tarjeta -->
-    <div class="card-content">
-      <h3 class="card-title">{{ props.data.titulo }}</h3>
-      <p class="card-description">{{ props.data.descripcion }}</p>
-      <p class="card-author">Por {{ props.data.email }}</p>
+      <div class="card-content">
+        <h3 class="card-title">{{ props.data.titulo }}</h3>
+        <p class="card-description">{{ props.data.descripcion }}</p>
+        <p class="card-author">Por {{ props.data.email }}</p>
+        <BotonesMural :publications="data" :hability="props.hability"/> 
+
+      </div>
     </div>
   </div>
-</div>
-
 </template>
 
 <script setup>
 import { defineProps } from 'vue';
+import BotonesMural from './Botones/BotonesMural.vue';
 
 const props = defineProps({
   data: Object,
-  
+  hability: Boolean
 });
 
+console.log("🔍 Prop hability en MuralCard:", props.hability); 
 </script>
+
 
 <style scoped>
    
@@ -102,5 +104,7 @@ const props = defineProps({
   margin-top: auto;
   text-align: right;
 }
-
+.menuButtons{
+  z-index: 10;
+}
 </style>

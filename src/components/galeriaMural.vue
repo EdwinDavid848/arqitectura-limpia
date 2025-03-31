@@ -1,36 +1,45 @@
 <template>
   <div ref="container" class="publication-list" @scroll="handleScroll">
     <div ref="container" class="mural-container">
-      <MuralCard v-for="post in publications" :key="post.id" :data="post" />
+      <MuralCard v-for="post in publications" :key="post.id" :data="post" :hability="HabilityButton"/>
     </div>
 
     <div v-if="loading" class="loading">Cargando más publicaciones...</div>
   </div>
 </template>
 
-
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import MuralCard from "./MuralCard.vue";
-import { fetchPublications } from '@/services/MuralServices';
+import { fetchPublications, searchPublicationsByTitle, searchPublicationsByUser } from '@/services/MuralServices';
+import { defineProps } from 'vue';
+
 const publications = ref([]);
-const page = ref(1);
 const loading = ref(false);
-const container = ref(null);
+const HabilityButton=ref(true)
 
-const loadMore = async () => {
-  if (loading.value) return;
+const props = defineProps({ 
+  buscador: String, 
+  buscadorUser: String 
+});
+
+const loadPublications = async () => {
   loading.value = true;
-
-  // Simulación de carga de datos (reemplázalo con tu API real)
   try {
-    const response = fetchPublications()
-    console.log("Datos recibidos:", response);
-    const data = await response;
-    
-    if (data.length) {
-      publications.value.push(...data);
-      page.value++;
+    if (props.buscadorUser) {
+      // Si se busca por usuario, ignoramos la búsqueda por título
+      console.log("Buscando publicaciones de usuario:", props.buscadorUser);
+      publications.value = await searchPublicationsByUser(props.buscadorUser);
+      HabilityButton.value=true;
+      console.log("HabilityButton:", HabilityButton.value);
+    } else if (props.buscador) {
+      // Si no hay usuario pero sí un término de búsqueda, buscamos por título
+      console.log("Buscando publicaciones con título:", props.buscador);
+      publications.value = await searchPublicationsByTitle(props.buscador);
+    } else {
+      // Si no hay búsqueda, cargamos todas las publicaciones
+      console.log("Cargando todas las publicaciones");
+      publications.value = await fetchPublications();
     }
   } catch (error) {
     console.error("Error al cargar publicaciones:", error);
@@ -39,17 +48,18 @@ const loadMore = async () => {
   }
 };
 
-const handleScroll = () => {
-  if (!container.value) return;
-  if (container.value.scrollTop + container.value.clientHeight >= container.value.scrollHeight - 10) {
-    loadMore();
-  }
-};
+// Observa cambios en `buscador` y `buscadorUser` y ejecuta `loadPublications()`
+watch([() => props.buscador, () => props.buscadorUser], () => {
+  console.log("Cambio detectado en buscador o buscadorUser");
+  loadPublications();
+}, { immediate: true });
 
 onMounted(() => {
-  loadMore();
+  loadPublications();
 });
 </script>
+
+
 <style scoped>
 .publication-list {
   padding: 1rem;

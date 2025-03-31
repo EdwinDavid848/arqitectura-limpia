@@ -100,7 +100,7 @@ const resetPassword = async () => {
 
 <style scoped>
 .contanier_principal {
-  background: url('F:\Nurv Vue Js\PROYECTO_PROTOTIPO\vue-project\src\assets\img\78950467_l_normal_none.jpg') center/cover no-repeat;
+  background: url('C:\Users\patid\arqitectura-limpia\src\assets\78950467_l_normal_none.jpg') center/cover no-repeat;
   height: 100vh;
   display: flex;
   align-items: center;

@@ -2,6 +2,20 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8000';
 
+export const AddPublications = async (formData) => {
+  try {
+    const response = await axios.post('http://localhost:8000/mural/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data' // Si envías archivos, esto es obligatorio
+      }
+    });
+    return response;
+  } catch (error) {
+    console.error('Error fetching publications:', error);
+    throw error;
+  }
+};
+
 export const fetchPublications = async () => {
   try {
     const response = await axios.get(`${API_URL}/publicaciones/`);
