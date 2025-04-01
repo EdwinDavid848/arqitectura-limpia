@@ -9,29 +9,35 @@
     <!-- Menú Desplegable -->
     <div v-if="menuAbierto" class="menuHamburguesa" >
 
-      <button id="Btn" class="BtnHabilitar">
+      <button id="Btn" class="BtnHabilitar" @click="HabilitarClase">
         <div class="sign">👁️‍🗨️</div>
         <div class="text">Habilitar</div>
       </button>
 
-      <button id="Btn" class="BtnEditar">
+      <button id="Btn" class="BtnEditar" @click="editarClase(clase)">
         <div class="sign">📝</div>
       <div class="text">Editar</div>
       </button>
 
-      <button id="Btn" class="BtnEliminar"> 
+    <button id="Btn" class="BtnEliminar" @click="EliminarCLase"> 
         <div class="sign">🗑️</div>
       <div class="text">Eliminar</div>
-</button>
+    </button>
 
 
 
     </div>
   </div>
+  <ClassForm v-if="claseEditando" :clase="claseEditando" @closeForm="cerrarFormulario" @claseActualizada="recargarClases" />
+
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, defineProps } from "vue";
+import { DeleteClass, HabilityClass } from '@/services/ClassServices';
+import ClassForm from "../ClassForm.vue";
+import Swal from 'sweetalert2';
+
 // Estado del menú
 const menuAbierto = ref(false);
 const menuRef = ref(null);
@@ -55,6 +61,70 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener("click", cerrarMenu);
 });
+
+// Definir props correctamente
+const props = defineProps({
+  clase: Object // La clase se pasa como prop desde ClassCard.vue
+});
+
+const EliminarCLase = async () => {
+  console.log("🔹 Eliminando clase con ID:", props.clase.id); // Debugging
+
+  try {
+    const response = await DeleteClass(props.clase.id); 
+    if (response && response.status === 200) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Clase eliminada con éxito',
+        text: 'Recargue la página para verificar'
+      }).then(() => {
+        window.location.reload(); // 🔄 Recargar la página después de eliminar
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo eliminar la clase, intente de nuevo.'
+      });
+    }
+  } catch (error) {
+    console.error("❌ Error al eliminar clase:", error);
+  }
+};
+
+const HabilitarClase = async () => {
+  console.log("🔹 Habilitando/Desabilitando clase con ID:", props.clase.id); // Debugging
+
+  try {
+    const response = await HabilityClass(props.clase.id, !props.clase.habilitado); 
+    if (response && response.status === 200) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Clase editada con éxito',
+        text: 'Recargue la página para verificar'
+      }).then(() => {
+        window.location.reload(); // 🔄 Recargar la página después de eliminar
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo editar la clase, intente de nuevo.'
+      });
+    }
+  } catch (error) {
+    console.error("❌ Error al eliminar clase:", error);
+  }
+};
+const claseEditando = ref(null);
+
+const editarClase = (clase) => {
+  claseEditando.value = clase; // Carga la clase en el formulario
+};
+
+const cerrarFormulario = () => {
+  claseEditando.value = null; // Cierra el formulario
+};
 </script>
 
 <style scoped>
@@ -72,11 +142,10 @@ onBeforeUnmount(() => {
 }
 .menuHamburguesa{
   position: absolute;
-  right: 0;
+  
   margin-top: 2px;
   width: 40%;
-  background-color: rgb(255, 255, 255);
-  
+  z-index: 5;
 }
 
 /* From Uiverse.io by vinodjangid07 */ 

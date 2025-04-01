@@ -1,6 +1,7 @@
 <template>
     <article class="todareserva">
-      <table class="compras-table">
+      <div class="table-container">
+        <table class="compras-table">
         <thead >
           <tr>
             <td> ID </td>
@@ -11,22 +12,41 @@
             <th>Accion</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-for="clase in Clases.slice(0, 5)" :key="clase.id">
           <tr>
-            <td>1019986</td>
-            <td>Clase 01</td>
-            <td>Daniela</td>
-            <td>12-03-2025</td>
-            <td>Pagado</td>
+            <td>{{clase.id}}</td>
+            <td>{{ clase.clase }}</td>
+            <td>{{ clase.user }}</td>
+            <td>{{ clase.fecha_class }}</td>
+            <td>{{ clase.estado }}</td>
             <td><BotonCancelacion></BotonCancelacion> <BotonConfirmacion></BotonConfirmacion></td>
           </tr>
         </tbody>
       </table>
+      </div>
     </article>
 </template>
 <script setup>
+import { ref, onMounted } from 'vue';
 import BotonCancelacion from './Botones/BotonCancelacion.vue';
 import BotonConfirmacion from './Botones/BotonConfirmacion.vue';
+import { VerReservaciones } from '@/services/ReservationClassServices';
+
+const Clases = ref([]);
+
+
+onMounted(async () => {
+  try {
+    const data = await VerReservaciones();
+    if (Array.isArray(data)) {
+      Clases.value = data;
+    } else {
+      console.error("Error: La API no devolvió un array.", data);
+    }
+  } catch (error) {
+    console.error("Error al obtener clases:", error);
+  }
+});
 </script>
 <style scoped>
 .todareserva{
@@ -34,14 +54,23 @@ import BotonConfirmacion from './Botones/BotonConfirmacion.vue';
   align-items: center;
   justify-content: center;
   padding-bottom: 10px;
+  
+}
+.table-container {
+  max-height: 300px; /* Ajusta la altura según necesites */
+  overflow-y: auto;  /* Agrega scroll vertical */
+  border: 1px solid #ccc; /* Opcional: para que se vea más claro el área */
+  width: 100%;
+  padding: 10px;
 }
   .compras-table {
-    width: 90%;
+    width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     background-color: #f7b661;
     border-radius: 8px;
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    
   }
   .compras-table th {
     background-color: #ff940a;

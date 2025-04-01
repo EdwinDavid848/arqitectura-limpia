@@ -105,4 +105,3 @@ export async function SolicitarProductos(id){
         return { error: error.response?.data?.detail || "Error desconocido" };
     }
 }
-  

@@ -1,8 +1,9 @@
 <template>
+
   <section class="informacionClass">
     <article class="welcome-section">
       <h1 class="welcome-title">BIENVENIDO <span>AL MUNDO DE LAS ARTES MANUALES</span></h1>
-      <div class="card">
+      <div class="cardAnuncio">
         <div class="loader">
           <p>Aprenderas</p>
           <div class="words">
@@ -19,6 +20,7 @@
       </p>
     </article>
 </section>
+
 <section class="clases">
         <div class="cuadro">
             <div class="video">
@@ -36,22 +38,38 @@
  <section class="infoClases">
    <h1 class="nuestrasclas">NUESTRAS CLASES DISPONIBLES</h1>
     <ClassCard></ClassCard>
-    <BotonAgregarClase></BotonAgregarClase>
+    <BotonAgregarClase text="Agregar nueva clase" @click="cambio()"></BotonAgregarClase>
+    <ClassForm v-if="change" @closeForm="change = false"></ClassForm>
  </section>
  <section>
     <label class="dropdown">
       <input type="checkbox" class="toggle"/>
-      <span class="button">Mostrar Clases Reservadas</span>
+      <span class="buttonReserva">Mostrar Clases Reservadas</span>
       <div class="content">
         <PayClass></PayClass>
       </div>
     </label>
   </section>
+  <div class="Anuncio">
+        <div class="parallax_version2">
+            <h1>Explora el Mundo del Tejido</h1>
+            <p>Tejer no es solo una técnica, es una expresión creativa. En nuestra tienda encontrarás todo lo que necesitas para hacer realidad tus proyectos, desde hilos y agujas hasta piezas únicas como ropa, peluches, y accesorios hechos a mano. También ofrecemos clases para que aprendas a tejer como un experto y lleves tus creaciones al siguiente nivel.</p>
+            <button> <router-link class="link" to="/mural">¡Unete a Nosotros!</router-link>
+            </button>
+        </div>
+  </div>
 </template>
 <script setup>
+import { ref } from 'vue';
 import ClassCard from '@/components/ClassCard.vue';
 import BotonAgregarClase from '@/components/Botones/BotonAgregarClase.vue';
 import PayClass from '@/components/PayClass.vue';
+import ClassForm from '@/components/ClassForm.vue';
+const change=ref(false);
+const cambio= async()=>{
+  change.value=true
+}
+
 </script>
 <style scope>
 /* Estilo de la seccion informacion de clase */
@@ -113,7 +131,7 @@ import PayClass from '@/components/PayClass.vue';
     font-weight: bold;
 }
 /* From Uiverse.io by kennyotsu */ 
-.card {
+.cardAnuncio {
   /* color used to softly clip top and bottom of the .words container */
   background: repeating-linear-gradient(45deg, #effaf5, #92c9b1 20px, #b3e0d2 20px, #b3e0d2 40px);  padding: 1rem 2rem;
   border-radius: 1.25rem;
@@ -356,9 +374,135 @@ import PayClass from '@/components/PayClass.vue';
 }
 
 /* Cuando el checkbox está marcado, muestra el contenido */
-.toggle:checked + .button + .content {
+.toggle:checked + .buttonReserva + .content {
   max-height: 500px; /* Ajusta según el contenido */
   opacity:1;
 }
 
+/* PARALLAX VERSION 2 */
+.Anuncio {
+  margin-top: 50px;
+  height: 100vh; 
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;  
+  color: #000000;
+}
+
+.parallax_version2 {
+  background-image: url('@/assets/vecteezy_ai-generated-crafts-advertisment-background-with-copy-space_372450692.jpg'); /* Usa ruta relativa para la imagen */
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;  
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #ffffff;
+  font-weight: bold;
+  background-position: center;
+}
+
+.Anuncio h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 50px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: white;
+}
+
+.Anuncio p {
+  font-size: 20px;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  width: 70%;
+  margin-bottom: 10px;
+  color: rgb(231, 231, 231);
+}
+
+.Anuncio button  {
+  padding: 15px 20px;
+  font-size: 28px;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  transition: all 0.5s ease;
+}
+.link{
+  text-decoration: none;
+  width: 100%;
+  color: #000000;
+  transition: all 0.5s ease;
+}
+    
+.Anuncio button:hover {
+  background-color: rgb(206, 127, 9);
+  color: white;
+}
+.Anuncio button .link:hover {
+  color: white;
+}
+
+@media (max-width: 1440px) {
+  .Anuncio button {
+    width: 30%;
+      }
+    }
+@media (min-width: 1280px) and (max-width: 1440px) {
+  .Anuncio button {
+    padding: 20px 10px;
+      }
+    }
+
+/** boton de mostrar reservaciones */
+.buttonReserva {
+  width: 100%;
+  margin-bottom: -3rem;
+  margin-top: 5px;
+  font-size: 18px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+  padding: 0.7em 2em;
+  border: 3px solid #2B3044;
+  border-radius: 2px;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.1);
+  color: #2B3044;
+  text-decoration: none;
+  transition: 0.3s ease all;
+  z-index: 1;
+  background-color: #f0974f;
+}
+.buttonReserva:before {
+  transition: 0.5s all ease;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  right: 50%;
+  bottom: 0;
+  opacity: 0;
+  content: '';
+  background-color: #2B3044;
+  z-index: -1;
+}
+
+.buttonReserva:hover, button:focus {
+  color: white;
+}
+
+.buttonReserva:hover:before, button:focus:before {
+  transition: 0.5s all ease;
+  left: 0;
+  right: 0;
+  opacity: 1;
+}
+.buttonReserva:active {
+  transform: scale(0.9);
+}
 </style>

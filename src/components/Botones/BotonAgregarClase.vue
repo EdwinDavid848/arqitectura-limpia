@@ -1,9 +1,18 @@
 <template>
-    <button  class="button" >Agregar nueva clase</button>
+  <button class="button">{{ text }}</button>
 </template>
+
 <script setup>
+import { defineProps } from 'vue';
+
+defineProps({
+  text: {
+    type: String,
+    default: 'Botón' // Texto por defecto si no se proporciona uno
+  }
+});
 </script>
-<style>
+<style scoped>
 .button {
   width: 100%;
   margin-bottom: -3rem;
