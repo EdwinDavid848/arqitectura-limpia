@@ -90,17 +90,18 @@ const onFileChange = (event) => {
 
 const submit = () => {
     const payload = {
-        nombre: formData.value.nombre,
-        descripcion: formData.value.descripcion,
+        nombre: formData.value.nombre.trim(),
+        descripcion: formData.value.descripcion.trim(),
         category: category.value,
-        precio: formData.value.precio,
-        tipo_unidad: formData.value.tipo_unidad,
-        color: formData.value.color,
+        precio: formData.value.precio.trim(),
+        tipo_unidad: formData.value.tipo_unidad.trim(),
+        color: formData.value.color.trim(),
         url: imagenFile.value
     };
 
     emit('submit', payload);
 };
+
 
 
 
@@ -171,11 +172,21 @@ label {
 button{
     width: 100%;
     padding: 10px;
-    border: 2px solid #424141;
+    border: 2px solid #ffffff;
+    color: white;
     border-radius: 5px;
     font-size: 1rem;
-    background: rgba(129, 128, 128, 0.548);
+    background: rgb(10, 10, 10);
     outline: none;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    text-transform: uppercase;
+}
+button:hover{
+    background-color: white;
+    color:black;
+    border: 2px solid #000000;
+
 }
 
 input:focus + label,

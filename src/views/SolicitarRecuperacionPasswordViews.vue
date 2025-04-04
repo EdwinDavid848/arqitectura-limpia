@@ -80,7 +80,7 @@ const submitEmail = async () => {
     margin-bottom: 15px;
 }
 input {
-    width: 95%;
+    width: 100%;
     padding: 10px;
     border: none;
     border-radius: 5px;
