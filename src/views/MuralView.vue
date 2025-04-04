@@ -5,23 +5,24 @@
             <input type="text" placeholder="Buscar" class="inputbusc" v-model="search">
             <button type="submit" class="gradient-button">Buscar</button>
         </form> 
-        <button class="gradient-button" @click="encontrar">Mis publicaciones</button>
-        <button class="gradient-button" @click="subir()">Subir Publicación</button>
+        <button class="gradient-button" @click="encontrar" v-if="permisos.user">Mis publicaciones</button>
+        <button class="gradient-button" @click="subir()" v-if="permisos.user">Subir Publicación</button>
         <MuralForms v-show="Booleanvalue" @close="Booleanvalue = false"></MuralForms>
       </div>
     <section class="conten">
       <galeriaMural :buscador="search" :buscadorUser="buscadorUsuario"></galeriaMural>
     </section>
     <p v-if="Booleanvalue">Formulario activado</p>
-
 </div>
 
 </template>
 <script setup>
 import galeriaMural from '@/components/galeriaMural.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import MuralForms from '@/components/MuralForms.vue';
+import { useAuthStore } from "@/store/authStore";
 
+const permisos=useAuthStore();
 const search = ref('');
 const buscadorUsuario = ref(null);
 
@@ -33,7 +34,9 @@ const encontrar = () => {
   if (buscadorUsuario.value) {
     buscadorUsuario.value = null; // Si ya estaba activo, lo desactiva
   } else {
-    buscadorUsuario.value = 'david@gmail.com'; // Activa la búsqueda por usuario
+    buscadorUsuario.value = permisos.user.email; // Activa la búsqueda por usuario
+    console.log(buscadorUsuario.value)
+
   }
 };
 
@@ -41,6 +44,13 @@ const Booleanvalue=ref(false)
 const subir = () =>{
   Booleanvalue.value=true;
 }
+onMounted(async () => {
+  if (!permisos.isAuthenticated) {
+        console.log("Acceso denegado, redirigiendo al login...");
+      }else{
+        permisos.fetchUserInfo();
+      }
+});
 </script>
 
 

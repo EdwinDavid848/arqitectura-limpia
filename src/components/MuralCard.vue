@@ -1,6 +1,6 @@
 <template>
-  <div v-if="props.data" id="cards-container">
-    <div class="card">
+<div v-if="props.data" id="cards-container" >
+  <div class="card">
 
       <div 
         class="card-image" 
@@ -13,23 +13,75 @@
         <h3 class="card-title">{{ props.data.titulo }}</h3>
         <p class="card-description">{{ props.data.descripcion }}</p>
         <p class="card-author">Por {{ props.data.email }}</p>
-        <BotonesMural :publications="data" :hability="props.hability"/> 
 
+      
+        <button id="Btn" class="BtnEditar" @click.stop="subir(publications)" v-if="esDelUsuario">
+          <div class="sign">📝</div>
+          <div class="text">Editar</div>
+        </button>
+
+        
+        <button id="Btn" class="BtnEliminar" @click="EliminarPub" v-if="permisos.user && permisos.user.rol==='administrador'" > 
+            <div class="sign">🗑️</div>
+            <div class="text">Eliminar</div>
+        </button>
+        <MuralForms v-show="hability" @close="hability = false" :publications="props.data"></MuralForms>
+        
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
-import BotonesMural from './Botones/BotonesMural.vue';
+import { ref,defineProps, onMounted, computed} from 'vue';
+import { useAuthStore } from '@/store/authStore';
+import { deletePublication } from "@/services/MuralServices";
+import MuralForms from './MuralForms.vue';
+import Swal from 'sweetalert2';
+
+const permisos=useAuthStore();
 
 const props = defineProps({
   data: Object,
-  hability: Boolean
 });
 
-console.log("🔍 Prop hability en MuralCard:", props.hability); 
+const EliminarPub = async () => {
+    console.log("🔹 Eliminando clase con ID:", props.data.id); // Debugging
+  
+    try {
+      const response = await deletePublication(props.data.id); 
+      if (response && response.status === 200) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Clase eliminada con éxito',
+          text: 'Recargue la página para verificar'
+        }).then(() => {
+          window.location.reload(); // 🔄 Recargar la página después de eliminar
+        });
+      } 
+    } catch (error) {
+      console.error("❌ Error al eliminar clase:", error);
+    }
+  };
+  
+const hability=ref(false)
+const subir = () =>{
+  hability.value=true;
+}
+const esDelUsuario = computed(() => {
+  return permisos.user && props.data.email === permisos.user.email;
+});
+
+onMounted(async () => {
+  if (!permisos.isAuthenticated) {
+        console.log("Acceso denegado, redirigiendo al login...");
+      }else{
+        permisos.fetchUserInfo();
+      }
+      console.log('mural', props.habilitada)
+  
+
+});
 </script>
 
 
@@ -106,5 +158,86 @@ console.log("🔍 Prop hability en MuralCard:", props.hability);
 }
 .menuButtons{
   z-index: 10;
+}
+
+/* From Uiverse.io by vinodjangid07 */ 
+.BtnEliminar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: .3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: rgb(255, 65, 65);
+  margin-top: 5px;
+}
+
+.BtnEditar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: .3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: rgb(5, 65, 65);
+}
+
+
+/* plus sign */
+.sign {
+  width: 100%;
+  transition-duration: .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+
+/* text */
+.text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  transition-duration: .3s;
+}
+/* hover effect on button width */
+#Btn:hover {
+  width: 125px;
+  border-radius: 40px;
+  transition-duration: .3s;
+}
+
+#Btn:hover .sign {
+  width: 30%;
+  transition-duration: .3s;
+  padding-left: 20px;
+}
+/* hover effect button's text */
+#Btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: .3s;
+  padding-right: 10px;
+}
+/* button click effect*/
+#Btn:active {
+  transform: translate(2px ,2px);
 }
 </style>

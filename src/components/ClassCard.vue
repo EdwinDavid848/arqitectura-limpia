@@ -2,14 +2,18 @@
   <section class="cards" v-if="Clases.length">
     <article v-for="clase in Clases" :key="clase.id" class="card">
       <div>
-        <BotonAgregarClase text="Agendar" v-if="clase.habilitado" @click="abrirModal(clase)" />
+        <BotonAgregarClase text="Agendar" v-if="permisos.user && clase.habilitado && permisos.user.rol === 'cliente'" @click="abrirModal(clase)" />
 
         <ReservaModal :clase="claseSeleccionada" :visible="mostrarModal" @closeForm="mostrarModal = false" />
 
         <div class="prueba1" :style="{ backgroundImage: `url(${encodeURI(clase.imagen)})` }">
-          <div class="menuButton">
+          <div
+            class="menuButton"
+            v-if="permisos.user && (permisos.user.rol === 'administrador' || permisos.user.rol === 'profesor')"
+          >
             <BotonClases :clase="clase" />
           </div>
+
 
           <div class="prueba2">
             <div class="prueba3">
@@ -33,7 +37,9 @@ import { VerClases } from '@/services/ClassServices';
 import BotonClases from './Botones/BotonClases.vue';
 import BotonAgregarClase from './Botones/BotonAgregarClase.vue';
 import ReservaModal from './ReservaModal.vue';
+import { useAuthStore } from '@/store/authStore';
 
+const permisos=useAuthStore();
 const Clases = ref([]);
 const mostrarModal = ref(false);
 const claseSeleccionada = ref(null);
@@ -54,6 +60,11 @@ onMounted(async () => {
   } catch (error) {
     console.error("Error al obtener clases:", error);
   }
+  if (!permisos.isAuthenticated) {
+        console.log("Acceso denegado, redirigiendo al login...");
+      }else{
+        permisos.fetchUserInfo();
+      }
 });
 
 </script>

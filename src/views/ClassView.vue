@@ -38,10 +38,13 @@
  <section class="infoClases">
    <h1 class="nuestrasclas">NUESTRAS CLASES DISPONIBLES</h1>
     <ClassCard></ClassCard>
-    <BotonAgregarClase text="Agregar nueva clase" @click="cambio()"></BotonAgregarClase>
+    <BotonAgregarClase 
+    text="Agregar nueva clase" @click="cambio()"
+    v-if="permisos.user && (permisos.user.rol === 'administrador' || permisos.user.rol === 'profesor')"
+    ></BotonAgregarClase>
     <ClassForm v-if="change" @closeForm="change = false"></ClassForm>
  </section>
- <section>
+ <section  v-if="permisos.user && (permisos.user.rol === 'administrador' || permisos.user.rol === 'profesor')" >
     <label class="dropdown">
       <input type="checkbox" class="toggle"/>
       <span class="buttonReserva">Mostrar Clases Reservadas</span>
@@ -60,16 +63,26 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import ClassCard from '@/components/ClassCard.vue';
 import BotonAgregarClase from '@/components/Botones/BotonAgregarClase.vue';
 import PayClass from '@/components/PayClass.vue';
 import ClassForm from '@/components/ClassForm.vue';
+import { useAuthStore } from '@/store/authStore';
+
+const permisos=useAuthStore();
+
 const change=ref(false);
 const cambio= async()=>{
   change.value=true
 }
-
+onMounted(async () => {
+  if (!permisos.isAuthenticated) {
+        console.log("Acceso denegado, redirigiendo al login...");
+      }else{
+        permisos.fetchUserInfo();
+      }
+});
 </script>
 <style scope>
 /* Estilo de la seccion informacion de clase */
