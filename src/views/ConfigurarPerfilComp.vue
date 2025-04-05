@@ -102,11 +102,12 @@ const props = defineProps({
 
 const router = useRouter();
 const opcionSelecionada = ref('');
-const opcionesAdministrador = ref(['Inventario Productos', 'Ver Ordenes']);
+const opcionesAdministrador = ref(['Inventario Productos', 'Ver Ordenes', 'Permisos de rol']);
 
 const rutas = ref({
   "Inventario Productos": '/inventario_productos',
   "Ver Ordenes": '/invenPay',
+  "Permisos de rol": '/PermisosRol'
 });
 
 const direcionarPag = () => {

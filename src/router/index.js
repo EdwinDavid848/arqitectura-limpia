@@ -6,7 +6,7 @@ import NosotrosViews from '@/views/NosotrosViews.vue';
 import SolicitarProductosView from '@/views/SolicitarProductosView.vue';
 import ClassView from '@/views/ClassView.vue';
 import MuralView from '@/views/MuralView.vue';
-
+import PermisosRolView from '@/views/PermisosRolView.vue';
 import TiendaView from '@/views/TiendaView.vue';
 import ComprarProductoView from '@/views/ComprarProductoView.vue';
 import InventarioProductos from '@/views/InventarioProductos.vue';
@@ -31,6 +31,7 @@ const routes = [
     {path: '/solicitar_recuperacion', component:SolicitarRecuperacionPasswordViews},
     {path: '/reset-password', component:ResetePasswordView},
     { path: '/solicitarProducto/:id', name: 'solicitarProducto', component: SolicitarProductosView },
+    {path:'/PermisosRol', component:PermisosRolView},
     {
         path: '/comprar_producto',
         component: ComprarProductoView,
