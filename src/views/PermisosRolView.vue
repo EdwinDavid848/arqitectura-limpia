@@ -50,7 +50,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
-import { obtenerUsuarios, actualizarRolUsuario } from '@/services/productService' ;
+import { obtenerUsuarios, actualizarRolUsuario } from '@/services/PermisosRolService';
 
 const Usu = ref([]);
 const UsuOriginales = ref([]);
@@ -59,12 +59,22 @@ const opcionesAdministrador = ref(['cliente', 'profesor', 'administrador']);
 
 const filterUsuarios = () => {
   const query = searchQuery.value.toLowerCase();
-  Usu.value = UsuOriginales.value.filter(
-    (usuarioss) =>
-      usuarioss.nombre.toLowerCase().includes(query) ||
-      usuarioss.email.toLowerCase().includes(query)
-  );
+
+  Usu.value = UsuOriginales.value
+    .filter(
+      (usuarioss) =>
+        usuarioss.nombre.toLowerCase().includes(query) ||
+        usuarioss.email.toLowerCase().includes(query)
+    )
+    .map(filtrado => {
+      const original = Usu.value.find(u => u.email === filtrado.email);
+      return {
+        ...filtrado,
+        nuevoRol: original?.nuevoRol ?? filtrado.rol,
+      };
+    });
 };
+
 
 const obtenerUsu = async () => {
   try {

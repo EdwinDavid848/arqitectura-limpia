@@ -1,9 +1,37 @@
 <template>
     <!-- From Uiverse.io by Mike11jr --> 
-<button class="btn"> Pagado
+<button class="btn" @click="confirmar"> Pagado
 </button>
 </template>
 <script setup>
+import { defineProps} from 'vue';
+import { CambiarEstado,pago } from '@/services/ReservationClassServices';
+import Swal from 'sweetalert2';
+const props=defineProps({
+  data: Object,
+})
+const confirmar=async()=>{
+  try{
+   await CambiarEstado(props.data.id, 'paid')
+   const fechaISO = new Date(props.data.fecha).toISOString().split('T')[0];
+    await pago(props.data.id,'presencial',props.data.monto,fechaISO)
+    console.log(props.data)
+    Swal.fire({
+          icon: 'success',
+          title: 'Reservacion pagada con exito',
+          text: 'Recargue la página para verificar'
+        }).then(() => {
+          window.location.reload(); // 🔄 Recargar la página después de eliminar
+        });
+  }catch(error){
+    Swal.fire({
+      icon:'error',
+      title: 'error al cancelar reservacion'
+    })
+    console.log('data',props.data)
+    console.log(error)
+  }
+}
 </script>
 <style scoped>
 /* From Uiverse.io by Mike11jr */ 

@@ -1,10 +1,39 @@
 <template>
 <!-- From Uiverse.io by vinodjangid07 --> 
-<button class="buttonDelete">
-  <svg viewBox="0 0 448 512" class="svgIcon"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg>
+<button class="buttonDelete" @click="cancelar">
+  <svg viewBox="0 0 448 512" class="svgIcon">
+    <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z">
+    </path>
+  </svg>
 </button>
 </template>
 <script setup>
+import { defineProps} from 'vue';
+import { CambiarEstado } from '@/services/ReservationClassServices';
+import Swal from 'sweetalert2';
+const props=defineProps({
+  data: Object,
+})
+const cancelar=async()=>{
+  try{
+   await CambiarEstado(props.data.id, 'cancelled')
+    console.log(props.data)
+    Swal.fire({
+          icon: 'success',
+          title: 'Reservacion cancelada con exito',
+          text: 'Recargue la página para verificar'
+        }).then(() => {
+          window.location.reload(); // 🔄 Recargar la página después de eliminar
+        });
+  }catch(error){
+    Swal.fire({
+      icon:'error',
+      title: 'error al cancelar reservacion'
+    })
+    console.log('data',props.data)
+    console.log(error)
+  }
+}
 </script>
 <style>
 /* From Uiverse.io by vinodjangid07 */ 
@@ -51,7 +80,7 @@
 .buttonDelete::before {
   position: absolute;
   top: -20px;
-  content: "Delete";
+  content: "Cancelar";
   color: white;
   transition-duration: .3s;
   font-size: 2px;

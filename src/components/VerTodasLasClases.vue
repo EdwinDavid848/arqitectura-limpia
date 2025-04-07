@@ -1,15 +1,16 @@
 <template>
+<div class="box gradDynamic">
+    <div class="botonagregar">
+        <BotonAgregarClase text="Agregar nueva clase" @click="cambio()"></BotonAgregarClase>
+        <ClassForm v-if="change" @closeForm="change = false"></ClassForm>
+    </div>
+    
   <section class="cards" v-if="Clases.length">
     <article v-for="clase in Clases" :key="clase.id" class="card">
-      <div v-if="clase.habilitado">
-        <BotonAgregarClase text="Agendar" v-if="permisos.user && clase.habilitado && permisos.user.rol === 'cliente'" @click="abrirModal(clase)" />
-
-        <ReservaModal :clase="claseSeleccionada" :visible="mostrarModal" @closeForm="mostrarModal = false" />
-
+      <div>
         <div class="prueba1" :style="{ backgroundImage: `url(${encodeURI(clase.imagen)})` }">
           <div
             class="menuButton"
-            v-if="permisos.user && (permisos.user.rol === 'administrador' || permisos.user.rol === 'profesor')"
           >
             <BotonClases :clase="clase" />
           </div>
@@ -24,31 +25,26 @@
             <h3 class="dexcrip">{{ clase.descripcion }}</h3>
             <h3 class="infor"><span>Profesor:</span> {{ clase.profesor }}</h3>
             <h3 class="infor"><span>Horarios:</span> {{ clase.fecha }} de {{ clase.comienzo }} - {{ clase.final }}</h3>
-          </div>
+            <h3 class="infor"><span>estado:</span> {{ clase.habilitado }}</h3>  
+        </div>
         </div>
       </div>
     </article>
   </section>
+</div>
 </template>
-
-<script setup>
+<script setup >
 import { ref, onMounted } from 'vue';
 import { VerClases } from '@/services/ClassServices';
 import BotonClases from './Botones/BotonClases.vue';
 import BotonAgregarClase from './Botones/BotonAgregarClase.vue';
-import ReservaModal from './ReservaModal.vue';
-import { useAuthStore } from '@/store/authStore';
-
-const permisos=useAuthStore();
+import ClassForm from './ClassForm.vue';
 const Clases = ref([]);
-const mostrarModal = ref(false);
-const claseSeleccionada = ref(null);
 
-const abrirModal = (clase) => {
-  claseSeleccionada.value = clase;
-  mostrarModal.value = true;
-};
-
+const change=ref(false);
+const cambio= async()=>{
+  change.value=true
+}
 onMounted(async () => {
   try {
     const data = await VerClases();
@@ -60,20 +56,56 @@ onMounted(async () => {
   } catch (error) {
     console.error("Error al obtener clases:", error);
   }
-  if (!permisos.isAuthenticated) {
-        console.log("Acceso denegado, redirigiendo al login...");
-      }else{
-        permisos.fetchUserInfo();
-      }
+
 });
 
 </script>
-
-
-
-  
 <style scoped>
-.prueba1 {
+  .box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+      height:100%;
+      width:100%;
+      min-height: 100vh;
+      padding-bottom: 20px;
+      padding-top: 100px;
+    }
+    
+  .gradDynamic{
+    position:relative;
+  }
+  
+  .gradDynamic:after, .gradDynamic:before{
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    content:"";
+    z-index:-1;
+  }
+  
+  .gradDynamic:after{
+    background:radial-gradient(circle,rgb(0, 0, 0),transparent);
+    background-size:400%;
+    animation:colorSpin 30s linear infinite;
+  }
+  
+  .gradDynamic:before{
+    background-color:rgb(223, 146, 5);
+  }
+  
+  @keyframes colorSpin{
+    25%{background-position:0 100%}
+    50%{background-position:100% 100%}
+    75%{background-position:100% 0}
+    100%{filter:hue-rotate(360deg)}
+  }
+.botonagregar{
+    margin-bottom: 30px;
+}
+  .prueba1 {
   overflow: hidden;
   width: 420px;
   height: 26rem;
@@ -162,5 +194,4 @@ onMounted(async () => {
     justify-content: space-around;
   }
   
-  </style>
-  
+</style>

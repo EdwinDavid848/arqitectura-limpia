@@ -44,7 +44,7 @@
     ></BotonAgregarClase>
     <ClassForm v-if="change" @closeForm="change = false"></ClassForm>
  </section>
- <section  v-if="permisos.user && (permisos.user.rol === 'administrador' || permisos.user.rol === 'profesor')" >
+ <section  v-if="permisos.user " >
     <label class="dropdown">
       <input type="checkbox" class="toggle"/>
       <span class="buttonReserva">Mostrar Clases Reservadas</span>

@@ -25,9 +25,9 @@ export async function ReservacionesUsuario(user) {
     }
 }
 
-export async function BuscarReservaciones(email) {
+export async function BuscarReservaciones(email,state) {
     try{
-        const data =  await axios.get(`${API_URL}/SearchClass/${email}`)
+        const data =  await axios.get(`${API_URL}/SearchClass/${email}/${state}`)
         console.log(data.data)
         return data.data
     }catch(error){
@@ -49,3 +49,35 @@ export async function AddReservaciones(clase, email, fecha) {
       return null;
     }
   }
+
+export async function CambiarEstado(id, state) {
+    try{
+        const response = await axios.put(`${API_URL}/EditReserver/${id}/${state}`)
+        return response.data
+    }catch(error){
+        console.error("Error obteniendo clases:", error);
+        return [];
+    }
+    
+}
+
+export async function pago(idClase,metodo,monto,fecha) {
+    try{
+        const response=await axios.post('http://127.0.0.1:8000/pagarClass/', 
+            {
+                reservation_id: idClase,
+                metodo_pago: metodo,
+                monto: monto,
+                fecha_pago: fecha
+            }, {
+                headers: {
+                'Content-Type': 'application/json'
+                }
+            });
+        return response.data;
+    }catch(error){
+        console.error("Error al reservar la clase:", error);
+      return null;
+    }
+    
+}

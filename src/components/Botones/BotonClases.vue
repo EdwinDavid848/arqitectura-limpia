@@ -19,10 +19,7 @@
       <div class="text">Editar</div>
       </button>
 
-    <button id="Btn" class="BtnEliminar" @click="EliminarCLase"> 
-        <div class="sign">🗑️</div>
-      <div class="text">Eliminar</div>
-    </button>
+
 
 
 
@@ -34,7 +31,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, defineProps } from "vue";
-import { DeleteClass, HabilityClass } from '@/services/ClassServices';
+import { HabilityClass } from '@/services/ClassServices';
 import ClassForm from "../ClassForm.vue";
 import Swal from 'sweetalert2';
 
@@ -67,30 +64,6 @@ const props = defineProps({
   clase: Object // La clase se pasa como prop desde ClassCard.vue
 });
 
-const EliminarCLase = async () => {
-  console.log("🔹 Eliminando clase con ID:", props.clase.id); // Debugging
-
-  try {
-    const response = await DeleteClass(props.clase.id); 
-    if (response && response.status === 200) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Clase eliminada con éxito',
-        text: 'Recargue la página para verificar'
-      }).then(() => {
-        window.location.reload(); // 🔄 Recargar la página después de eliminar
-      });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'No se pudo eliminar la clase, intente de nuevo.'
-      });
-    }
-  } catch (error) {
-    console.error("❌ Error al eliminar clase:", error);
-  }
-};
 
 const HabilitarClase = async () => {
   console.log("🔹 Habilitando/Desabilitando clase con ID:", props.clase.id); // Debugging

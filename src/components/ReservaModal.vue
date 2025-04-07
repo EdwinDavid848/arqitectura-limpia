@@ -19,11 +19,14 @@
 
 
 <script setup>
-import { ref, computed, watch, defineProps, defineEmits } from 'vue';
+import { ref, computed, watch, defineProps, defineEmits, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import { AddReservaciones } from '@/services/ReservationClassServices';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
+import { useAuthStore } from '@/store/authStore';
+
+const permisos=useAuthStore();
 
 const props = defineProps({
   clase: Object,
@@ -100,19 +103,26 @@ const AgregarReserva = async () => {
   try {
     
     const fechaISO = new Date(fechaSeleccionada.value).toISOString().split('T')[0];
-    const response= await AddReservaciones(props.clase.titulo, 'david@gmail.com', fechaISO);
-    console.log(props.clase.titulo, 'david@gmail.com', fechaISO)
-    if (response && response.status === 200) {
-      Swal.fire({ icon: 'success', title: 'Reservación exitosa', text: 'Clase reservada correctamente' })  
-      emit('closeForm');
-    }else{
-      console.log('error en la respuesta', response)
-    }
+    await AddReservaciones(props.clase.titulo, permisos.user.email, fechaISO);
+    console.log(props.clase.titulo, permisos.user.email, fechaISO)
+    Swal.fire({ icon: 'success', title: 'Reservación exitosa', text: 'Clase reservada el dia', fechaISO }).then(() => {
+          window.location.reload(); // 🔄 Recargar la página después de eliminar
+        });  
+    emit('closeForm');
+    
   } catch (error) {
     agenda.value=false
     console.error(error);
   }
 };
+onMounted(async () => {
+  
+  if (!permisos.isAuthenticated) {
+        console.log("Acceso denegado, redirigiendo al login...");
+      }else{
+        permisos.fetchUserInfo();
+      }
+});
 </script>
 
 
