@@ -102,12 +102,12 @@ const toggleActivo = async (producto) => {
   const accion = producto.activo ? "desactivar" : "activar";
 
   const confirmacion = await Swal.fire({
-    title: ¿Quieres ${accion} este producto?,
+    title: `¿Quieres ${accion} este producto?`,
     text: "Esta acción puede revertirse",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonText: Sí, ${accion},
-    cancelButtonText: "Cancelar",
+    confirmButtonText: `Sí, ${accion}`,
+    cancelButtonText: "Cancelar"
   });
 
   if (confirmacion.isConfirmed) {
@@ -116,12 +116,12 @@ const toggleActivo = async (producto) => {
 
       if (result.success) {
         producto.activo = !producto.activo;
-        Swal.fire("Hecho", Producto ${accion} correctamente, "success");
+        Swal.fire("Hecho", `Producto ${accion} correctamente`, "success");
       } else {
         throw new Error("Respuesta no válida");
       }
     } catch (error) {
-      Swal.fire("Error", No se pudo ${accion} el producto, "error");
+      Swal.fire("Error", `No se pudo ${accion} el producto`, "error");
     }
   }
 };

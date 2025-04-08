@@ -11,13 +11,12 @@ import UserHistorialComprasView from '@/views/UserHistorialComprasView.vue';
 import TiendaView from '@/views/TiendaView.vue';
 import ComprarProductoView from '@/views/ComprarProductoView.vue';
 import InventarioProductos from '@/views/InventarioProductos.vue';
-import InventarioProductos2 from '@/views/InventarioProductos2.vue';
+import InventarioProductos2 from '@/views/InventarioProductos.vue';
 import InventarioComprasView from '@/views/InventarioComprasView.vue';
 import ResetePasswordView from '@/views/ResetePasswordView.vue';
 import SolicitarRecuperacionPasswordViews from '@/views/SolicitarRecuperacionPasswordViews.vue';
 import VerTodasLasClases from '@/components/VerTodasLasClases.vue';
 import { getToken } from "@/utils/localStorage";
-import { getToken } from '@/utils/localStorage';
 import { useAuthStore } from '@/store/authStore'; 
 
 
@@ -44,7 +43,6 @@ const routes = [
         component: ComprarProductoView,
         meta: { requiresAuth: true }
     },
-    { path: '/solicitarProducto/:id', name: 'solicitarProducto', component: SolicitarProductosView },
     {
       path: "/dashboard",
       component: UserDashboard,
