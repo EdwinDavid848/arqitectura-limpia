@@ -62,7 +62,7 @@
           <h2>Precio Total</h2>
           <h2>{{ calcularTotal }} $</h2>
         </div>
-        <button @click="comprarProductos">Confirmar Compra</button>
+        <button @click="comprarProducto">Confirmar Compra</button>
       </div>
     </div>
 </template>
@@ -73,14 +73,37 @@ import {ref,onMounted, nextTick} from 'vue';
 import { useAuthStore } from "@/store/authStore";
 import { useCartStore } from '@/store/cartStore';
 import { useRouter } from 'vue-router';
+import { comprarProductos } from '@/services/productService';
+import Swal from 'sweetalert2';
 
 const router = useRouter();
 
 const cartStore = useCartStore();
 const authStore = useAuthStore();
-
-
 const divActual = ref('PRESENCIAL')
+
+
+const comprarProducto = async () => {
+  const confirmacion = await Swal.fire({
+    title: "¿Estás seguro?",
+    text: "Esta acción no se puede deshacer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, Comprar",
+    cancelButtonText: "Cancelar",
+  });
+  const metodo_pago = divActual.value;
+
+  if (confirmacion.isConfirmed) {
+    const compra = await comprarProductos(authStore.user.email, metodo_pago);
+    if (compra) {
+      Swal.fire("Comprado", "El producto ha sido comprado", "success");
+    } else {
+      Swal.fire("Error", "No se pudo comprar el producto", "error");
+    }
+  }
+};
+
 
 
 
@@ -113,7 +136,7 @@ onMounted(async () => {
     grid-template-columns: 1.5fr 1fr;
     min-height: 100vh;
     padding-bottom: 20px;
-    padding-top: 100px;
+    padding-top: 80px;
   }
  
   .gradDynamic {
@@ -132,7 +155,7 @@ onMounted(async () => {
   }
  
   .gradDynamic:after {
-    background: linear-gradient(to right, rgb(235, 218, 125), rgb(255, 255, 255));
+    background: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255));
     background-size: 200% 100%;
     animation: colorSlide 5s infinite alternate ease-in-out;
 }
@@ -186,13 +209,13 @@ onMounted(async () => {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s, transform 1s;
+    border: 1px solid black;
+
 }
 
 .opcion button:hover{
     background-color: #ffffff; 
     color: black; 
-    transform: scale(1.05); 
-    border: 1px solid black;
 }
 
 .opcion button.active{
@@ -302,13 +325,16 @@ onMounted(async () => {
   .tab-result div{
     display: grid;
     justify-content: center;
+    align-items: center;
     grid-template-columns: 2fr 1fr 1fr;
     gap: 10px;
     padding: 10px;
     border-bottom: 1px solid #bbbaba;
   }
   .tab-result div h2{
-    font-size: 25px;
+    font-size: 20px;
+
+
   }
   .tab-result div h3{
     color: #333;
@@ -316,17 +342,17 @@ onMounted(async () => {
   .tab-result div p{
     font-size: 20px;
     text-align: end;
-    color: #f38201;
+    color: #000000;
     font-weight: bold;
   }
   .amounts{
-    font-size: 20px;
+    font-size: 17px;
+    font-weight: 600;
   }
   .tab-result div img{
-    max-width: 100%;
-    max-height: 300px;
-    display: flex;
-    justify-content: center;
+    width: auto;
+    max-width: 200px;
+    max-height: 200px;
 
   }
   .tab-precio{

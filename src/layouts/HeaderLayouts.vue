@@ -17,7 +17,6 @@
                 <router-link class="ruta" to="/dashboard">Perfl</router-link>
             </section>
             
-           
         </nav>
     </header>
 </template>

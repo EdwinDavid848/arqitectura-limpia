@@ -39,7 +39,12 @@
           <td>{{ d.color }}</td>
           <td class="botoness">
             <button @click="$emit('editar', d)" class="editar">Editar</button>
-            <button @click="eliminarProductos(d.id)" class="eliminar">Eliminar</button>
+            <button 
+              @click="toggleActivo(d)" 
+              :class="d.activo ? 'btn-rojo' : 'btn-verde'"
+            >
+              {{ d.activo ? 'Desactivar' : 'Activar' }}
+            </button>
           </td>
         </tr>
       </tbody>
@@ -52,7 +57,7 @@
 
 <script setup>
 import { onMounted, computed, ref } from 'vue';
-import { obtenerProductos, eliminarProducto, obtenerProductosPorCategoria } from '@/services/productService';
+import { obtenerProductos, estadoProducto, obtenerProductosPorCategoria } from '@/services/productService';
 import Swal from 'sweetalert2';
 
 const datos = ref([]); 
@@ -93,23 +98,30 @@ const obtenerDatosCategoria = async () => {
   }
 };
 
-const eliminarProductos = async (id) => {
+const toggleActivo = async (producto) => {
+  const accion = producto.activo ? "desactivar" : "activar";
+
   const confirmacion = await Swal.fire({
-    title: "¿Estás seguro?",
-    text: "Esta acción no se puede deshacer",
+    title: ¿Quieres ${accion} este producto?,
+    text: "Esta acción puede revertirse",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonText: "Sí, eliminar",
+    confirmButtonText: Sí, ${accion},
     cancelButtonText: "Cancelar",
   });
 
   if (confirmacion.isConfirmed) {
-    const eliminado = await eliminarProducto(id);
-    if (eliminado) {
-      Swal.fire("Eliminado", "El producto ha sido eliminado", "success");
-      datos.value = datos.value.filter(producto => producto.id !== id); 
-    } else {
-      Swal.fire("Error", "No se pudo eliminar el producto", "error");
+    try {
+      const result = await estadoProducto(accion, producto.id);
+
+      if (result.success) {
+        producto.activo = !producto.activo;
+        Swal.fire("Hecho", Producto ${accion} correctamente, "success");
+      } else {
+        throw new Error("Respuesta no válida");
+      }
+    } catch (error) {
+      Swal.fire("Error", No se pudo ${accion} el producto, "error");
     }
   }
 };
@@ -208,14 +220,32 @@ onMounted(async () => {
   background-color: #bd8d0a;
 }
 
-.eliminar {
+.btn-rojo {
   background-color: #e74c3c;
   color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.eliminar:hover {
+.btn-verde {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-rojo:hover {
   background-color: #c0392b;
 }
+
+.btn-verde:hover {
+  background-color: #27ae60;
+}
+
 
 .load-more-btn {
   margin-top: 15px;

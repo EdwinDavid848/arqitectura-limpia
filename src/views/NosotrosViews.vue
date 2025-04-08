@@ -65,7 +65,7 @@
     <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
       <div class="product">
         <ProductCardVersion2  
-          v-for="(producto, index) in productosCategoria.lana" 
+          v-for="(producto, index) in productosCategoria.peluche" 
           :key="index"
           :producto="producto" 
         />

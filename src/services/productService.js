@@ -74,12 +74,12 @@ export async function registrarProducto(producto) {
   }
 }
 
-export async function eliminarProducto(id) {
+export async function estadoProducto(accion, producto_id) {
   try {
-    await axios.delete(`${API_URL}/productos/${id}`);
-    return { success: true };
+    const response = await axios.put(`${API_URL}/estado_producto/${accion}/${producto_id}`);
+    return { success: true, message: response.data.detail };
   } catch (error) {
-    console.error("Error al eliminar el producto:", error);
+    console.error("Error al cambiar estado del producto:", error);
     throw error;
   }
 }
@@ -98,4 +98,42 @@ export async function actualizarProducto(id, producto) {
     console.error("Error al actualizar el producto:", error);
     throw error;
   }
+}
+
+export async function comprarProductos(email_cliente, metodo_pago) {
+  try{
+    await axios.post(`${API_URL}/realizar_pedido/${email_cliente}/${metodo_pago}`);
+    return {success: true};
+  }catch(error){
+    console.error("Error al comprar el producto:", error);
+    throw error;
+  }
+  
+}
+
+export async function historialCompras(access_token) {
+  try{
+    const historial = await axios.get(`${API_URL}/historialCompra`, {
+      headers: {
+          Authorization: `Bearer ${access_token}`
+      }
+  });
+  return historial.data
+  }catch(error){
+    console.error("Error al ver el historial de compras:", error);
+    throw error;
+  }
+  
+}
+
+
+export async function historialAdministradorCompras() {
+  try{
+    const response = await axios.get(`${API_URL}/InventarioPay`);
+    return response.data;
+  }catch(error){
+    console.error("Error al comprar el producto:", error);
+    throw error;
+  }
+  
 }
