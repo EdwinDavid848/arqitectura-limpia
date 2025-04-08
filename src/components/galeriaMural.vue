@@ -1,7 +1,7 @@
 <template>
   <div ref="container" class="publication-list" @scroll="handleScroll">
     <div ref="container" class="mural-container">
-      <MuralCard v-for="post in publications" :key="post.id" :data="post" :hability="HabilityButton"/>
+      <MuralCard v-for="post in publications" :key="post.id" :data="post"/>
     </div>
 
     <div v-if="loading" class="loading">Cargando más publicaciones...</div>
@@ -16,12 +16,12 @@ import { defineProps } from 'vue';
 
 const publications = ref([]);
 const loading = ref(false);
-const HabilityButton=ref(true)
 
 const props = defineProps({ 
   buscador: String, 
-  buscadorUser: String 
+  buscadorUser: String,
 });
+
 
 const loadPublications = async () => {
   loading.value = true;
@@ -30,8 +30,8 @@ const loadPublications = async () => {
       // Si se busca por usuario, ignoramos la búsqueda por título
       console.log("Buscando publicaciones de usuario:", props.buscadorUser);
       publications.value = await searchPublicationsByUser(props.buscadorUser);
-      HabilityButton.value=true;
-      console.log("HabilityButton:", HabilityButton.value);
+
+
     } else if (props.buscador) {
       // Si no hay usuario pero sí un término de búsqueda, buscamos por título
       console.log("Buscando publicaciones con título:", props.buscador);

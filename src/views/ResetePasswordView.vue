@@ -68,7 +68,7 @@ const resetPassword = async () => {
   <div v-if="modelPasswordAprobado" class=" overlay">
     <div class="modal_password">
       <p>Contraseña Actulizada Exitosamente</p>
-      <img src="F:\Nurv Vue Js\PROYECTO_PROTOTIPO\vue-project\src\assets\img\marca-de-verificacion.png" alt="" style="height: 100px;">
+      <img src="@/assets/img/marca-de-verificacion.png" alt="" style="height: 100px;">
     </div>
   </div>
     <div>

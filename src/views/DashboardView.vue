@@ -16,8 +16,11 @@
                     <UserHistorialComprasView/>
                   </div>
                   <div v-if="divActual === 'Class History'">
+                    <PayClass></PayClass>
+                    <button @click="cambio" v-if="authStore.user && (authStore.user.rol == 'administrador' || authStore.user.rol == 'profesor' )">Gestion de clases</button>
                   </div>
                   <div v-else-if="divActual === 'Publications'" >
+                    <galeriaMural :buscador-user="authStore.user.email"></galeriaMural>
                   </div>
                   <div v-else-if="divActual === 'Configuration'" >
                     <ConfigurarPerfilComp  v-if="authStore.user"  :nombre="authStore.user.nombre" :email="authStore.user.email" :rol="authStore.user.rol" :telefono="authStore.user.telefono" :password="authStore.user.password"/>
@@ -48,6 +51,8 @@
   import { useCartStore } from "@/store/cartStore";
   import { useRouter } from 'vue-router';
   import ConfigurarPerfilComp from "@/views/ConfigurarPerfilComp.vue";
+  import galeriaMural from "@/components/galeriaMural.vue";
+  import PayClass from "@/components/PayClass.vue";
   import UserHistorialComprasView from "./UserHistorialComprasView.vue";
 
   import { ref } from 'vue';
@@ -67,7 +72,9 @@
     authStore.logout();
     router.push('/');
   };
-
+  const cambio=()=>{
+    router.push('/TodaClase');
+  }
   onMounted(() => {
     if (!authStore.isAuthenticated) {
         console.log("Acceso denegado, redirigiendo al login...");
