@@ -47,6 +47,9 @@ export const useCartStore = defineStore("cart", {
             } catch (error) {
                 console.error("Error al eliminar producto del carrito:", error);
             }
+        },
+        async limpiarCarrito(){
+            this.items = [];
         }
     },
 });

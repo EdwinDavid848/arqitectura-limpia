@@ -16,21 +16,7 @@
             <section class="rutasPerfil" v-else>
                 <router-link class="ruta" to="/dashboard">Perfl</router-link>
             </section>
-            <router-link class="ruta" to="/principa">Nosotros</router-link>
-            <router-link class="ruta" to="">Productos</router-link>
-            <router-link class="ruta" to="">Clases</router-link>
             
-            <!-- Si el usuario NO está autenticado, mostrar Login y Registro -->
-            <template v-if="!isAuthenticated">
-                <router-link class="ruta" to="/">Login</router-link>
-                <router-link class="ruta" to="/register">Registro</router-link>
-            </template>
-
-            <!-- Si el usuario está autenticado, mostrar Dashboard y Cerrar Sesión -->
-            <template v-else>
-                <router-link class="ruta" to="/dashboard">Dashboard</router-link>
-                <button class="ruta" @click="logout">Cerrar sesión</button>
-            </template>
         </nav>
     </header>
 </template>

@@ -13,6 +13,7 @@
               </div>
               <div v-else>
                   <div v-if="divActual === 'Shopping Cart'">
+                    <UserHistorialComprasView/>
                   </div>
                   <div v-if="divActual === 'Class History'">
                   </div>
@@ -44,8 +45,10 @@
   <script setup>
   import { onMounted } from "vue";
   import { useAuthStore } from '@/store/authStore';
+  import { useCartStore } from "@/store/cartStore";
   import { useRouter } from 'vue-router';
   import ConfigurarPerfilComp from "@/views/ConfigurarPerfilComp.vue";
+  import UserHistorialComprasView from "./UserHistorialComprasView.vue";
 
   import { ref } from 'vue';
 
@@ -56,9 +59,11 @@
   };
     
   const authStore = useAuthStore();
+  const cartStore = useCartStore();
   const router = useRouter();
   
   const logout = () => {
+    cartStore.limpiarCarrito();
     authStore.logout();
     router.push('/');
   };
@@ -86,7 +91,6 @@
       padding-bottom: 50px;
   }
   .mostrarInformacion{
-    
       padding-top: 20px;
       display: flex;
       flex-direction: column;
@@ -117,15 +121,17 @@
       color: #ffffff;
   }
 
-  .info_perfil{
-        background: linear-gradient(to bottom, #ffe4a5, #ffcf6d);
-        width: 95%;
-        height: 100%;
-        border-radius: 5px;
-        box-shadow: 0 8px 6px rgba(0, 0, 0, 0.493);
-        border-radius: 15px;
+  .info_perfil {
+  background: linear-gradient(to bottom, #ffe4a5, #ffcf6d);
+  width: 95%;
+  height: 100%;
+  max-height: 600px; /* Ajusta este valor según tu diseño */
+  overflow-y: auto; /* Scroll vertical cuando se sobrepase la altura */
+  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.493);
+  border-radius: 15px;
+  padding: 15px;
+}
 
-  }
   .mostrarPerfil  {
       display: grid;
       grid-template-rows: 0.5fr 2fr;

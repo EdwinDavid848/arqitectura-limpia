@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { loginUser, registerUser, informacionPerfil } from "@/services/authService";
+import { historialCompras } from "@/services/productService";
 import { saveToken, getToken, removeToken, saveEmail, removeEmail } from "@/utils/localStorage";
 import { jwtDecode } from "jwt-decode";
 
@@ -9,6 +10,7 @@ export const useAuthStore = defineStore("auth", {
         token: null, 
         tokenExpiration: null,
         email: null,
+        historial: []
     }),
 
     getters: {
@@ -68,7 +70,17 @@ export const useAuthStore = defineStore("auth", {
                 console.error("Error al obtener información del usuario:", error);
             }
         },
+        async obtenerHistorialCompras() {
+            try {
+                if (!this.token) return;
         
+                const compras = await historialCompras(this.token);
+                this.historial = compras; 
+                console.log("Historial de compras obtenido:", compras);
+            } catch (error) {
+                console.error("Error al obtener historial de compras:", error);
+            }
+        },        
         setToken(newToken) {
             try {
                 const decodedToken = jwtDecode(newToken);
