@@ -127,6 +127,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow:#131313;
 }
 .opciones-administradorr select{
   width: 90%;
@@ -217,13 +218,14 @@ onMounted(() => {
   }
 
   th {
-    background-color: #ff940a;
+    background-color: #ecd448;
     font-weight: bold;
     color: #000000;
   }
 
   td {
     color: #000000;
+    background-color: rgb(253, 251, 225);
   }
 
   .no-data-message {
@@ -297,7 +299,7 @@ onMounted(() => {
 }
 
 .btn:hover {
- background-color: #4cc9f0;
+ background-color: rgb(223, 146, 5);
  color: #fff;
  box-shadow: 0 2px 0 2px #0d3b66;
 }

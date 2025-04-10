@@ -14,7 +14,7 @@
         <p class="card-description">{{ props.data.descripcion }}</p>
         <p class="card-author">Por {{ props.data.email }}</p>
 
-      
+      <div class="bottonmenu">
         <button id="Btn" class="BtnEditar" @click.stop="subir(publications)" v-if="esDelUsuario">
           <div class="sign">📝</div>
           <div class="text">Editar</div>
@@ -25,6 +25,8 @@
             <div class="sign">🗑️</div>
             <div class="text">Eliminar</div>
         </button>
+      </div>
+        
         <MuralForms v-show="hability" @close="hability = false" :publications="props.data"></MuralForms>
         
       </div>
@@ -49,8 +51,7 @@ const EliminarPub = async () => {
     console.log("🔹 Eliminando clase con ID:", props.data.id); // Debugging
   
     try {
-      const response = await deletePublication(props.data.id); 
-      if (response && response.status === 200) {
+       await deletePublication(props.data.id); 
         Swal.fire({
           icon: 'success',
           title: 'Clase eliminada con éxito',
@@ -58,7 +59,7 @@ const EliminarPub = async () => {
         }).then(() => {
           window.location.reload(); // 🔄 Recargar la página después de eliminar
         });
-      } 
+      
     } catch (error) {
       console.error("❌ Error al eliminar clase:", error);
     }
@@ -94,7 +95,11 @@ onMounted(async () => {
   margin: 10px;
   
 }
-
+.bottonmenu{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
 /* Tarjeta individual */
 .card {
   width: 300px;

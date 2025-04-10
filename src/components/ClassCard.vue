@@ -76,7 +76,7 @@ onMounted(async () => {
 .prueba1 {
   overflow: hidden;
   width: 420px;
-  height: 26rem;
+  height: 29rem;
   margin-bottom: 40px;
   display: flex;
   flex-direction: column-reverse;

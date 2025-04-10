@@ -1,5 +1,5 @@
 <template>
-<div class="box gradDynamic">
+<div :style="{ backgroundColor: backgroundColor, transition: 'background-color 0.3s ease' }" class="min-h-screen">
     <div class="formulary">
         <form action="" class="buscar" @submit.prevent="buscar">
             <input type="text" placeholder="Buscar" class="inputbusc" v-model="search">
@@ -13,46 +13,40 @@
       <galeriaMural :buscador="search" :buscadorUser="buscadorUsuario"></galeriaMural>
     </section>
     <p v-if="Booleanvalue">Formulario activado</p>
+    
 </div>
-
 </template>
+
 <script setup>
-import galeriaMural from '@/components/galeriaMural.vue';
 import { ref, onMounted } from 'vue';
+import galeriaMural from '@/components/galeriaMural.vue';
 import MuralForms from '@/components/MuralForms.vue';
 import { useAuthStore } from "@/store/authStore";
+import backgroundMural from "@/composables/backgroundMural"; // ✅ importamos
 
-const permisos=useAuthStore();
+const { backgroundColor } = backgroundMural(); // ✅ ¡aquí sí la usamos!
+
+const permisos = useAuthStore();
 const search = ref('');
 const buscadorUsuario = ref(null);
+const Booleanvalue = ref(false);
 
-const buscar = () => {
-  // La búsqueda ya está ligada a `search`, no necesitas parámetros
-};
-
+const buscar = () => {};
 const encontrar = () => {
-  if (buscadorUsuario.value) {
-    buscadorUsuario.value = null; // Si ya estaba activo, lo desactiva
-  } else {
-    buscadorUsuario.value = permisos.user.email; // Activa la búsqueda por usuario
-    console.log(buscadorUsuario.value)
-
-  }
+  buscadorUsuario.value = buscadorUsuario.value ? null : permisos.user.email;
+};
+const subir = () => {
+  Booleanvalue.value = true;
 };
 
-const Booleanvalue=ref(false)
-const subir = () =>{
-  Booleanvalue.value=true;
-}
-onMounted(async () => {
+onMounted(() => {
   if (!permisos.isAuthenticated) {
-        console.log("Acceso denegado, redirigiendo al login...");
-      }else{
-        permisos.fetchUserInfo();
-      }
+    console.log("Acceso denegado, redirigiendo al login...");
+  } else {
+    permisos.fetchUserInfo();
+  }
 });
 </script>
-
 
 <style scoped>
 

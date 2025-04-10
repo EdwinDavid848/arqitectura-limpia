@@ -16,12 +16,12 @@
                     <UserHistorialComprasView/>
                   </div>
                   <div v-if="divActual === 'Class History'">
+                    <button class="buttongestion" @click="cambio" v-if="authStore.user && (authStore.user.rol == 'administrador' || authStore.user.rol == 'profesor' )">Gestion de clases</button>
+                    <h2 class="reservaciones">Reservaciones</h2>
                     <PayClass></PayClass>
-                    <button @click="cambio" v-if="authStore.user && (authStore.user.rol == 'administrador' || authStore.user.rol == 'profesor' )">Gestion de clases</button>
                   </div>
-                  <div v-else-if="divActual === 'Publications'" >
-                    <galeriaMural :buscador-user="authStore.user.email"></galeriaMural>
-                  </div>
+                  <router-link v-else-if="divActual === 'Publications'" to="/mural">
+                  </router-link>
                   <div v-else-if="divActual === 'Configuration'" >
                     <ConfigurarPerfilComp  v-if="authStore.user"  :nombre="authStore.user.nombre" :email="authStore.user.email" :rol="authStore.user.rol" :telefono="authStore.user.telefono" :password="authStore.user.password"/>
                   </div>
@@ -51,7 +51,6 @@
   import { useCartStore } from "@/store/cartStore";
   import { useRouter } from 'vue-router';
   import ConfigurarPerfilComp from "@/views/ConfigurarPerfilComp.vue";
-  import galeriaMural from "@/components/galeriaMural.vue";
   import PayClass from "@/components/PayClass.vue";
   import UserHistorialComprasView from "./UserHistorialComprasView.vue";
 
@@ -75,6 +74,7 @@
   const cambio=()=>{
     router.push('/TodaClase');
   }
+  
   onMounted(() => {
     if (!authStore.isAuthenticated) {
         console.log("Acceso denegado, redirigiendo al login...");
@@ -88,6 +88,54 @@
   </script>
 
 <style scoped>
+/* From Uiverse.io by adamgiebl */ 
+.buttongestion {
+  align-items: center;
+  appearance: none;
+  background-color: #EEF2FF;
+  border-radius: 8px;
+  border-width: 2px;
+  border-color: #cea021;
+  box-shadow: rgba(83, 109, 254, 0.2) 0 2px 4px, rgba(83, 109, 254, 0.15) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: #fdbb05;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "JetBrains Mono", monospace;
+  height: 56px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding-left: 24px;
+  padding-right: 24px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow 0.15s, transform 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow, transform;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.buttongestion:focus {
+  outline: none;
+  box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(83, 109, 254, 0.4) 0 2px 4px, rgba(83, 109, 254, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+}
+
+.buttongestion:hover {
+  box-shadow: rgba(83, 109, 254, 0.3) 0 4px 8px, rgba(83, 109, 254, 0.2) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.buttongestion:active {
+  box-shadow: #D6D6E7 0 3px 7px inset;
+  transform: translateY(2px);
+}
   .Contenedor_Perfil{
     background-color: #cea021;
       background-repeat: no-repeat;

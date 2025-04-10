@@ -16,27 +16,58 @@
         </div>
       </div>
       <p class="welcome-description">
-        Aprender a tejer no solo te relaja, sino que también mejora la creatividad, la concentración y te permite crear piezas únicas con tus propias manos. ¡Descubre los beneficios del arte manual hoy!
+        Si aun no te has registrado, que esperas!
+        <button class="cssbuttons-io" @click="cambioPagina">
+          <span>Registrate ahora mismo!!</span>
+        </button>
       </p>
+      <!-- From Uiverse.io by adamgiebl --> 
+      
     </article>
 </section>
 
-<section class="clases">
-        <div class="cuadro">
-            <div class="video">
-                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/7A6I8wk3srI?si=u9HbD9JnNpGsnU9O" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>            
-            </div>
-            <div class="textoc">
-                <h2 class="nuestroscursos">Nuestros Cursos</h2>
-                <p class="pcursos">
-                  Nosotros les proporcionamos a las personas interesadas en iniciar este gran mundo del tegido con clases de 1 hora de duracion donde podran expandir su creatividad y aprender como hacer los diseños que deseen implementando patrones de tegido, con el segumiento de nuestros amables profesores quienes siempre estaran dispuestos a darte una mano en tu tegido y enseñarte o dirigirte en tus proyectos 
-                </p>
-            </div>
-        </div>
-        <button class="btn-curso">Reserva tu curso</button>
-</section>
+
  <section class="infoClases">
-   <h1 class="nuestrasclas">NUESTRAS CLASES DISPONIBLES</h1>
+  <h1 class="nuestrasclas">Informacion De Nuestras Clases</h1>
+<div class="cardspublicitarias">
+<!-- From Uiverse.io by xantha01 --> 
+<div class="cardinfo" style="background-image: url('https://i.pinimg.com/736x/18/75/15/187515f5544057f531fc934f71ae15cc.jpg'); background-repeat: no-repeat; background-size: cover; ">
+  <div class="details">
+    <div class="cardHeader">Beneficios de tejer</div>
+    <div class="cardText">
+      Aprender a tejer ofrece múltiples beneficios tanto mentales como emocionales. Es una actividad relajante que ayuda a reducir el estrés y la ansiedad, mejora la concentración y la coordinación motriz fina
+    </div>
+  </div>
+</div>
+
+<!-- From Uiverse.io by xantha01 --> 
+<div class="cardinfo" style="background-image: url('https://i.pinimg.com/736x/06/80/65/068065ec9d0405de1bb70e180efe6b30.jpg'); background-repeat: no-repeat; background-size: cover; ">
+  <div class="details">
+    <div class="cardHeader">Conoce nuestros cursos</div>
+    <div class="cardText">
+      Mustras clases son 100% presenciales y te ofrecemos clases de amiguramis, doble tejido y otras tecnicas de tejido que puedes aprender para hacer hermosas creaciones, 
+      <span>Expande tu creatividad</span>
+    </div>
+  </div>
+</div>
+<div class="cardinfo" style="background-image: url('https://i.pinimg.com/736x/e2/56/8e/e2568e7b0a35994be5fd9ec3dd535ce6.jpg'); background-repeat: no-repeat; background-size: cover; ">
+  <div class="details">
+    <div class="cardHeader">Como optener un curso</div>
+    <div class="cardText">
+    En las siguientes tablas de informacion encontraras toda la informacion referente a la clase que desee, arriba de la tabla contara con un boton de agendamiento donde se le abrira un calendario del cual podra elegir el dia de acuerdo al horario que tiene la clase. Para ver sus clases agendadas tendra la opcion de verlas en su perfil o al final de las tablas de informacion
+    </div>
+  </div>
+</div>
+</div >
+<p class="welcome-description" v-if="!permisos.user" style="color:black; margin:10px">
+        Si aun no te has registrado, que esperas!
+        <button class="cssbuttons-io" @click="cambioPagina">
+          <span>Registrate ahora mismo!!</span>
+        </button>
+        y asi haras parte de una bonita comunidad al igual de disfrutar de las funciones de nuestra pagina
+      </p>
+<h1 class="nuestrasclas">NUESTRAS CLASES DISPONIBLES</h1>
+
     <ClassCard></ClassCard>
     <BotonAgregarClase 
     text="Agregar nueva clase" @click="cambio()"
@@ -69,13 +100,19 @@ import BotonAgregarClase from '@/components/Botones/BotonAgregarClase.vue';
 import PayClass from '@/components/PayClass.vue';
 import ClassForm from '@/components/ClassForm.vue';
 import { useAuthStore } from '@/store/authStore';
+import { useRouter } from 'vue-router';
 
 const permisos=useAuthStore();
+const router = useRouter;
 
 const change=ref(false);
 const cambio= async()=>{
   change.value=true
 }
+const cambioPagina=()=>{
+    router.push('/');
+  }
+
 onMounted(async () => {
   if (!permisos.isAuthenticated) {
         console.log("Acceso denegado, redirigiendo al login...");
@@ -125,7 +162,7 @@ onMounted(async () => {
 .welcome-title {
     font-size: 3rem;
     font-weight: bold;
-    background: linear-gradient(to right, #845EC2, #D65DB1, #FF6F91, #FFC75F);
+    background: linear-gradient(to left, #845EC2, #D65DB1, #FF6F91, #FFC75F);
     -webkit-background-clip: text;
     color: transparent;
     margin-bottom: 10px;
@@ -142,11 +179,15 @@ onMounted(async () => {
     color: #ffffff;
     line-height: 1.6;
     font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 /* From Uiverse.io by kennyotsu */ 
 .cardAnuncio {
   /* color used to softly clip top and bottom of the .words container */
-  background: repeating-linear-gradient(45deg, #effaf5, #92c9b1 20px, #b3e0d2 20px, #b3e0d2 40px);  padding: 1rem 2rem;
+  background: repeating-linear-gradient(45deg, #effaf5, #c9ba92 20px, #e0d8b3 20px, #e0d8b3 40px);  padding: 1rem 2rem;
   border-radius: 1.25rem;
   display: flex;
   align-items: center;
@@ -189,7 +230,7 @@ onMounted(async () => {
   height: 100%;
   padding-left: 6px;
   font-weight: bold;
-    background: linear-gradient(to right, #845EC2, #D65DB1, #FF6F91, #FFC75F);
+    background: linear-gradient(to left, #845EC2, #D65DB1, #FF6F91, #FFC75F);
     -webkit-background-clip: text;
     color: transparent;
   animation: spin_4991 4s infinite;
@@ -366,7 +407,6 @@ onMounted(async () => {
       flex-direction: column;
       padding: 20px;
       margin-bottom: 30px;
-      background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20231103/pngtree-texture-of-black-knitted-fabric-pattern-image_13740463.png');
       background-size: cover;
     }
 
@@ -518,4 +558,145 @@ onMounted(async () => {
 .buttonReserva:active {
   transform: scale(0.9);
 }
+/* From Uiverse.io by adamgiebl */ 
+.cssbuttons-io { 
+  position: relative;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  border-radius: 0.8em;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(to right, #e2c12d, #e08600);
+  color: ghostwhite;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.cssbuttons-io svg {
+  width: 1.2em;
+  height: 1.2em;
+  margin-right: 0.5em;
+}
+
+.cssbuttons-io span {
+  position: relative;
+  z-index: 10;
+  transition: color 0.4s;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8em 1.2em 0.8em 1.05em;
+}
+
+.cssbuttons-io::before,
+.cssbuttons-io::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.cssbuttons-io::before {
+  content: "";
+  background: #4d6569;
+  width: 120%;
+  left: -10%;
+  transform: skew(30deg);
+  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+.cssbuttons-io:hover::before {
+  transform: translate3d(100%, 0, 0);
+}
+
+.cssbuttons-io:active {
+  transform: scale(0.95);
+}
+.cardspublicitarias{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  margin-bottom: 15px;
+}
+
+
+/* From Uiverse.io by xantha01 */ 
+.cardinfo {
+  background: #c79013;
+  position: relative;
+  max-width: 270px;
+  height: 350px;
+  border-radius: 5px;
+  padding: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 7.5px;
+  transition: 0.5s ease;
+  color: white;
+}
+
+.cardinfo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  transition: 0.3s ease;
+}
+
+.cardinfo:hover::after {
+  opacity: 0.25;
+}
+
+.cardHeader {
+  text-transform: uppercase;
+  position: relative;
+  width: max-content;
+  font-weight: bold;
+  transition: all 0.5s ease;
+}
+.cardHeader::after {
+  content: "";
+  width: calc(100% + 1rem);
+  height: 2.5px;
+  transform: translateX(calc(-100% - 1rem));
+  background: aqua;
+  bottom: -2px;
+  left: 0;
+  position: absolute;
+  opacity: 0;
+}
+
+.details {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transform: translateY(95%);
+  transition: all 0.5s ease;
+  background-color: #2b30447e;
+  padding: 3px;
+}
+
+
+.cardinfo:hover .details {
+  transform: translateY(0%);
+  transition-delay: 0.5s;
+
+}
+.cardinfo:hover .cardHeader::after {
+  transform: translateX(-1rem);
+  transition: 0.5s ease;
+  opacity: 1;
+  
+}
+.cardinfo:hover {
+  transform: scale(1.1);
+  border-radius: 15px;
+}
+
 </style>
