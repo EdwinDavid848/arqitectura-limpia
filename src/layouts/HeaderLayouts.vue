@@ -50,9 +50,10 @@ const handleScroll = () => {
 const headerEstilos =computed(() =>{
     if (route.path === "/principa") {
         return { 'scrolled': isScrolled.value, 'header-principa': true };
+
     } else if (route.path === "/tienda"  || route.name === "solicitarProducto"  ) {
         return { 'scrolled': isScrolled.value, 'header-tienda': true };
-    } else if (route.path === "/inventario_productos"){
+    } else if (route.path === "/inventario_productos" ){
         return{  'header-inventario': true}
     }else if (route.path === "/dashboard"){
         return{  'header-perfil': true}

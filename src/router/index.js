@@ -40,7 +40,6 @@ const routes = [
         component: ComprarProductoView,
         meta: { requiresAuth: true }
     },
-    { path: '/solicitarProducto/:id', name: 'solicitarProducto', component: SolicitarProductosView },
     {
       path: "/dashboard",
       component: UserDashboard,
