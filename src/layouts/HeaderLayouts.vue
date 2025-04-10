@@ -50,11 +50,14 @@ const handleScroll = () => {
 const headerEstilos =computed(() =>{
     if (route.path === "/principa") {
         return { 'scrolled': isScrolled.value, 'header-principa': true };
-    } else if (route.path === "/tienda"  || route.name === "solicitarProducto" || route.path === "/comprar_producto") {
+
+    } else if (route.path === "/tienda"  || route.name === "solicitarProducto"  ) {
         return { 'scrolled': isScrolled.value, 'header-tienda': true };
     } else if (route.path === "/inventario_productos" ){
         return{  'header-inventario': true}
-    } else {
+    }else if (route.path === "/dashboard"){
+        return{  'header-perfil': true}
+     } else {
         return { 'scrolled': isScrolled.value };
     }
 })
@@ -154,6 +157,16 @@ logo-comp {
     background-color: rgba(214, 211, 211, 0.822);
 }
 .header-inventario .rutasViwes .ruta{
+    color: black;
+    padding: 15px;
+}
+
+.header-perfil{
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+}
+.header-perfil .rutasViwes .ruta{
     color: black;
     padding: 15px;
 }

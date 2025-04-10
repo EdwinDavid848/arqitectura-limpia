@@ -11,7 +11,6 @@ import UserHistorialComprasView from '@/views/UserHistorialComprasView.vue';
 import TiendaView from '@/views/TiendaView.vue';
 import ComprarProductoView from '@/views/ComprarProductoView.vue';
 import InventarioProductos from '@/views/InventarioProductos.vue';
-import InventarioProductos2 from '@/views/InventarioProductos.vue';
 import InventarioComprasView from '@/views/InventarioComprasView.vue';
 import ResetePasswordView from '@/views/ResetePasswordView.vue';
 import SolicitarRecuperacionPasswordViews from '@/views/SolicitarRecuperacionPasswordViews.vue';
@@ -28,9 +27,7 @@ const routes = [
     {path: '/productos', component: SolicitarProductosView },
     {path:'/mural', component:MuralView},
     {path: '/tienda', component: TiendaView},
-    {path: '/inventario_productos', component:InventarioProductos},
-    {path: '/inventario_productos2', component:InventarioProductos2},
-    {path: '/clases', component:ClassView},
+    {path: '/inventario_productos', component:InventarioProductos},    {path: '/clases', component:ClassView},
     {path: '/userHistorialCompras', component:UserHistorialComprasView},
     {path: '/solicitar_recuperacion', component:SolicitarRecuperacionPasswordViews},
     {path: '/reset-password', component:ResetePasswordView},
@@ -58,27 +55,25 @@ const router = createRouter({
     }
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore();
-
-    // Corregir la obtención del token
-    const token = getToken(); // Usa la función en lugar de localStorage directamente
-
+    const token = getToken();
+  
     if (!authStore.token && token) {
-        authStore.setToken(token);
+      authStore.setToken(token);
+      await authStore.fetchUserInfo(); 
     }
-
-    console.log("Token en authStore antes de navegar:", authStore.token);
-    console.log("Email en authStore antes de navegar:", authStore.email);
-
-
+  
     if (to.meta.requiresAuth && !authStore.token) {
-        console.warn("Acceso denegado, redirigiendo al login...");
-        next('/');
+      console.warn("Acceso denegado, redirigiendo al login...");
+      next('/');
+    } else if (to.meta.requiresAdmin && authStore.role !== 'admin') {
+      console.warn("Acceso denegado, no es administrador...");
+      next('/acceso-denegado'); 
     } else {
-        next();
+      next();
     }
-});
-
+  });
+  
   
 export default router;

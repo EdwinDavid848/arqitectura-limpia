@@ -68,7 +68,7 @@ const resetPassword = async () => {
   <div v-if="modelPasswordAprobado" class=" overlay">
     <div class="modal_password">
       <p>Contraseña Actulizada Exitosamente</p>
-      <img src="C:\Users\patid\arqitectura-limpia\src\views" alt="" style="height: 100px;">
+      <img src="@/assets/encendido.png" alt="" style="height: 100px;">
     </div>
   </div>
     <div>

@@ -110,6 +110,7 @@ const toggleActivo = async (producto) => {
     cancelButtonText: "Cancelar"
   });
 
+
   if (confirmacion.isConfirmed) {
     try {
       const result = await estadoProducto(accion, producto.id);
@@ -121,7 +122,8 @@ const toggleActivo = async (producto) => {
         throw new Error("Respuesta no válida");
       }
     } catch (error) {
-      Swal.fire("Error", `No se pudo ${accion} el producto`, "error");
+
+      Swal.fire(`"Error", No se pudo ${accion} el producto, "error"`);
     }
   }
 };
