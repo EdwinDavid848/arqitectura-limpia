@@ -1,6 +1,6 @@
 <template>
     <div class="cont-info">
-    <img src="@/assets/Producto 1 part1.jpeg" alt="Imagen de perfil" />
+    <img src="@/assets/perfil.png" alt="Imagen de perfil" />
     <div >
         <h1>{{ nombre ?? 'Usuario' }}</h1>
         <h2>{{ rol ?? 'Sin rol' }}</h2>
@@ -150,8 +150,29 @@ const closeEditing = () => {
 };
 
 const updateFieldHandler = (field) => {
+  let value = tempData.value[field];
+
+  if (field === 'telefono') {
+    // Eliminar espacios y todo lo que no sea número
+    const cleanedValue = value.replace(/\D/g, '');
+
+    if (cleanedValue.length !== 10) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Número inválido',
+        text: 'El número de teléfono debe tener exactamente 10 dígitos.',
+      });
+      return;
+    }
+
+    // Actualizamos el campo con el valor limpio
+    tempData.value[field] = cleanedValue;
+  }
+
   updateField(props.email, field, tempData.value[field]);
+  editField.value = null;
 };
+
 
 const updatePasswordHandler = () => {
   updatePassword(props.email, tempData.value.originalPassword, tempData.value.password);
@@ -173,6 +194,8 @@ const updatePasswordHandler = () => {
         width: 150px;
         border-radius: 50%;
         margin-left: 30px;
+        box-shadow: 3px 6px 10px rgba(0, 0, 0, 0.1);
+
     }
 
     .cont-info div h2{
@@ -215,18 +238,20 @@ const updatePasswordHandler = () => {
         min-width: 60%;
         width: auto;
         font-weight: bold;
-        color: rgb(110, 42, 2);
+        color: rgb(0, 0, 0);
     }
     .cont-datos div input{
-      border: 1px solid rgb(245, 187, 27);
       padding: 5px;
-        border: none;
-        font-size: 22px;
-        font-weight: bold;
-        color: rgb(110, 42, 2);
+      border-radius: 25px;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      background-color: #1d1a1a;
+      border: 1px solid rgb(211, 208, 201);
+      color: rgb(255, 255, 255);
     }
     #actulizar_password{
-        background-color: rgba(179, 189, 186, 0.562);
+        background-color: rgba(221, 233, 229, 0.562);
         text-align: center;
         color: rgb(0, 0, 0);
     }
@@ -234,7 +259,7 @@ const updatePasswordHandler = () => {
       background-color: rgba(230, 141, 7, 0.288);
       padding: 5px;
       border: 1px solid black;
-      
+
     }
 
 
@@ -351,7 +376,8 @@ const updatePasswordHandler = () => {
   width: 90%;
   padding: 15px;
   border-radius: 5px;
-  border: 1px solid rgb(245, 187, 27);
+  background-color:rgb(245, 187, 27) ;
+  border: 3px solid rgb(245, 187, 27);
   font-size: 15px;
   font-weight: bold;
 }

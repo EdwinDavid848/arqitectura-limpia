@@ -1,12 +1,32 @@
 <template>
   <div class="Contenedor_Perfil">
       <div class="mostrarInformacion">
-          <nav class="header_perfil">
-              <button @click="mostrarDiv('Shopping Cart')" class="links_Perfil">Shopping Cart</button>
-              <button @click="mostrarDiv('Class History')" class="links_Perfil">Class History</button>
-              <button @click="mostrarDiv('Publications')" class="links_Perfil">Publications</button>
-              <button @click="mostrarDiv('Configuration')" class="links_Perfil">Configuration</button>
-          </nav>
+        <nav class="header_perfil">
+          <button
+            @click="mostrarDiv('Shopping Cart')"
+            :class="['links_Perfil', seccionActiva === 'Shopping Cart' ? 'activo' : '']"
+          >
+            Shopping Cart
+          </button>
+          <button
+            @click="mostrarDiv('Class History')"
+            :class="['links_Perfil', seccionActiva === 'Class History' ? 'activo' : '']"
+          >
+            Class History
+          </button>
+          <button
+            @click="mostrarDiv('Publications')"
+            :class="['links_Perfil', seccionActiva === 'Publications' ? 'activo' : '']"
+          >
+            Publications
+          </button>
+          <button
+            @click="mostrarDiv('Configuration')"
+            :class="['links_Perfil', seccionActiva === 'Configuration' ? 'activo' : '']"
+          >
+            Configuration
+          </button>
+        </nav>
           <div class="info_perfil"> 
               <div v-if="isLoading">
                   <p>Cargando información del perfil...</p>
@@ -32,7 +52,7 @@
       </div>
       <div class="mostrarPerfil">
           <div class="cont_img">
-              <img src="@/assets/Producto 1 part1.jpeg" alt="">
+              <img src="@/assets/perfil.png" alt="">
           </div>
           <div v-if="authStore.user" class="opciones_Perfil">
               <h1 style="text-transform: uppercase;">{{authStore.user.nombre}}</h1>
@@ -59,9 +79,15 @@
 
   const divActual = ref('Configuration');
 
+  const seccionActiva = ref('');
+
+
   const mostrarDiv = (div) => {
-      divActual.value = div;
-  };
+  divActual.value = div;
+  seccionActiva.value = div;
+};
+
+
     
   const authStore = useAuthStore();
   const cartStore = useCartStore();
@@ -89,7 +115,7 @@
 
 <style scoped>
   .Contenedor_Perfil{
-    background-color: #cea021;
+    background-color: #ffffff;
       background-repeat: no-repeat;
       min-height: 100vh;
       display: grid;
@@ -105,35 +131,63 @@
       row-gap: 20px;
   }
   .header_perfil {
-    background: linear-gradient(to bottom, #ffcf6d, #ffcf6d);
-    width: 95%;
+      width: 95%;
       height: 60px;
       border-radius: 10px;
       display: flex;
       justify-content: space-around;
       align-items: center;
+      border-bottom: 1px solid rgb(100, 98, 98);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(to bottom, #faf8f8, #ffffff);
+
   }
   
-  .links_Perfil{
-      text-decoration: none;
-      font-size: 20px;
-      color: rgb(0, 0, 0);
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
-      background-color: transparent;
-      border: none;
-      transition: transform 0.5s ease-in-out;
-  }
-  .links_Perfil:hover {
-      color: #ffffff;
-  }
+
+.links_Perfil {
+  color: #696969; 
+  position: relative;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 999px;
+  overflow: hidden;
+  z-index: 0;
+  transition: color 0.3s ease;
+}
+
+.links_Perfil::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140%;
+  height: 250%;
+  background-color: #e7791e;
+  border-radius: 999px;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+
+.links_Perfil:hover::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+.links_Perfil.activo {
+  color: #000000; 
+  font-weight: 400;
+}
+
 
   .info_perfil {
-  background: linear-gradient(to bottom, #ffe4a5, #ffcf6d);
+      background: linear-gradient(to bottom, #faf8f8, #ffffff);
   width: 95%;
+  border-top: 2px solid rgb(100, 98, 98);
   height: 100%;
-  max-height: 600px; /* Ajusta este valor según tu diseño */
-  overflow-y: auto; /* Scroll vertical cuando se sobrepase la altura */
+  max-height: 600px; 
+  overflow-y: auto; 
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.493);
   border-radius: 15px;
   padding: 15px;
@@ -144,7 +198,7 @@
       grid-template-rows: 0.5fr 2fr;
       margin-right: 20px;
       gap: 10px;
-      background: linear-gradient(to bottom, #ffe4a5, #ffcf6d);
+      background: linear-gradient(to bottom, #faf8f8, #ffffff);
       box-shadow: 0 8px 6px rgba(0, 0, 0, 0.493);
       height: 100%;
       border-radius: 15px;
@@ -157,10 +211,10 @@
 
   }
   .cont_img img{
-      height: 200px;
-      width: 50%;
+      height: 150px;
+      width: 100%;
       border-radius: 50%;
-      border: 1px solid black;
+      border: 0.5px solid rgb(163, 161, 161);
   }
   .correo{
     font-size: 25px;
@@ -266,8 +320,8 @@
 
     }
     .cont_img img{
-        height: 75%;
-        width: 30%;
+        height: 150px;
+        width: 40%;
     }
 }
   @media (max-width: 1441px) {

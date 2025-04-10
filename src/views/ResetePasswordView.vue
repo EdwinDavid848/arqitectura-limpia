@@ -49,7 +49,7 @@ const resetPassword = async () => {
       modelRedirigir.value = true;
       setTimeout(() => {
         modelRedirigir.value = true;
-        router.push("/login");
+        router.push("/");
       }, 3000);
     }, 3000)
 
@@ -68,7 +68,7 @@ const resetPassword = async () => {
   <div v-if="modelPasswordAprobado" class=" overlay">
     <div class="modal_password">
       <p>Contraseña Actulizada Exitosamente</p>
-      <img src="@/assets/img/marca-de-verificacion.png" alt="" style="height: 100px;">
+      <img src="@/assets/encendido.png" alt="" style="height: 100px;">
     </div>
   </div>
     <div>
