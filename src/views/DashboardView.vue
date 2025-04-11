@@ -127,7 +127,7 @@
   color: #fdbb05;
   cursor: pointer;
   display: inline-flex;
-  font-family: "JetBrains Mono", monospace;
+  font-weight: bold;
   height: 56px;
   justify-content: center;
   line-height: 1;
@@ -146,6 +146,7 @@
   will-change: box-shadow, transform;
   font-size: 20px;
   margin-bottom: 10px;
+  margin-left: 70%;
 }
 
 .buttongestion:focus {

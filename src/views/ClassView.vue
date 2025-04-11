@@ -28,7 +28,7 @@
 
 
  <section class="infoClases">
-  <h1 class="nuestrasclas">Informacion De Nuestras Clases</h1>
+  <h1 class="nuestrasclas">INFORMACION DE NUESTRAS CLASES</h1>
 <div class="cardspublicitarias">
 <!-- From Uiverse.io by xantha01 --> 
 <div class="cardinfo" style="background-image: url('https://i.pinimg.com/736x/18/75/15/187515f5544057f531fc934f71ae15cc.jpg'); background-repeat: no-repeat; background-size: cover; ">
@@ -87,7 +87,7 @@
   <div class="Anuncio">
         <div class="parallax_version2">
             <h1>Explora el Mundo del Tejido</h1>
-            <p>Tejer no es solo una técnica, es una expresión creativa. En nuestra tienda encontrarás todo lo que necesitas para hacer realidad tus proyectos, desde hilos y agujas hasta piezas únicas como ropa, peluches, y accesorios hechos a mano. También ofrecemos clases para que aprendas a tejer como un experto y lleves tus creaciones al siguiente nivel.</p>
+            <p>Tejer no es solo una técnica, es una expresión creativa. Unete a nuestra comunidad y descubre diseños creativos diseñados por amantes del tejido como tu!!</p>
             <button> <router-link class="link" to="/mural">¡Unete a Nosotros!</router-link>
             </button>
         </div>
@@ -400,6 +400,7 @@ onMounted(async () => {
     color: transparent;
     text-align: center;
     margin-bottom: 20px;
+    margin-top: 20px;
    }
     .infoClases{
       display: flex;
@@ -615,11 +616,13 @@ onMounted(async () => {
 .cssbuttons-io:active {
   transform: scale(0.95);
 }
+
 .cardspublicitarias{
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-around;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 

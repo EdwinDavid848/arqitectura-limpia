@@ -1,21 +1,22 @@
 <template>
   <article class="todareserva">
     <div class="table-container">
-      <!-- From Uiverse.io by mrhyddenn --> 
-      <form class="form__group field" @submit.prevent="buscar" v-if="permisos.user && (permisos.user.rol === 'administrador' || permisos.user.rol === 'profesor')"  >
-          <input type="input" class="form__field" placeholder="Name" required="" v-model="search">
-          <label for="name" class="form__label">Name</label>
-          <button type="submit" class="gradient-button">Buscar</button>
-      </form>
-      
-      <div class="opciones" v-if="permisos.user && permisos.user.rol === 'cliente'">
-        <select v-model="state" >
+      <!-- FILTRO DE ESTADO -->
+      <div class="opciones" v-if="permisos.user">
+        <select v-model="state" @change="filterEstado">
           <option value="" disabled>Opciones de estado</option>
           <option v-for="option in opciones" :key="option" :value="option">
             {{ option }}
           </option>
         </select>
       </div>
+      <!-- From Uiverse.io by mrhyddenn --> 
+      <form class="buscar" @submit.prevent="buscar" v-if="permisos.user && (permisos.user.rol === 'administrador' || permisos.user.rol === 'profesor')"  >
+          <input type="input" class="inputbusc" placeholder="Nombre o Correo" required="" v-model="search">
+          <button type="submit" class="gradient-button">Buscar</button>
+      </form>
+      
+      
       <table class="compras-table">
         <thead>
           <tr>
@@ -28,7 +29,7 @@
             <th>Acción</th>
           </tr>
         </thead>
-        <tbody v-for="clase in Clases" :key="clase.id">
+        <tbody v-for="clase in reserva" :key="clase.id">
           <tr>
             <td>{{ clase.id }}</td>
             <td>{{ clase.clase }}</td>
@@ -38,11 +39,11 @@
             <td>{{ clase.estado }}</td>
             <td>
               <BotonCancelacion 
-                v-if="permisos.user && permisos.user.rol === 'cliente'" 
+                v-if="clase.estado=='reserved' && permisos.user && permisos.user.rol === 'cliente'" 
                 :data="clase" 
               />
               <BotonConfirmacion 
-                v-if="permisos.user && (permisos.user.rol === 'administrador' || permisos.user.rol === 'profesor')" 
+                v-if="clase.estado=='reserved' && permisos.user && (permisos.user.rol === 'administrador' || permisos.user.rol === 'profesor') " 
                 :data="clase"
               />
             </td>
@@ -62,10 +63,17 @@ import { useAuthStore } from '@/store/authStore';
 
 const permisos = useAuthStore();
 const Clases = ref([]);
+const reserva=ref([])
 const opciones = ref(['reserved', 'paid', 'cancelled']);
 const state = ref('reserved');
 const search = ref('');
 
+const filterEstado =()=>{
+  const query=state.value.toLowerCase();
+  reserva.value=Clases.value.filter(
+    (clase)=> clase.estado.toLowerCase().includes(query)
+  )
+}
 
 const cargarReservaciones = async () => {
   try {
@@ -74,10 +82,18 @@ const cargarReservaciones = async () => {
     if (permisos.user.rol === 'cliente') {
       const data = await BuscarReservaciones(permisos.user.email, state.value);
       Clases.value = data;
+      reserva.value=data.map( us =>({
+        ...us,
+        estados:us.estado
+      }));
       console.log(Clases.value)
     } else {
       const data = await VerReservaciones();
       Clases.value = data;
+      reserva.value=data.map( us =>({
+        ...us,
+        estados:us.estado
+      }));
       console.log(Clases.value)
     }
   } catch (error) {
@@ -122,18 +138,19 @@ watch(state, async () => {
   border: 1px solid #ccc; /* Opcional: para que se vea más claro el área */
   width: 100%;
   padding: 10px;
+  margin-top: 10px;
 }
   .compras-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #f7b661;
+    background-color: #fcfaf8;
     border-radius: 8px;
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
     
   }
   .compras-table th {
-    background-color: #ff940a;
+    background-color: #ee8e10;
     font-weight: bold;
     color: #000000;
   }
@@ -145,7 +162,6 @@ watch(state, async () => {
 .compras-table th, td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
 
   }
@@ -163,69 +179,34 @@ watch(state, async () => {
   font-size: 15px;
   font-weight: bold;
 }
-/* From Uiverse.io by mrhyddenn */ 
-.form__group {
-  position: relative;
-  padding: 20px 0 0;
-  width: 100%;
-  max-width: 180px;
-  display:flex;
-  flex-wrap: nowrap; 
+.gradient-button {
+  background: linear-gradient(90deg, #ff6a00 0%, #d14400 100%); /* Degradado naranja */
+  color: white; /* Texto blanco */
+  border: none; /* Sin bordes */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 10px 20px; /* Espaciado interno */
+  font-size: 16px; /* Tamaño del texto */
+  cursor: pointer; /* Cursor de mano */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Transición suave */
 }
 
-.form__field {
-  font-family: inherit;
-  width: 100%;
-  border: none;
-  border-bottom: 2px solid #9b9b9b;
-  outline: 0;
-  font-size: 17px;
-  color: #fff;
-  padding: 7px 0;
-  background: transparent;
-  transition: border-color 0.2s;
+.gradient-button:hover {
+  transform: translateY(-2px); /* Sube ligeramente al pasar */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra al pasar */
 }
 
-.form__field::placeholder {
-  color: transparent;
+.gradient-button:active {
+  transform: translateY(2px); /* Baja ligeramente al hacer clic */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra reducida */
 }
-
-.form__field:placeholder-shown ~ .form__label {
-  font-size: 17px;
-  cursor: text;
-  top: 20px;
-}
-
-.form__label {
-  position: absolute;
-  top: 0;
-  display: block;
-  transition: 0.2s;
-  font-size: 17px;
-  color: #9b9b9b;
-  pointer-events: none;
-}
-
-.form__field:focus {
-  padding-bottom: 6px;
-  font-weight: 700;
-  border-width: 3px;
-  border-image: linear-gradient(to right, #116399, #38caef);
-  border-image-slice: 1;
-}
-
-.form__field:focus ~ .form__label {
-  position: absolute;
-  top: 0;
-  display: block;
-  transition: 0.2s;
-  font-size: 17px;
-  color: #38caef;
-  font-weight: 700;
-}
-
-/* reset input */
-.form__field:required, .form__field:invalid {
-  box-shadow: none;
+.inputbusc{
+      background-color: white; /* Fondo blanco */
+  color: rgb(0, 0, 0); /* Color del texto */
+  border: 2px solid rgb(#fd9f47); /* Borde anaranjado */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 5px 15px; /* Espaciado interno */
+  font-size: 16px; /* Tamaño del texto */
+  cursor: pointer; /* Cursor de mano al pasar */
+  transition: all 0.3s ease; 
 }
 </style>

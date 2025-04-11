@@ -56,14 +56,14 @@ const confirmar=async()=>{
  position: absolute;
  width: 100px;
  height: 120%;
- background-color: #ff6700;
+ background-color: #c06815;
  top: 50%;
  transform: skewX(30deg) translate(-150%, -50%);
  transition: all 0.5s;
 }
 
 .btn:hover {
- background-color: #4cc9f0;
+ background-color: #c06815;
  color: #fff;
  box-shadow: 0 2px 0 2px #0d3b66;
 }
