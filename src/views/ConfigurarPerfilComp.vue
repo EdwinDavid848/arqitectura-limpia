@@ -78,7 +78,7 @@
         </div>
         <section>
           <button @click="updatePasswordHandler">Actualizar Contraseña</button>
-          <button style="background-color:transparent; color: rgb(122, 50, 1);" @click="mostrarUptadePassword = false">Cancelar</button>
+          <button style="background-color:transparent; color: rgb(216, 33, 33);" @click="mostrarUptadePassword = false">Cancelar</button>
         </section>
       </div>
 
@@ -295,7 +295,7 @@ const updatePasswordHandler = () => {
 }
 
 .modal {
-  background-color: #fcddba;
+  background: rgba(0, 0, 0, 0.5);
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -309,11 +309,11 @@ const updatePasswordHandler = () => {
 .modal h2 {
   margin-bottom: 5px;
   font-size: 28px;
-  color: rgb(122, 50, 1);
+  color: rgb(255, 255, 255);
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .modal p{
-  color: #aa6f03;
+  color: #ffffff;
   font-size: 20px;
 }
 .modal div{
@@ -325,13 +325,13 @@ const updatePasswordHandler = () => {
 }
 .modal div label{
   font-size: 20px;
-  color: rgb(122, 50, 1);
+  color: rgb(255, 255, 255);
 }
 .modal div input{
   padding: 12px;
   border-radius: 5px;
-  border: 2px solid rgb(245, 187, 27);
-  background-color: #f5e7d6;
+  border: 2px solid #ccc;
+  background: rgba(255, 255, 255, 0.8);
 }
 
 
@@ -360,8 +360,8 @@ const updatePasswordHandler = () => {
   font-size: 15px;
   padding: 15px 15px;
   border: none;
-  background-color: #d28700;
-  color: white;
+  background-color: #ffd700; 
+  color: rgb(0, 0, 0);
   border-radius: 5px;
   cursor: pointer;
 }

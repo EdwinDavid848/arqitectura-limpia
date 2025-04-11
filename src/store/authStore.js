@@ -58,6 +58,7 @@ export const useAuthStore = defineStore("auth", {
             this.tokenExpiration = null;
             this.user = null;
             this.email = null;
+            this.historial = [];
         },
         async fetchUserInfo() {
             try {

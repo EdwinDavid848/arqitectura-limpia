@@ -8,7 +8,7 @@
 		<div class="card_content">
 			<div class="card_header">
 				<h2 class="card_title">{{ producto.nombre }}</h2>
-				<h2 class="card_subtitle">{{ producto.precio }} €</h2>
+				<h2 class="card_subtitle">{{ formatoPesosColombianos(producto.precio) }} $</h2>
 			</div>
 			<p class="card_descripcion">{{ producto.descripcion }}</p>
 			<button class="botoncard" @click="productoDetalles">Agregar al carrito</button>
@@ -25,6 +25,10 @@ const router = useRouter();
 const props = defineProps({
     producto: Object
 });
+
+const formatoPesosColombianos = (valor) => {
+  return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(valor);
+};
 
 const productoDetalles = () =>{
     router.push({ name: 'solicitarProducto', params: {id: props.producto.id}})
@@ -85,7 +89,7 @@ const productoDetalles = () =>{
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	max-width: 60%;
+	max-width: 40%;
 }
 .card_subtitle {
 	font-weight: bold;
@@ -126,7 +130,7 @@ const productoDetalles = () =>{
 @media (min-width: 1441px) and (max-width: 1600px) {
 		.mi_card_producto {
 		width: 22%;
-		height: 200px; 
+		height: 240px; 
 		border-radius: 20px;
 		overflow: hidden;
 		display: flex;

@@ -5,10 +5,13 @@
         <h2>Bienvenido de nuevo!</h2>
         <p>No tienes una cuenta? <span class="highlight">Crea tu cuenta</span>, solo toma unos minutos.</p>
         <FormRegistroComp modo="login" buttonText="Login" @submit="handleLogin"/>
-        <button @click="loginWithGoogle" class="google-btn">
-            <img src="" alt="Google Logo" class="google-logo" /> Iniciar sesión con Google
+        <div>
+          <button @click="loginWithGoogle" class="google-btn">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" class="google-logo" /> Iniciar sesión con Google
         </button>
+        
         <router-link class="solicitar_recuperacion" to="/solicitar_recuperacion">Recuperar Contraseña</router-link>
+        </div>
       </div>
     </div>
   </article>  
@@ -36,6 +39,7 @@ const handleLogin = async (credentials) => {
 const loginWithGoogle = () => {
     window.location.href = "http://127.0.0.1:8000/auth/login";
 };
+
 </script>
 
 
@@ -79,5 +83,30 @@ const loginWithGoogle = () => {
 .solicitar_recuperacion:hover{
     color: rgb(235, 183, 40);
     transition: all 0.3s ease;
+}
+
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.google-btn:hover {
+    background-color: #f1f1f1;
+}
+
+.google-logo {
+  width: 20px;
+    height: 20px;
+    margin-right: 10px;
 }
 </style>

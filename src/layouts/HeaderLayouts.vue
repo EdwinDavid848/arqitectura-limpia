@@ -51,7 +51,7 @@ const headerEstilos =computed(() =>{
     if (route.path === "/principa") {
         return { 'scrolled': isScrolled.value, 'header-principa': true };
 
-    } else if (route.path === "/tienda"  || route.name === "solicitarProducto"  ) {
+    } else if (route.path === "/tienda"  || route.name === "solicitarProducto"  || route.path === "/comprar_producto" || route.path === "/mural") {
         return { 'scrolled': isScrolled.value, 'header-tienda': true };
     } else if (route.path === "/inventario_productos" ){
         return{  'header-inventario': true}

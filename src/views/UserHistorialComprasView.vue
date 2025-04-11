@@ -69,7 +69,6 @@
     isTicketVisible.value = false;
   };
 
-  //  Esta  funcion para mostrar los precios correctamente al pais asignado
   const currency = (value) => {
     if (typeof value !== 'number') return value;
     return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(value);

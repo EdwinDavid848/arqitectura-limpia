@@ -14,13 +14,12 @@
           >
             Class History
           </button>
-          <button
-            @click="mostrarDiv('Publications')"
+          <router-link
+            to="/mural"
             :class="['links_Perfil', seccionActiva === 'Publications' ? 'activo' : '']"
           >
             Publications
-          </button>
-          <button
+          </router-link>          <button
             @click="mostrarDiv('Configuration')"
             :class="['links_Perfil', seccionActiva === 'Configuration' ? 'activo' : '']"
           >
@@ -40,8 +39,7 @@
                     <h2 class="reservaciones">Reservaciones</h2>
                     <PayClass></PayClass>
                   </div>
-                  <router-link v-else-if="divActual === 'Publications'" to="/mural">
-                  </router-link>
+                  <router-link v-else-if="divActual === 'Publications'" to="/mural"></router-link>
                   <div v-else-if="divActual === 'Configuration'" >
                     <ConfigurarPerfilComp  v-if="authStore.user"  :nombre="authStore.user.nombre" :email="authStore.user.email" :rol="authStore.user.rol" :telefono="authStore.user.telefono" :password="authStore.user.password"/>
                   </div>
@@ -96,6 +94,7 @@
     cartStore.limpiarCarrito();
     authStore.logout();
     router.push('/');
+    console.log
   };
   const cambio=()=>{
     router.push('/TodaClase');
@@ -163,7 +162,7 @@
   transform: translateY(2px);
 }
   .Contenedor_Perfil{
-    background-color: #ffffff;
+    background-color: #e0d9d9;
       background-repeat: no-repeat;
       min-height: 100vh;
       display: grid;
@@ -204,6 +203,8 @@
   overflow: hidden;
   z-index: 0;
   transition: color 0.3s ease;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 .links_Perfil::before {
@@ -225,7 +226,6 @@
 }
 .links_Perfil.activo {
   color: #000000; 
-  font-weight: 400;
 }
 
 

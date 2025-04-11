@@ -42,7 +42,7 @@
       <p>Productos realizados por la pagina divido en categorias, puedes buscar mas variadad en nuestro Productos</p>
     </div>
     <h2 class="titulos">Lanas</h2>
-    <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
+    <div  class="cont_product">
       <div class="product">
         <ProductCardVersion2 
           v-for="(producto, index) in productosCategoria.lana" 
@@ -52,17 +52,18 @@
       </div>
     </div>
     <h2 class="titulos">Agujas</h2>
-    <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
+    <div >
       <div class="product">
         <ProductCardVersion2  
           v-for="(producto, index) in productosCategoria.agujas" 
           :key="index"
           :producto="producto" 
+          class="prductos"
         />
       </div>
     </div>
     <h2 class="titulos">Piedras</h2>
-    <div ref="animatable" :class="{'animate': isVisible0}" class="contenedor_animacion_version2">
+    <div >
       <div class="product">
         <ProductCardVersion2  
           v-for="(producto, index) in productosCategoria.peluche" 
@@ -72,6 +73,9 @@
       </div>
     </div>
   </section>
+
+
+  <section class="mostrarPublicidad"><MostrarPublicidadComp/></section>
 
   <!-- PARALLAX VERSION 2 -->
 
@@ -92,6 +96,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import CarruselComp from '@/components/CarruselComp.vue';
 import ProductCardVersion1 from '@/components/ProductCard(Version-1).vue';
 import BotonProductos from '@/components/Botones/BotonProductos.vue';
+import MostrarPublicidadComp from '@/components/MostrarPublicidadComp.vue';
 import ProductCardVersion2 from '@/components/ProductCard(Version-2).vue';
 import { mostrarProductosIniciales } from '@/services/authService';
 import { obtenerProductosCategoria } from '@/services/authService';
@@ -312,6 +317,9 @@ onUnmounted(() => {});
 
 
 
+.mostrarPublicidad{
+  margin: 50px 0px;
+}
 
 /* MOSTRAR PRODUCTOS VERSION 2 */
 
@@ -354,13 +362,19 @@ onUnmounted(() => {});
   font-family: 'Playfair Display', serif;
 }
 
+.cont_product{
+  height: auto;
+  margin-bottom: 20px;
+}
 .product {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-around;
-  padding: 20px;
+  padding: 10px;
 }
+
+
 
 .card {
   width: auto;

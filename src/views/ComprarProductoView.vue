@@ -155,7 +155,7 @@ onMounted(async () => {
   }
  
   .gradDynamic:after {
-    background: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255));
+    background: linear-gradient(to right, rgb(255, 255, 255), rgb(224, 223, 223));
     background-size: 200% 100%;
     animation: colorSlide 5s infinite alternate ease-in-out;
 }
@@ -229,7 +229,6 @@ onMounted(async () => {
     min-height: 70vh;
     height: auto;
     padding: 20px;
-    background-color: #ffffff;
   }
   #cont-nequi{
     display: flex;

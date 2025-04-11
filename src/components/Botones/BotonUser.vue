@@ -18,7 +18,7 @@
 .Enviar_btn {
   width: 100%;
   position: relative;
-  padding: 10px 20px;
+  padding: 12px 20px;
   font-size: 16px;
   cursor: pointer;
   background-color: #ffd700; 

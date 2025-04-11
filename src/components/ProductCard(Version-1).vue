@@ -3,8 +3,8 @@
         <img :src="producto.imagen_url" alt="Producto">
         <div class="card_text1">
             <h2>{{ producto.nombre }}</h2>
-            <h3>$ {{ producto.precio }}</h3>
-            <h1>{{ producto.id }}</h1>
+            <h3>{{ formatoPesosColombianos(producto.precio) }}</h3>
+
         </div>
     </div>
 </template>
@@ -22,6 +22,9 @@
         padding: 10px;
         transition: background-color 0.5s ease; 
         background-color: rgba(212, 212, 212, 0.37);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+        cursor: pointer;
 
     }
     .card_part1:hover{
@@ -81,6 +84,11 @@ const productoDetalles = () =>{
 const props = defineProps({
     producto: Object
 });
+
+const formatoPesosColombianos = (valor) => {
+  return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(valor);
+};
+
 /*
 import { defineProps } from 'vue';
 
