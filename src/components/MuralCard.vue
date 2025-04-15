@@ -129,6 +129,8 @@ onMounted(async () => {
   width: 100%;
   max-height: 100%;
   object-fit: cover;
+  min-height: 230px;
+
 }
 
 /* Contenido de la tarjeta */

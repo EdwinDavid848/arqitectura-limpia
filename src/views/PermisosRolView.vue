@@ -12,7 +12,6 @@
     <table v-if="Usu.length" class="Usu-table">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Nombre</th>
           <th>Correo</th>
           <th>Teléfono</th>
@@ -22,7 +21,6 @@
       </thead>
       <tbody>
         <tr v-for="(usuarioss, index) in Usu" :key="index">
-          <td>{{ usuarioss.id }}</td>
           <td>{{ usuarioss.nombre }}</td>
           <td>{{ usuarioss.email }}</td>
           <td>{{ usuarioss.telefono }}</td>
@@ -169,7 +167,7 @@ onMounted(() => {
   }
   
   .gradDynamic:before{
-    background-color:rgb(223, 146, 5);
+    background-color:rgb(184, 183, 182);
   }
   
   @keyframes colorSpin{
@@ -218,14 +216,14 @@ onMounted(() => {
   }
 
   th {
-    background-color: #ecd448;
+    background-color: rgb(223, 146, 5);
     font-weight: bold;
     color: #000000;
   }
 
   td {
     color: #000000;
-    background-color: rgb(253, 251, 225);
+    background-color: rgb(252, 251, 245);
   }
 
   .no-data-message {

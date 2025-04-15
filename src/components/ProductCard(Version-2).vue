@@ -8,7 +8,7 @@
 		<div class="card_content">
 			<div class="card_header">
 				<h2 class="card_title">{{ producto.nombre }}</h2>
-				<h2 class="card_subtitle">{{ formatoPesosColombianos(producto.precio) }} $</h2>
+				<h2 class="card_subtitle">{{ formatoPesosColombianos(producto.precio) }} </h2>
 			</div>
 			<p class="card_descripcion">{{ producto.descripcion }}</p>
 			<button class="botoncard" @click="productoDetalles">Agregar al carrito</button>
