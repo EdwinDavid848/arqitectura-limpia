@@ -6,9 +6,9 @@
      <div class="producto_detalles">
          <div>
              <h1>{{ producto.nombre }}</h1>
-             <h2>$ {{ producto.precio }}</h2>
+             <h2> {{ formatoPesosColombianos(producto.precio)  }}</h2>
              <p><strong>Categoría:</strong> {{ producto.category }}</p>
-             <p><strong>Precio:</strong> {{ producto.precio }} €</p>
+             <p><strong>Precio:</strong> {{ formatoPesosColombianos(producto.precio) }} $</p>
              <p><strong>Color:</strong> {{ producto.color }}</p>
              <p><strong>Tipo de cantidad:</strong> {{ producto.tipo_unidad }}</p>
              <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
@@ -82,9 +82,8 @@
      />
 </div>
 </template>
-
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue'; // ⬅️ aquí agregas watch
 import { SolicitarProductos, obtenerProductosCategoria } from '@/services/authService';
 import { useRoute } from 'vue-router';
 import { useCartStore } from '@/store/cartStore';
@@ -92,39 +91,27 @@ import { useAuthStore } from '@/store/authStore';
 import ProductCardVersion2 from '@/components/ProductCard(Version-2).vue';
 import Swal from 'sweetalert2';
 
-
-
 const cartStore = useCartStore();
 const authStore = useAuthStore();
 
 const route = useRoute();
 const producto = ref({});
 const producto_similares = ref([]);
-
 const amount = ref(1);
-
-
 
 const obtenerProductosSimilares = async (category) => {
     try {
         const respuesta = await obtenerProductosCategoria(category);
-        console.log("Respuesta del backend:", respuesta); 
         if (respuesta && Array.isArray(respuesta)) {
             producto_similares.value = respuesta.slice(0, 4);
-            console.log("Productos similares:", producto_similares.value);
-        } else {
-            console.warn("No se encontraron productos similares.");
         }
     } catch (error) {
         console.error("Error obteniendo productos:", error);
     }
 };
 
-
 const agregarAlCarrito = async () => {
-    const email_User = authStore.email; 
-    console.log(email_User);
-
+    const email_User = authStore.email;
     if (!email_User) {
         Swal.fire({
             icon: 'error',
@@ -142,16 +129,31 @@ const agregarAlCarrito = async () => {
     }
 };
 
+const formatoPesosColombianos = (valor) => {
+  return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(valor);
+};
 
+// ✅ Carga inicial
 onMounted(async () => {
- producto.value = await SolicitarProductos(route.params.id);
- 
- if (producto.value && producto.value.category) {
-     console.log(producto.value.category)
-     await obtenerProductosSimilares(producto.value.category); 
- }
+    producto.value = await SolicitarProductos(route.params.id);
+    if (producto.value && producto.value.category) {
+        await obtenerProductosSimilares(producto.value.category);
+    }
 });
+
+// ✅ Reaccionar a cambios en el ID del producto (cuando el usuario da clic en producto similar)
+watch(
+  () => route.params.id,
+  async (nuevoId) => {
+    producto.value = await SolicitarProductos(nuevoId);
+    if (producto.value && producto.value.category) {
+      await obtenerProductosSimilares(producto.value.category);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // opcional
+  }
+);
 </script>
+
 
 
 <style scoped>

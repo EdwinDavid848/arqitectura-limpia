@@ -21,7 +21,7 @@
         </button>
 
         
-        <button id="Btn" class="BtnEliminar" @click="EliminarPub" v-if="permisos.user && permisos.user.rol==='administrador'" > 
+        <button id="Btn" class="BtnEliminar" @click="EliminarPub" v-if="permisos.user && permisos.user.rol==='administrador' || esDelUsuario" > 
             <div class="sign">🗑️</div>
             <div class="text">Eliminar</div>
         </button>
@@ -130,7 +130,7 @@ onMounted(async () => {
   max-height: 100%;
   object-fit: cover;
   min-height: 230px;
-
+  max-height: 410px;
 }
 
 /* Contenido de la tarjeta */

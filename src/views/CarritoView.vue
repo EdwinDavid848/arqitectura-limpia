@@ -3,40 +3,42 @@
     <button v-show="email_client" @click="toggleCart" class="open-cart-btn" aria-label="Ver Carrito">
       Ver Carrito
     </button>
-    <div v-if="isCartVisible" class="cart-overlay">
-      <div class="cart">
-        <div class="cart-header">
-          <h2>Mis Reservas</h2>
-          <button @click="toggleCart" class="close-cart-btn" aria-label="Cerrar reservas">X</button>
-        </div>
-        <div class="cart-body">
-          <div v-if="cartStore.items.length === 0" class="no-items-message">
-            <p>No tienes productos reservados actualmente.</p>
+    <transition name="fade-slide">
+      <div v-if="isCartVisible" class="cart-overlay">
+        <div class="cart">
+          <div class="cart-header">
+            <h2>Mis Reservas</h2>
+            <button @click="toggleCart" class="close-cart-btn" aria-label="Cerrar reservas">X</button>
           </div>
-          <div v-else>
-            <div v-for="(item, index) in cartStore.items" :key="index" class="cart-item">
-              <img :src="item.imagen_url" alt="product image" class="product-image" />
-              <div class="cart_dat">
-                <p class="tit">{{ item.product_name }}</p>
-                <p>{{ item.precio }} $</p>
-                <div class="quantity-controls">
-                  <button @click="decreaseQuantity(item)" class="decrease-btn">-</button>
-                  <input type="text" v-model="item.cantidad" readonly class="quantity-input"/>
-                  <button @click="increaseQuantity(item)" class="increase-btn">+</button>
+          <div class="cart-body">
+            <div v-if="cartStore.items.length === 0" class="no-items-message">
+              <p>No tienes productos reservados actualmente.</p>
+            </div>
+            <div v-else>
+              <div v-for="(item, index) in cartStore.items" :key="index" class="cart-item">
+                <img :src="item.imagen_url" alt="product image" class="product-image" />
+                <div class="cart_dat">
+                  <p class="tit">{{ item.product_name }}</p>
+                  <p>{{ item.precio }} $</p>
+                  <div class="quantity-controls">
+                    <button @click="decreaseQuantity(item)" class="decrease-btn">-</button>
+                    <input type="text" v-model="item.cantidad" readonly class="quantity-input"/>
+                    <button @click="increaseQuantity(item)" class="increase-btn">+</button>
+                  </div>
+                  <p>Total: {{ totalPrecio.toFixed(2) }} $</p>
+                  <button @click="removeItem(item.product_id)" class="remove-btn">Eliminar</button>
                 </div>
-                <p>Total: {{ (item.precio * item.cantidad).toFixed(2) }} $</p>
-                <button @click="removeItem(item.product_id)" class="remove-btn">Eliminar</button>
               </div>
             </div>
           </div>
-        </div>
-        
-        <div v-if="cartStore.items.length > 0" class="cart-footer">
-          <h3>Subtotal: {{ cartSubtotal }} $</h3>
-          <router-link class="pay-btn" to="/comprar_producto">Continuar Compra</router-link>
+          
+          <div v-if="cartStore.items.length > 0" class="cart-footer">
+            <h3>Subtotal: {{ cartSubtotal }} $</h3>
+            <router-link class="pay-btn" to="/comprar_producto">Continuar Compra</router-link>
+          </div>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -81,6 +83,9 @@ const increaseQuantity = async (item) => {
     await cartStore.updateCarrito(item.product_id, newQuantity, email_client.value);
 };
 
+const totalPrecio = computed(() =>
+  cartStore.items.reduce((total, item) => total + item.precio * item.cantidad, 0)
+);
 
 
 const decreaseQuantity = async (item) => {
@@ -129,6 +134,15 @@ onMounted(async () => {
 
 
 <style scoped>
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  transform: translateX(100%);
+}
+.fade-slide-enter-to,
+.fade-slide-leave-from {
+  transform: translateX(0);
+}
+
 .cart-overlay {
   position: fixed;
   top: 0;

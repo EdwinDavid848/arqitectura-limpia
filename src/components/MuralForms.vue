@@ -5,7 +5,7 @@
           <form class="form" @submit.prevent="submitForm">
             <div class="form-group">
               <label for="email">Titulo</label>
-              <input type="text" id="email" name="email" required="" v-model="title">
+              <input type="text"  required="" v-model="title">
             </div>
             <div class="form-group">
               <label for="textarea">Descripcion</label>
@@ -26,14 +26,15 @@
 import { ref, defineEmits, defineProps, watch } from 'vue';
 import Swal from 'sweetalert2';
 import { AddPublications, editPublication } from '@/services/MuralServices';
+import { useAuthStore } from '@/store/authStore';
 
+const permisos= useAuthStore();
 const props = defineProps({
   publications: Object // Recibe la clase a editar
 });
 const emit = defineEmits(['close', 'PubActualizada']);
 
 // Variables reactivas para cada campo
-const email = ref('david@gmail.com');
 const title = ref('');
 const description = ref('');
 const file = ref(null);
@@ -54,7 +55,7 @@ const onFileChange = (event) => {
 const submitForm = async () => {
   try {
     const formData = new FormData();
-    formData.append('email', email.value);
+    formData.append('email', permisos.user.email);
     formData.append("titulo", title.value);
     formData.append("descripcion", description.value);
     if (file.value) {
@@ -65,7 +66,7 @@ const submitForm = async () => {
     if(props.publications?.id){
       
         const data = {
-        email : email.value,
+        email : permisos.user.email,
         titulo : title.value,
         descripcion : description.value,
         foto : file.value,
@@ -77,7 +78,7 @@ const submitForm = async () => {
       
     }else{
       await AddPublications(formData);
-      console.log(email.value,title.value,description.value,file.value)
+      console.log(permisos.user.email,title.value,description.value,file.value)
     }
       
       Swal.fire({

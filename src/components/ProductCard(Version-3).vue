@@ -6,7 +6,7 @@
 		<div class="card-content">
 			<div class="card-header">
 				<h2 class="card-title">{{ producto.nombre }}</h2>
-				<h2 class="card-price">{{ producto.precio }} €</h2>
+				<h2 class="card-price">{{ formatoPesosColombianos(producto.precio) }} $</h2>
 			</div>
 			<p class="card-description">{{ producto.descripcion }}</p>
 			<button class="add-to-cart-button" @click="productoDetalles">Agregar al carrito</button>
@@ -34,6 +34,11 @@ const router = useRouter();
 const productoDetalles = () =>{
     router.push({ name: 'solicitarProducto', params: {id: props.producto.id}})
 }
+
+const formatoPesosColombianos = (valor) => {
+  return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(valor);
+};
+
 
 </script>
 
@@ -90,7 +95,7 @@ const productoDetalles = () =>{
 
 .card-price {
 	font-size: 22px;
-	color: #ff6b6b;
+	color: #c56103;
 	margin: 0;
 }
 

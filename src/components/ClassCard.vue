@@ -143,6 +143,9 @@ onMounted(async () => {
     text-align: center;
     margin-top: -1rem;
     margin-bottom: 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
   }
   
   .prex span {

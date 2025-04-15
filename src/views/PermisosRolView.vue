@@ -105,6 +105,7 @@ const editRol = async (usuario) => {
       title: 'Rol actualizado correctamente'
     });
   } catch (error) {
+    console.log(usuario.email, usuario.nuevoRol)
     Swal.fire({
       icon: 'error',
       title: 'Fallo en la edición del rol',

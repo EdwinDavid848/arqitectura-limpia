@@ -1,3 +1,7 @@
+<script setup lang="ts">
+
+</script>
+
 <template>
     <div class="cont_part1_button">
         
@@ -7,7 +11,7 @@
             Ver todo
         </router-link> 
         -->
-        <button class="link">Ver todo</button>
+        <router-link  class="link" to="/tienda">Ver todo</router-link >
     </div>
 </template>
 
@@ -32,6 +36,8 @@
     border-bottom: 1px solid rgb(95, 94, 94);
     transition: text-shadow 0.3s ease;
     color: black;
+    width: auto;
+    cursor: pointer;
 }
 
 .cont_part1_button .link:hover {

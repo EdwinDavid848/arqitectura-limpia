@@ -17,9 +17,12 @@
       </div>
       <p class="welcome-description">
         Si aun no te has registrado, que esperas!
-        <button class="cssbuttons-io" @click="cambioPagina">
+        <router-link v-if="!isAuthenticated" class="cssbuttons-io" to="/register" @click="cambioPagina">
           <span>Registrate ahora mismo!!</span>
-        </button>
+        </router-link>
+        <router-link v-else class="cssbuttons-io" to="/dashboard" @click="cambioPagina">
+          <span>Registrate ahora mismo!!</span>
+        </router-link>
       </p>
       <!-- From Uiverse.io by adamgiebl --> 
       
@@ -60,11 +63,11 @@
 </div>
 </div >
 <p class="welcome-description" v-if="!permisos.user" style="color:black; margin:10px">
-        Si aun no te has registrado, que esperas!
-        <button class="cssbuttons-io" @click="cambioPagina">
-          <span>Registrate ahora mismo!!</span>
-        </button>
-        y asi haras parte de una bonita comunidad al igual de disfrutar de las funciones de nuestra pagina
+        ¿Aun no te has registrado?, que esperas!
+        <router-link  class="cssbuttons-io" to="/" @click="cambioPagina">
+          <span>Unete a nosotros!!</span>
+        </router-link>
+        y asi disfrutar de las funciones de nuestra pagina
       </p>
 <h1 class="nuestrasclas">NUESTRAS CLASES DISPONIBLES</h1>
 
@@ -75,15 +78,7 @@
     ></BotonAgregarClase>
     <ClassForm v-if="change" @closeForm="change = false"></ClassForm>
  </section>
- <section  v-if="permisos.user " >
-    <label class="dropdown">
-      <input type="checkbox" class="toggle"/>
-      <span class="buttonReserva">Mostrar Clases Reservadas</span>
-      <div class="content">
-        <PayClass></PayClass>
-      </div>
-    </label>
-  </section>
+
   <div class="Anuncio">
         <div class="parallax_version2">
             <h1>Explora el Mundo del Tejido</h1>
@@ -94,24 +89,29 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted,computed, watch } from 'vue';
 import ClassCard from '@/components/ClassCard.vue';
 import BotonAgregarClase from '@/components/Botones/BotonAgregarClase.vue';
-import PayClass from '@/components/PayClass.vue';
 import ClassForm from '@/components/ClassForm.vue';
 import { useAuthStore } from '@/store/authStore';
-import { useRouter } from 'vue-router';
+
 
 const permisos=useAuthStore();
-const router = useRouter;
+
+
+const isAuthenticated = computed(() => permisos.isAuthenticated);
+
+    watch(isAuthenticated, (newVal) => {
+        if (!newVal) {
+            console.log("Token expirado, redirigiendo al login...");
+        }
+    });
 
 const change=ref(false);
 const cambio= async()=>{
   change.value=true
 }
-const cambioPagina=()=>{
-    router.push('/');
-  }
+
 
 onMounted(async () => {
   if (!permisos.isAuthenticated) {

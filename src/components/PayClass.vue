@@ -170,6 +170,7 @@ watch(state, async () => {
   align-items: center;
   justify-content: center;
   margin-top: 10px;
+  margin-bottom: 10px;
 }
 .opciones select{
   width: 40%;
