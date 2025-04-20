@@ -4,7 +4,8 @@ import { ref } from 'vue';
 import productService from '@/services/productService'; 
 
 
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = 'https://proyectobackend2025-production.up.railway.app';
+
 
 export const getProductosPorCategoria = async (categoria, limit, offset) => {
   try {

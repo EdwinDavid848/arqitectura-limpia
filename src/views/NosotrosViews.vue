@@ -139,38 +139,45 @@ onUnmounted(() => {});
   <style scoped>
   .cont_nosotros {
     background-image: url("@/assets/78950467_l_normal_none.jpg");
-    height: 100vh;
-    margin-top: 0%;
-    color: rgb(239, 240, 241);
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    margin: 0;
+    padding: 0 20px;
+    color: rgb(239, 240, 241);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    margin: 0px 5px;
     text-align: center;
+    box-sizing: border-box;
   }
-  .cont_nosotros h2{
-    text-align: center;
+  
+  .cont_nosotros h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .cont_nosotros h2 {
+    font-size: 1.5rem;
     padding: 20px;
+    max-width: 900px;
   }
-
-
-  /* PARALLAX VERSION 1 */
+  
+  /* PARALLAX SECTION */
   .publicidad_class {
-    height: 350px;
+    min-height: 350px;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    color: #000000;
     background-color: #e2dfdf56;
     opacity: 1;
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   }
-  
   
   .parallax {
     background-image: url('@/assets/vecteezy_ai-generated-knitting-advertisment-background-with-copy-space_37246648.jpg');
@@ -181,62 +188,109 @@ onUnmounted(() => {});
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    color: #ffffff;
     box-shadow: 2px 4px 18px rgba(0, 0, 0, 0.1);
     font-weight: bold;
     width: 100%;
     height: 80%;
-    color: #000000;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
   }
   
-  .publicidad_class .parallax h1 {
+  .parallax h1 {
     font-family: 'Playfair Display', serif;
-    font-size: 50px;
+    font-size: 3rem;
     color: #ebebeb;
+    margin-bottom: 10px;
   }
   
-  .publicidad_class .parallax h3 {
+  .parallax h3 {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 1.3rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #ebebeb;
-
   }
   
-  .publicidad_class .parallax p {
-    font-size: 25px;
-    margin-bottom: 10px;
+  .parallax p {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
     color: #ebebeb;
-
+    max-width: 800px;
   }
   
-  .publicidad_class .parallax button {
+  .parallax button {
     background-color: #ffffffbe;
-    padding: 13px;
+    padding: 13px 20px;
     border-radius: 5px;
-    font-size: 28px;
+    font-size: 1.2rem;
     font-family: 'Montserrat', sans-serif;
     border: none;
     transition: all 0.5s ease;
+    cursor: pointer;
   }
   
   .link {
     text-decoration: none;
     color: #000000;
   }
-  .link:hover{
+  
+  .link:hover {
     color: white;
   }
   
-  .publicidad_class div button:hover {
+  .parallax button:hover {
     background-color: rgb(236, 151, 24);
     color: white;
   }
-
-
-
+  
+  /* 📱 MEDIA QUERIES */
+  @media screen and (max-width: 768px) {
+    .cont_nosotros h1 {
+      font-size: 2rem;
+    }
+  
+    .cont_nosotros h2 {
+      font-size: 1rem;
+      padding: 10px;
+    }
+  
+    .parallax h1 {
+      font-size: 2rem;
+    }
+  
+    .parallax h3 {
+      font-size: 1rem;
+    }
+  
+    .parallax p {
+      font-size: 1rem;
+    }
+  
+    .parallax button {
+      font-size: 1rem;
+      padding: 10px 16px;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .cont_nosotros {
+      padding: 0 15px;
+    }
+  
+    .parallax h1 {
+      font-size: 1.6rem;
+    }
+  
+    .parallax p {
+      font-size: 0.95rem;
+    }
+  
+    .parallax button {
+      font-size: 0.9rem;
+    }
+  }
 
 
 /* MOSTRAR PRODUCTOS VERSION 1 */
@@ -320,6 +374,60 @@ onUnmounted(() => {});
 .mostrarPublicidad{
   margin: 50px 0px;
 }
+@media screen and (max-width: 1024px) {
+  .cont_part1_text {
+    font-size: 28px;
+    width: 85%;
+    letter-spacing: 2px;
+  }
+
+  .cont_part1 {
+    width: 95%;
+    gap: 15px;
+    padding: 20px;
+  }
+
+  .cont_part1_button .link {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .contenedor_text {
+    height: auto;
+    padding: 20px 10px;
+  }
+
+  .cont_part1_text {
+    font-size: 22px;
+    width: 100%;
+    letter-spacing: 1px;
+    padding: 10px;
+  }
+
+  .cont_part1 {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    gap: 15px;
+  }
+
+  .conten {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cont_part1_button .link {
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .contenedor_animacion_version1 {
+    transform: scale(1);
+  }
+}
+
 
 /* MOSTRAR PRODUCTOS VERSION 2 */
 
@@ -492,6 +600,9 @@ onUnmounted(() => {});
       }
     }
 
+
+
+    
 
   </style>
   

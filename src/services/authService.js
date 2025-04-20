@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8000'; 
+const API_URL = 'https://proyectobackend2025-production.up.railway.app';
 
 
 
@@ -43,7 +43,7 @@ export async function registerUser(userData) {
 
 export async function informacionPerfil(access_token){
     try{
-        const respuesta_Usuario = await axios.get(`http://127.0.0.1:8000/usuarios`, {
+        const respuesta_Usuario = await axios.get(`${API_URL}/usuarios`, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
@@ -64,7 +64,7 @@ export async function informacionPerfil(access_token){
 
 export async function recuperarPassword(email){
     try{
-        const respuesta = await axios.post("http://localhost:8000/forgot-password", {
+        const respuesta = await axios.post(`${API_URL}forgot-password`, {
             email,
         })
         return respuesta.data;

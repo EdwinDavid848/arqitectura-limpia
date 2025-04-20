@@ -1,38 +1,38 @@
 <template>
     <footer class="Footer">
-        <nav id="footer_nav_Uno" class="footer_nav">
-            <div>
-                <label for="">Facebook</label>
-                <li>Bisuteria-prederia la pajarraca</li>
-            </div>
-            <div>
-                <label for="">Direccion</label>
-                <li>calle 18 N 100-11 fontibon </li>
-            </div>
-        </nav>
-        <nav id="footer_nav_Dos" class="footer_nav">
-            <div>
-                <label for="">Nombre</label>
-                <li>pedrerialaPajarraca</li>
-            </div>
-            <div>
-                <label for="">Numero Telefonico</label>
-                <li>601 4152748</li>
-            </div>
-        </nav>
-        <nav id="footer_nav_Dos" class="footer_nav">
-            <div>
-                <label for="">Email:</label>
-                <li>omarrarevalo@hotmail.es</li>
-            </div>
-            <div>
-                <label for="">Numero Telefonico</label>
-                <li>311 532 3347</li>
-            </div>
-        </nav>
+      <nav id="footer_nav_Uno" class="footer_nav">
+        <div>
+          <label>Facebook</label>
+          <li>Bisuteria-prederia la pajarraca</li>
+        </div>
+        <div>
+          <label>Dirección</label>
+          <li>Calle 18 N 100-11 Fontibón</li>
+        </div>
+      </nav>
+      <nav id="footer_nav_Dos" class="footer_nav">
+        <div>
+          <label>Nombre</label>
+          <li>pedrerialaPajarraca</li>
+        </div>
+        <div>
+          <label>Teléfono</label>
+          <li>601 4152748</li>
+        </div>
+      </nav>
+      <nav id="footer_nav_Tres" class="footer_nav">
+        <div>
+          <label>Email</label>
+          <li>omarrarevalo@hotmail.es</li>
+        </div>
+        <div>
+          <label>Celular</label>
+          <li>311 532 3347</li>
+        </div>
+      </nav>
     </footer>
-</template>
-
+  </template>
+  
 
 <style scoped>
     .Footer{
@@ -88,5 +88,69 @@
         align-items: center;
         justify-content: center;
     }
+
+    .Footer {
+  min-height: 180px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-around;
+  background-color: #ffffff;
+  color: #030303;
+  flex-direction: row;
+  padding: 20px 10px;
+  transition: transform 0.3s ease;
+  gap: 20px;
+}
+
+.footer_nav {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+}
+
+.footer_nav div {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+}
+
+.footer_nav label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #000;
+}
+
+.footer_nav li {
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  list-style: none;
+}
+
+/* ✅ Responsive para tablets y móviles */
+@media screen and (max-width: 768px) {
+  .Footer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer_nav {
+    width: 90%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer_nav div {
+    width: 100%;
+  }
+
+  .footer_nav li {
+    font-size: 16px;
+  }
+}
 </style>
 

@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000';
+const API_URL = 'https://proyectobackend2025-production.up.railway.app';
 
 export const AddPublications = async (formData) => {
   try {
-    const response = await axios.post('http://localhost:8000/mural/', formData, {
+    const response = await axios.post(`${API_URL}/mural/`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data' // Si envías archivos, esto es obligatorio
       }
