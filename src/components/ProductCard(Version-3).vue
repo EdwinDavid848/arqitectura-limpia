@@ -1,5 +1,5 @@
 <template>
-	<div class="card-container">
+	<div class="card-container" >
 		<div class="image-container">
 			<img :src="producto.imagen_url" alt="Producto">
 		</div>

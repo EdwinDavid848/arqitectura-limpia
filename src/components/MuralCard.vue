@@ -102,7 +102,7 @@ onMounted(async () => {
 }
 /* Tarjeta individual */
 .card {
-  width: 300px;
+  width: 100%;
   background-color: #fff8ed;
   border-radius: 15px;
   overflow: hidden;
@@ -246,5 +246,32 @@ onMounted(async () => {
 /* button click effect*/
 #Btn:active {
   transform: translate(2px ,2px);
+}
+@media (max-width: 480px) {
+  .card {
+    max-width: 160px;
+  }
+
+  .card-content {
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  .card-description {
+    font-size: 0.9rem;
+  }
+
+  .card-author {
+    font-size: 0.7rem;
+  }
+
+  .card-img-test {
+    min-height: 150px;
+    max-height: 200px;
+  }
 }
 </style>

@@ -32,7 +32,7 @@
               </div>
               <div v-else>
                   <div v-if="divActual === 'Shopping Cart'">
-                    <UserHistorialComprasView/>
+                    <UserHistorialComprasView></UserHistorialComprasView>
                   </div>
                   <div v-if="divActual === 'Class History'">
                     <button class="buttongestion" @click="cambio" v-if="authStore.user && (authStore.user.rol == 'administrador' || authStore.user.rol == 'profesor' )">Gestion de clases</button>

@@ -15,13 +15,16 @@ import InventarioComprasView from '@/views/InventarioComprasView.vue';
 import ResetePasswordView from '@/views/ResetePasswordView.vue';
 import SolicitarRecuperacionPasswordViews from '@/views/SolicitarRecuperacionPasswordViews.vue';
 import VerTodasLasClases from '@/components/VerTodasLasClases.vue';
+import AuthCallbackViews from '@/views/AuthCallbackViews.vue';
 import { getToken } from "@/utils/localStorage";
 import { useAuthStore } from '@/store/authStore'; 
+import { useCartStore } from '@/store/cartStore';
 
 
 const routes = [
     { path: '/', component: UserLogin },
     { path: '/register', component: UserRegister },
+    {   path: '/auth-callback',name: 'authCallback', component: AuthCallbackViews},
     {path: '/clases', component:ClassView},
     {path: '/principa', component:NosotrosViews},
     {path: '/productos', component: SolicitarProductosView },
@@ -56,24 +59,50 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    const authStore = useAuthStore();
-    const token = getToken();
-  
-    if (!authStore.token && token) {
+  const authStore = useAuthStore();
+  const token = getToken();
+
+  if (!authStore.token && token) {
       authStore.setToken(token);
-      await authStore.fetchUserInfo(); 
-    }
-  
-    if (to.meta.requiresAuth && !authStore.token) {
+      await authStore.fetchUserInfo();
+  }
+
+  if (authStore.token && !authStore.user) {
+      await authStore.fetchUserInfo();
+  }
+
+  if (to.meta.requiresAuth && !authStore.token) {
       console.warn("Acceso denegado, redirigiendo al login...");
-      next('/');
-    } else if (to.meta.requiresAdmin && authStore.role !== 'admin') {
+      return next('/');
+  }
+
+  // Protección por rol admin (opcional)
+  if (to.meta.requiresAdmin && authStore.role !== 'admin') {
       console.warn("Acceso denegado, no es administrador...");
-      next('/acceso-denegado'); 
-    } else {
-      next();
+      return next('/acceso-denegado');
+  }
+
+  if (to.path === '/comprar_producto') {
+    const cartStore = useCartStore();
+    const user = authStore.user;
+
+    if (!user || !user.email) {
+        console.warn("Usuario no cargado aún. Redirigiendo al login.");
+        return next('/');
     }
-  });
-  
+
+    if (cartStore.items.length === 0) {
+        await cartStore.fetchCarrito(user.email);
+
+        if (cartStore.items.length === 0) {
+            console.warn("Carrito vacío, redirigiendo a la tienda.");
+            return next('/tienda');
+        }
+    }
+  }
+
+  next();
+});
+
   
 export default router;

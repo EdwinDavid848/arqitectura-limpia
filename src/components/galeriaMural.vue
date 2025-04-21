@@ -69,15 +69,42 @@ onMounted(() => {
 
 .mural-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 5 columnas */
-  gap: 1rem; /* Espaciado entre tarjetas */
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  padding: 20px;
   justify-content: center;
 }
+
 
 .loading {
   text-align: center;
   padding: 10px;
   font-size: 14px;
   color: #666;
+}
+
+@media (max-width: 1400px) {
+  .mural-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .mural-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .mural-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablet/móvil grande */
+  }
+}
+
+@media (max-width: 480px) {
+  .mural-container {
+    
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas también en móvil pequeño */
+  }
 }
 </style>
