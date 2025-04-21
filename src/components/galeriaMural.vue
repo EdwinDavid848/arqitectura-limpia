@@ -69,13 +69,11 @@ onMounted(() => {
 
 .mural-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* se adapta mejor */
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1rem;
-  max-width: 1200px; /* evita que crezca mucho */
-  margin: 0 auto; /* centra horizontalmente */
-  padding: 1rem;
+  padding: 20px;
+  justify-content: center;
 }
-
 
 .loading {
   text-align: center;
@@ -84,91 +82,28 @@ onMounted(() => {
   color: #666;
 }
 
-.publication-list {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column-reverse;
+@media (max-width: 1400px) {
+  .mural-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
-.mural-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  justify-content: center;
+@media (max-width: 1200px) {
+  .mural-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
   .mural-container {
-    display: block;
-    column-count: 2;
-    column-gap: 1rem;
-  }
-
-  .mural-container > * {
-    break-inside: avoid;
-    margin-bottom: 1rem;
-    width: 100%;
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablet/móvil grande */
   }
 }
 
-/* Para móviles muy pequeños */
 @media (max-width: 480px) {
   .mural-container {
-    column-count: 1;
+    
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas también en móvil pequeño */
   }
-}
-
-
-
-.publication-list {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column-reverse;
-}
-
-.mural-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Escritorio */
-  gap: 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-  justify-content: center;
-}
-
-/* Tabletas */
-@media (max-width: 1024px) {
-  .mural-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Móviles grandes */
-@media (max-width: 768px) {
-  .mural-container {
-    display: block;
-    column-count: 2;
-    column-gap: 1rem;
-  }
-
-  .mural-container > * {
-    break-inside: avoid;
-    margin-bottom: 1rem;
-    width: 100%;
-  }
-}
-
-/* Móviles pequeños */
-@media (max-width: 480px) {
-  .mural-container {
-    column-count: 1;
-  }
-}
-
-.loading {
-  text-align: center;
-  padding: 10px;
-  font-size: 14px;
-  color: #666;
 }
 </style>
