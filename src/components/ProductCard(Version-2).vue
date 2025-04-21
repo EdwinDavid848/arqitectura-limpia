@@ -142,5 +142,61 @@ const productoDetalles = () =>{
 		background-position: center; 
 	}
 }
+@media (max-width: 1024px) {
+	.mi_card_producto {
+		width: 260px;
+		height: 320px;
+		margin: 10px;
+	}
+	.card_content {
+		height: 160px;
+		transform: translateY(60%);
+		padding: 10px;
+	}
+	.card_content:hover {
+		transform: translateY(0);
+	}
+	.card_header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 5px;
+	}
+	.card_title, .card_subtitle {
+		font-size: 14px;
+		max-width: 100%;
+	}
+	.card_descripcion {
+		font-size: 13px;
+		white-space: normal;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.botoncard {
+		width: 100%;
+		padding: 8px;
+		font-size: 13px;
+	}
+}
 
+@media (max-width: 600px) {
+	.mi_card_producto {
+		width: 230px;
+		height: 300px;
+		margin: 8px;
+	}
+	.card_content {
+		height: 150px;
+		transform: translateY(55%);
+	}
+	.card_title, .card_subtitle {
+		font-size: 13px;
+	}
+	.card_descripcion {
+		font-size: 12px;
+	}
+	.botoncard {
+		font-size: 12px;
+		padding: 7px;
+	}
+}
 </style>
