@@ -520,6 +520,41 @@ onUnmounted(() => {});
     font-family: 'Playfair Display', serif;
   }
 }
+@media screen and (max-width: 768px) {
+  .product {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 10px;
+  }
+
+  .product::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product > * {
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    width: 80%; /* Ajusta el tamaño de la tarjeta en móviles */
+  }
+
+  .titulos {
+    font-size: 30px;
+    text-align: center;
+    margin: 10px auto;
+  }
+
+  .TituloProducto p {
+    width: 95%;
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .TituloProducto h1 {
+    font-size: 28px;
+  }
+}
 
 
 /* PARALLAX VERSION 2 */
