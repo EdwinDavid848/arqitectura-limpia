@@ -116,9 +116,9 @@
   border-radius: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-    overflow: hidden;       /* Evita que el contenido se salga */
-  text-overflow: ellipsis; /* Agrega "..." si el texto es demasiado largo */
-  white-space: nowrap;    
+  overflow: hidden;       /* Evita el desbordamiento hacia fuera del div */
+  word-wrap: break-word;  /* Permite que las palabras largas se rompan si es necesario */
+  white-space: normal;  
 }
 
 .carrusel_texto h2 {
