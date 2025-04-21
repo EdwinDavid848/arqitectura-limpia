@@ -116,6 +116,9 @@
   border-radius: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+    overflow: hidden;       /* Evita que el contenido se salga */
+  text-overflow: ellipsis; /* Agrega "..." si el texto es demasiado largo */
+  white-space: nowrap;    
 }
 
 .carrusel_texto h2 {
