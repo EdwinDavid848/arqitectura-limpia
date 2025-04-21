@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000'; 
+const API_URL = 'https://proyectobackend2025-production.up.railway.app';
+
 
 export async function VerReservaciones() {
     try{
@@ -63,7 +64,7 @@ export async function CambiarEstado(id, state) {
 
 export async function pago(idClase,metodo,monto,fecha) {
     try{
-        const response=await axios.post('http://127.0.0.1:8000/pagarClass/', 
+        const response=await axios.post(`${API_URL}/pagarClass/`, 
             {
                 reservation_id: idClase,
                 metodo_pago: metodo,

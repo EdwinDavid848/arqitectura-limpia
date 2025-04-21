@@ -75,7 +75,6 @@ onMounted(() => {
   justify-content: center;
 }
 
-
 .loading {
   text-align: center;
   padding: 10px;

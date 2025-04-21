@@ -11,7 +11,7 @@
 
 
 <style scoped> 
-    .card_part1{
+        .card_part1{
         height: 550px;
         width: 40%;
         display: flex;
@@ -65,6 +65,58 @@
         width: 30%;
 
     }
+}
+
+
+
+/* Tablet */
+@media screen and (max-width: 1024px) {
+  .card_part1 {
+    width: 45%;
+    height: auto;
+    padding: 15px;
+  }
+
+  .card_text1 h2 {
+    font-size: 18px;
+  }
+
+  .card_text1 h3 {
+    font-size: 16px;
+  }
+
+  .cont_part1 img {
+    height: auto;
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+  }
+}
+
+/* Móvil */
+@media screen and (max-width: 768px) {
+  .card_part1 {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+
+  .card_text1 h2 {
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .card_text1 h3 {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .cont_part1 img {
+    height: auto;
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+  }
 }
 
  

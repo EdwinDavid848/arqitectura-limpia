@@ -1,34 +1,7 @@
 <template>
     <div class="box gradDynamic">
       <div>
-        <div class="tit-opcionPago">
-          <h2>Opciones de Pago</h2>
-        </div>
-        <div class="opcion">
-          <div>
-            <button @click="mostrarDiv('PRESENCIAL')">PRESENCIAL</button>
-            <button @click="mostrarDiv('NEQUI')">NEQUI</button>
-            <button @click="mostrarDiv('DAVIPLATA')">DAVIPLATA</button>
-          </div>
-        </div>
-        <div v-if="divActual === 'NEQUI'" class="div-contenido" id="cont-nequi">
-          <div class="container">
-            <img
-              src="https://i.pinimg.com/564x/c6/a0/46/c6a04605a0cd2729fa647d1958b24110.jpg"
-              alt="Logo Nequi"
-              class="logo"
-            />
-            <h1 class="title">Compra aquí</h1>
-            <div class="payment-informacion">
-              <p class="nequi-numero">Número de Nequi: {{ nequiNumber }}</p>
-              <img :src="QrCodigo" alt="Código QR" class="qr-code" />
-            </div>
-            <p class="instructions">
-              Escanea el código QR o utiliza el número de Nequi para comprar
-            </p>
-          </div>
-        </div>
-        <div v-if="divActual === 'PRESENCIAL'" class="div-contenido" id="cont-pren">
+        <div class="div-contenido" id="cont-pren">
           <div class="tab-section">
             <div class="tab-inf">
               <h2>INFORMACION PERSONAL</h2>
@@ -45,17 +18,21 @@
             </div>
           </div>
         </div>
-        <div v-if="divActual === 'div3'" class="div-contenido">
-          <p>Este es el contenido del Div 3</p>
-        </div>
       </div>
       <div class="result-section">
         <div class="tab-result">
           <h2 class="tit-resul">Artículos en orden</h2>
-          <div v-for="(item, index) in cartStore.items" :key="index">
-            <img :src="item.imagen_url" />
-            <h2>{{ item.product_name }} <br> <h3 class="amounts">Cantidad: {{ item.cantidad }}</h3></h2>
-            <p>Precio: {{ item.precio }}</p>
+          <div v-for="(item, index) in cartStore.items" :key="index ">
+            <div class="item-compra">
+              <img :src="item.imagen_url" />
+              <div class="info-item">
+                <div class="nombre-precio">
+                  <h2 class="nombre">{{ item.product_name }}</h2>
+                  <p class="precio">Precio: {{ item.precio }}</p>
+                </div>
+                <h3 class="amounts">Cantidad: {{ item.cantidad }}</h3>
+              </div>
+            </div>
           </div>
         </div>
         <div class="tab-precio">
@@ -69,7 +46,7 @@
 
 
 <script setup>
-import {ref,onMounted, nextTick} from 'vue';
+import {onMounted, nextTick, computed} from 'vue';
 import { useAuthStore } from "@/store/authStore";
 import { useCartStore } from '@/store/cartStore';
 import { useRouter } from 'vue-router';
@@ -80,7 +57,8 @@ const router = useRouter();
 
 const cartStore = useCartStore();
 const authStore = useAuthStore();
-const divActual = ref('PRESENCIAL')
+
+const metodo_pago = ("PRESENCIAL")
 
 
 const comprarProducto = async () => {
@@ -92,7 +70,6 @@ const comprarProducto = async () => {
     confirmButtonText: "Sí, Comprar",
     cancelButtonText: "Cancelar",
   });
-  const metodo_pago = divActual.value;
 
   if (confirmacion.isConfirmed) {
     const compra = await comprarProductos(authStore.user.email, metodo_pago);
@@ -104,12 +81,15 @@ const comprarProducto = async () => {
   }
 };
 
+const calcularTotal = computed(() => {
+  return cartStore.items.reduce((total, item) => {
+    return total + (item.precio * item.cantidad);
+  }, 0);
+});
 
 
 
-const mostrarDiv = (div) => {
-  divActual.value = div;
-};
+
 
 
 
@@ -308,28 +288,9 @@ onMounted(async () => {
     align-items: center;
 
   }
-  .tab-result{
-    display: grid;
-    width: 90%;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px 20px;
-    max-height: 700px;
-    overflow: auto;  
-  }
-  .tit-resul{
-    border-bottom: 1px solid #bbbaba;
-    margin-bottom: 10px;
-  }
-  .tab-result div{
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 10px;
-    padding: 10px;
-    border-bottom: 1px solid #bbbaba;
-  }
+
+ 
+
   .tab-result div h2{
     font-size: 20px;
 
@@ -382,6 +343,117 @@ onMounted(async () => {
     display: grid;
     gap: 10px;
   }
+
+
+  .tab-result {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-height: 700px;
+  overflow-y: auto;
+  border-radius: 10px;
+}
+
+.tab-result > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f3f3f3;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.tab-result img {
+  width: 100px;
+  height: auto;
+  border-radius: 10px;
+  object-fit: contain;
+  margin-right: 15px;
+}
+
+.tab-result h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.tab-result h3.amounts {
+  font-size: 16px;
+  margin-top: 5px;
+  color: #555;
+}
+
+.tab-result p {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  min-width: 100px;
+  text-align: end;
+}
+
+
+
+
+
+.item-compra {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #f3f3f3;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.item-compra img {
+  width: 100px;
+  height: auto;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.info-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.nombre-precio {
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start;
+  gap: 5px;
+  color: #ff0077;
+}
+
+.nombre-precio .nombre {
+  font-size: 20px;
+  margin: 0;
+  color: #222;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.nombre-precio .precio {
+  font-size: 18px;
+  color: #444;
+  margin: 0;
+  color: #222122;
+
+}
+
+.amounts {
+  font-size: 16px;
+  margin-top: 5px;
+  color: #555;
+}
 
 
 </style>

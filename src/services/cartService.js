@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000";
+const API_URL = 'https://proyectobackend2025-production.up.railway.app';
 
 export const getCarrito = async (emailCliente) => {
     const response = await axios.get(`${API_URL}/ver_carrito/${emailCliente}`);

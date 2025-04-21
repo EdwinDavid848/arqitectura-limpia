@@ -109,4 +109,118 @@ const loginWithGoogle = () => {
     height: 20px;
     margin-right: 10px;
 }
+
+.login-container {
+  height: 100vh;
+  background-image: url("@/assets/78950467_l_normal_none.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /* para evitar que se pegue a los bordes en móviles */
+}
+
+.login-content {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.welcome-section h2 {
+  color: white;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.welcome-section p {
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #d39103;
+}
+
+.solicitar_recuperacion {
+  display: block;
+  font-size: 16px;
+  color: white;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.solicitar_recuperacion:hover {
+  color: rgb(235, 183, 40);
+  transition: all 0.3s ease;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid #ccc;
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.google-btn:hover {
+  background-color: #f1f1f1;
+}
+
+.google-logo {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+/* 📱 Responsive para tablets y móviles */
+@media screen and (max-width: 768px) {
+  .login-content {
+    padding: 20px;
+  }
+
+  .welcome-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .welcome-section p {
+    font-size: 14px;
+  }
+
+  .google-btn {
+    font-size: 14px;
+  }
+
+  .solicitar_recuperacion {
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .welcome-section h2 {
+    font-size: 1.4rem;
+  }
+
+  .google-logo {
+    width: 18px;
+    height: 18px;
+  }
+
+  .google-btn {
+    padding: 8px 15px;
+  }
+}
 </style>

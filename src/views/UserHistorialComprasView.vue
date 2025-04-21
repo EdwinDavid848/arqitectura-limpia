@@ -24,7 +24,7 @@
     </table>
     <div v-if="isTicketVisible" class="ticket-modal" @click.self="closeTicket">
   <div class="ticket-content">
-    <header class="modal-header">
+    <header class="modal-header"> 
       <h3>Detalles del Pedido {{ currentCompra.pedido_id }}</h3>
       <button @click="closeTicket" class="btn-close">&times;</button>
     </header>
@@ -35,9 +35,9 @@
           Precio unitario: 
           <span class="precio">{{ currency(producto.precio_unitario) }}</span><br />
           Cantidad: {{ producto.cantidad }}<br />
-          <span class="total">
-            Total Producto: {{ currency(producto.precio_unitario * producto.cantidad) }}
-          </span>
+          <section class="ticket-summary">
+            <p><strong>Total del Pedido:</strong> {{ currency(currentCompra.monto) }}</p>
+          </section>
         </li>
       </ul>
     </section>
@@ -282,4 +282,140 @@
       width: 95%;
     }
   }
+
+
+
+
+
+  .ticket-content {
+  background: linear-gradient(to bottom right, #fffaf0, #ffffff);
+  padding: 30px 20px;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Líneas curvas decorativas */
+.ticket-content::before,
+.ticket-content::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200px;
+  background: radial-gradient(circle at center, #ff940a 30%, transparent 70%);
+  opacity: 0.1;
+  z-index: 0;
+  transform: rotate(5deg);
+}
+
+.ticket-content::before {
+  top: -120px;
+  left: -50%;
+}
+
+.ticket-content::after {
+  bottom: -120px;
+  right: -50%;
+  transform: rotate(-5deg);
+}
+
+.ticket-details,
+.modal-header,
+.modal-footer {
+  position: relative;
+  z-index: 1; /* Encima de las curvas decorativas */
+}
+
+/* Títulos y textos */
+.modal-header h3 {
+  font-size: 1.6em;
+  color: #333;
+  font-weight: bold;
+}
+
+.ticket-details li strong {
+  font-size: 1.05em;
+  color: #000;
+}
+
+.precio {
+  color: #2ecc71;
+}
+
+.total {
+  color: #ff940a;
+  font-weight: 600;
+}
+
+/* Botones más suaves */
+.btn-close-modal {
+  background-color: #ff940a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-close-modal:hover {
+  background-color: #e07b00;
+}
+
+/* Botón detalles también redondeado */
+.btn-detalles {
+  padding: 8px 16px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9em;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+}
+
+.btn-detalles:hover {
+  background-color: #2980b9;
+}
+
+
+th {
+  background-color: #fff;
+  color: #ff940a;
+  border-bottom: 2px solid #ff940a;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+.ticket-content {
+  transform: scale(0.95);
+  opacity: 0;
+  animation: showUp 0.3s forwards ease;
+}
+
+@keyframes showUp {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.ticket-details li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  background: #fdfdfd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+}
+.ticket-summary {
+  margin-top: 20px;
+  font-size: 1.1em;
+  text-align: right;
+  color: #2c3e50;
+}
+
   </style>

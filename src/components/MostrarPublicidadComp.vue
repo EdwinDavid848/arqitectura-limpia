@@ -256,4 +256,129 @@ onMounted(() => {
         }
  
     }
+
+    @media (max-width: 1024px) {
+    .mural {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .contenedor_imagenes {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #inf_principal h1 {
+        font-size: 22px;
+    }
+
+    #inf_principal p, #inf_principal a {
+        font-size: 16px;
+    }
+
+    .card .inf h1 {
+        font-size: 0.9rem;
+    }
+
+    .card .inf p, .card .inf a {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 768px) {
+    .contenedor_imagenes {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        width: 90%;
+        height: 220px;
+    }
+
+    .card .inf h1 {
+        font-size: 0.85rem;
+    }
+
+    .card .inf p, .card .inf a {
+        font-size: 12px;
+    }
+
+    #inf_principal h1 {
+        font-size: 20px;
+    }
+
+    #inf_principal p, #inf_principal a {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .Mural_contenedor {
+        width: 100%;
+    }
+
+    .card {
+        height: 200px;
+        padding: 20px;
+    }
+
+    .card .inf {
+        align-items: center;
+        text-align: center;
+    }
+
+    .card .inf h1 {
+        font-size: 0.8rem;
+    }
+
+    .card .inf p, .card .inf a {
+        font-size: 11px;
+    }
+
+    #inf_principal h1 {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    #inf_principal p, #inf_principal a {
+        font-size: 14px;
+        text-align: center;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .contenedor_imagenes {
+        grid-template-columns: repeat(2, 1fr); /* Mostrar 2 en 2 */
+        gap: 10px;
+    }
+
+    .card {
+        width: min(100%, 160px); /* Ajusta el ancho de cada card */
+        height: 200px;
+        padding: 20px 15px;
+    }
+
+    .card .inf h1 {
+        font-size: 0.9rem;
+    }
+
+    .card .inf p, .card .inf a {
+        font-size: 12px;
+    }
+
+    #contenedor_img_principal {
+        width: 100%;
+        height: auto;
+    }
+
+    #inf_principal h1 {
+        font-size: 20px;
+    }
+
+    #inf_principal p, #inf_principal a {
+        font-size: 16px;
+    }
+}
+
+
 </style>

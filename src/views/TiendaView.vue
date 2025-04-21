@@ -1,42 +1,74 @@
 <template>
-    <div class="contenedor-Hilos-Lanas">
-      <div>
-        <div class="conts_opcione">
-          <div class="cont_botones">
-            <button @click="estilo_mostrarProductos('grid')" :class="{ active: estilo === 'grid' }">Columna</button>
-            <button @click="estilo_mostrarProductos('list')" :class="{ active: estilo === 'list' }">Fila</button>
-          </div>
-        </div>
-      </div>
-      <div class="cont_list" v-if="estilo == 'list'" @scroll="handleScroll">
-        <div class="contendroProductos">
-          <SidebarCategorias :categories="categories" :selectedCategory="selectedCategory" @cambiarCategoria="cambiarCategoria" />
-          <div class="product" :class="{ 'animar-aparicion': animar }">
-            <ProductCardVersion2 class="product-card" v-for="(producto, index) in productos" :key="index" :producto="producto" :estilo="estilo" />
-          </div>
-        </div>
-      </div>
-      <div class="cont_grid" v-if="estilo == 'grid'" @scroll="handleScroll">
-        <div class="contendroProductos">
-          <SidebarCategorias :categories="categories" :selectedCategory="selectedCategory" @cambiarCategoria="cambiarCategoria" />
-          <div class="product" :class="{ 'animar-aparicion': animar }">
-            <ProductCardVersion3  v-for="(producto, index) in productos" :key="index" :producto="producto" :estilo="estilo" />
-          </div>
+  <div class="contenedor-Hilos-Lanas">
+    <div>
+      <!-- Botón para pantallas pequeñas -->
+      <button class="btn-toggle-categorias" @click="toggleSidebar" v-if="isMobile">Categorías</button>
+
+      <div class="conts_opcione">
+        <div class="cont_botones">
+          <button @click="estilo_mostrarProductos('grid')" :class="{ active: estilo === 'grid' }">Columna</button>
+          <button @click="estilo_mostrarProductos('list')" :class="{ active: estilo === 'list' }">Fila</button>
         </div>
       </div>
     </div>
-</template>
-  
-<script setup>
-  import { useProductos } from '@/composables/useProducto';
-  import ProductCardVersion2 from '@/components/ProductCard(Version-2).vue';
-  import SidebarCategorias from '@/components/SidebarCategorias.vue';
-import ProductCardVersion3 from '@/components/ProductCard(Version-3).vue';
-  
-  const { categories, selectedCategory, productos, estilo, animar, cambiarCategoria, estilo_mostrarProductos, handleScroll } = useProductos();
 
+    <div class="cont_list" v-if="estilo == 'list'" @scroll="handleScroll">
+      <div class="contendroProductos">
+        <!-- Sidebar con transición -->
+        <SidebarCategorias
+          :categories="categories"
+          :selectedCategory="selectedCategory"
+          @cambiarCategoria="cambiarCategoria"
+          @cerrarSidebar="mostrarSidebar = false"
+          v-if="mostrarSidebar"
+        />
+        <div class="product" :class="{ 'animar-aparicion': animar }">
+          <ProductCardVersion2 class="product-card" v-for="(producto, index) in productos" :key="index" :producto="producto" :estilo="estilo" />
+        </div>
+      </div>
+    </div>
+
+    <div class="cont_grid" v-if="estilo == 'grid'" @scroll="handleScroll">
+      <div class="contendroProductos">
+        <!-- Sidebar con transición -->
+        <SidebarCategorias
+          :categories="categories"
+          :selectedCategory="selectedCategory"
+          @cambiarCategoria="cambiarCategoria"
+          @cerrarSidebar="mostrarSidebar = false"
+          v-if="mostrarSidebar"
+        />
+        <div class="product" :class="{ 'animar-aparicion': animar }">
+          <ProductCardVersion3 v-for="(producto, index) in productos" :key="index" :producto="producto" :estilo="estilo" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useProductos } from '@/composables/useProducto';
+import ProductCardVersion2 from '@/components/ProductCard(Version-2).vue';
+import ProductCardVersion3 from '@/components/ProductCard(Version-3).vue';
+import SidebarCategorias from '@/components/SidebarCategorias.vue';
+
+const { categories, selectedCategory, productos, estilo, animar, cambiarCategoria, estilo_mostrarProductos, handleScroll } = useProductos();
+
+const mostrarSidebar = ref(true);
+const isMobile = ref(false);
+
+onMounted(() => {
+  isMobile.value = window.innerWidth <= 768;
+  window.addEventListener('resize', () => {
+    isMobile.value = window.innerWidth <= 768;
+  });
+});
+
+function toggleSidebar() {
+  mostrarSidebar.value = !mostrarSidebar.value;
+}
 </script>
-  
 
 
 <style scoped>
@@ -72,10 +104,16 @@ import ProductCardVersion3 from '@/components/ProductCard(Version-3).vue';
 
 .product {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); 
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* valor por defecto */
   gap: 20px;
   background-color: rgba(0, 255, 255, 0);
   padding: 10px;
+}
+
+@media (min-width: 1200px) {
+  .product {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 
@@ -148,6 +186,59 @@ import ProductCardVersion3 from '@/components/ProductCard(Version-3).vue';
 
 }
 
+
+.btn-toggle-categorias {
+  display: none;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  background-color: #f4a300;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* Mostrar el botón solo en pantallas pequeñas */
+@media (max-width: 768px) {
+  .btn-toggle-categorias {
+    display: block;
+  }
+
+  .contendroProductos {
+    grid-template-columns: 1fr; /* Modifica para dispositivos móviles */
+  }
+}
+
+
+@media (max-width: 768px) {
+  .cont_botones {
+    display: none;
+  }
+
+  .btn-toggle-categorias {
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 0;
+    background-color: #f4a300;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-toggle-categorias:hover {
+    background-color: #d98c00;
+  }
+
+  .contendroProductos {
+    grid-template-columns: 1fr; /* Forzar una sola columna */
+  }
+}
+
+
 </style>
+
+
+
 
 

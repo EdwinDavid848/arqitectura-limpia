@@ -1,25 +1,30 @@
 <template>
     <header :class="headerEstilos">
-        <logo-comp class="logo" />
-        <nav class="rutasViwes">
-            <section class="contRutas">
-                <router-link class="ruta" to="/principa">Nosotros</router-link>
-                <router-link class="ruta" to="/tienda">Productos</router-link>
-                <router-link class="ruta" to="/clases">Clases</router-link>  
-                <router-link class="ruta" to="/mural">Mural</router-link>  
-            </section>
-            <section class="rutasPerfil" v-if="!isAuthenticated">
-                <router-link class="ruta" to="/register">Registro</router-link>
-                <router-link class="ruta" to="/">Login</router-link>
-            </section>
-
-            <section class="rutasPerfil" v-else>
-                <router-link class="ruta" to="/dashboard">Perfl</router-link>
-            </section>
-            
-        </nav>
+      <logo-comp class="logo" />
+        <button class="menu-toggle" @click="toggleMenu">
+        ☰
+      </button>
+  
+      <nav :class="['rutasViwes', { open: isMenuOpen }]">
+        <section class="contRutas">
+          <router-link class="ruta" to="/principa">Nosotros</router-link>
+          <router-link class="ruta" to="/tienda">Productos</router-link>
+          <router-link class="ruta" to="/clases">Clases</router-link>
+          <router-link class="ruta" to="/mural">Mural</router-link>
+        </section>
+  
+        <section class="rutasPerfil" v-if="!isAuthenticated">
+          <router-link class="ruta" to="/register">Registro</router-link>
+          <router-link class="ruta" to="/">Login</router-link>
+        </section>
+  
+        <section class="rutasPerfil" v-else>
+          <router-link class="ruta" to="/dashboard">Perfil</router-link>
+        </section>
+      </nav>
     </header>
 </template>
+  
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed, watch } from "vue";
@@ -40,6 +45,10 @@ const isAuthenticated = computed(() => authStore.isAuthenticated);
         }
     });
 
+    const isMenuOpen = ref(false);
+    const toggleMenu = () => {
+    isMenuOpen.value = !isMenuOpen.value;
+    };
 
 
 const isScrolled = ref(false);
@@ -50,6 +59,7 @@ const handleScroll = () => {
 const headerEstilos =computed(() =>{
     if (route.path === "/principa") {
         return { 'scrolled': isScrolled.value, 'header-principa': true };
+
     } else if (route.path === "/tienda"  || route.name === "solicitarProducto"  || route.path === "/comprar_producto" || route.path === "/mural") {
         return { 'scrolled': isScrolled.value, 'header-tienda': true };
     } else if (route.path === "/inventario_productos" ){
@@ -169,4 +179,60 @@ logo-comp {
     color: black;
     padding: 15px;
 }
+
+
+.menu-toggle {
+  display: none;
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+}
+@media screen and (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .rutasViwes {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+    padding: 0;
+    z-index: 999;
+  }
+
+  .rutasViwes.open {
+    max-height: 500px; /* Ajusta según tu contenido */
+    padding: 10px 0;
+  }
+
+  .contRutas,
+  .rutasPerfil {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ruta {
+    color: black !important;
+    margin: 10px 0;
+    transition: color 0.3s;
+  }
+
+  .scrolled .rutasViwes .ruta {
+    color: black;
+  }
+}
+
 </style>
+
+

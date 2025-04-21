@@ -1,7 +1,8 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const API_URL = 'http://localhost:8000';
+const API_URL = 'https://proyectobackend2025-production.up.railway.app';
+
 
 export const updateField = async (email, field, value) => {
   try {

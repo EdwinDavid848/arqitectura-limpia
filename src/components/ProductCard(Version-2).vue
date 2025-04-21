@@ -8,7 +8,7 @@
 		<div class="card_content">
 			<div class="card_header">
 				<h2 class="card_title">{{ producto.nombre }}</h2>
-				<h2 class="card_subtitle">{{ formatoPesosColombianos(producto.precio) }} $</h2>
+				<h2 class="card_subtitle">{{ formatoPesosColombianos(producto.precio) }} </h2>
 			</div>
 			<p class="card_descripcion">{{ producto.descripcion }}</p>
 			<button class="botoncard" @click="productoDetalles">Agregar al carrito</button>
@@ -140,6 +140,72 @@ const productoDetalles = () =>{
 		color: white; 
 		background-size: cover; 
 		background-position: center; 
+	}
+}
+@media (max-width: 1024px) {
+	.mi_card_producto {
+		width: 260px;
+		height: 320px;
+		margin: 10px;
+	}
+	.card_content {
+		height: 160px;
+		transform: translateY(60%);
+		padding: 10px;
+	}
+	.card_content:hover {
+		transform: translateY(0);
+	}
+	.card_header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 5px;
+	}
+	.card_title, .card_subtitle {
+		font-size: 14px;
+		max-width: 100%;
+	}
+	.card_descripcion {
+		font-size: 13px;
+		white-space: normal;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.botoncard {
+		width: 100%;
+		padding: 8px;
+		font-size: 13px;
+	}
+}
+
+@media (max-width: 600px) {
+	.mi_card_producto {
+		width: 230px;
+		height: 300px;
+		margin: 8px;
+	}
+
+	.card_content {
+		height: auto; /* Permite que se ajuste al contenido */
+		transform: translateY(50%);
+		padding: 10px;
+		padding-bottom: 10px; /* Reduce el padding inferior */
+	}
+
+	.card_title, .card_subtitle {
+		font-size: 13px;
+	}
+
+	.card_descripcion {
+		font-size: 12px;
+		white-space: normal;
+	}
+
+	.botoncard {
+		font-size: 12px;
+		padding: 7px;
+		width: 100%;
+		margin-top: 10px; /* Asegura que haya espacio superior */
 	}
 }
 

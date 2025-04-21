@@ -30,7 +30,7 @@ const routes = [
     {path: '/productos', component: SolicitarProductosView },
     {path:'/mural', component:MuralView},
     {path: '/tienda', component: TiendaView},
-    {path: '/inventario_productos', component:InventarioProductos},    {path: '/clases', component:ClassView},
+    {path: '/inventario_productos', component:InventarioProductos, meta: { requiresAuth: true }},    {path: '/clases', component:ClassView},
     {path: '/userHistorialCompras', component:UserHistorialComprasView},
     {path: '/solicitar_recuperacion', component:SolicitarRecuperacionPasswordViews},
     {path: '/reset-password', component:ResetePasswordView},

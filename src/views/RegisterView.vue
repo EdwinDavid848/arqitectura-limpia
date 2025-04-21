@@ -77,6 +77,68 @@ const handleRegister = async (useData) => {
     font-weight: bold;
     color: #d39103;
 }
+.login-container {
+  height: 100vh;
+  background-image: url("@/assets/78950467_l_normal_none.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /* Para evitar bordes pegados en móviles */
+}
+
+.login-content {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.welcome-section h2 {
+  color: white;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.welcome-section p {
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #d39103;
+}
+
+/* 📱 Responsive para tablets y móviles */
+@media screen and (max-width: 768px) {
+  .login-content {
+    padding: 20px;
+  }
+
+  .welcome-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .welcome-section p {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .welcome-section h2 {
+    font-size: 1.4rem;
+  }
+
+  .login-content {
+    padding: 15px;
+  }
+}
 </style>
 
 

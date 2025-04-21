@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { useAuthStore } from '@/store/authStore'; // si estás fuera de setup, usa método alterno
 
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = 'https://proyectobackend2025-production.up.railway.app';
+
 
 export const obtenerUsuarios = async () => {
   const auth = useAuthStore(); // accede a tu store de auth
