@@ -208,6 +208,34 @@ function toggleSidebar() {
   }
 }
 
+
+@media (max-width: 768px) {
+  .cont_botones {
+    display: none;
+  }
+
+  .btn-toggle-categorias {
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 0;
+    background-color: #f4a300;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-toggle-categorias:hover {
+    background-color: #d98c00;
+  }
+
+  .contendroProductos {
+    grid-template-columns: 1fr; /* Forzar una sola columna */
+  }
+}
+
+
 </style>
 
 
