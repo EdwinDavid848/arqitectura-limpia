@@ -249,7 +249,7 @@ onMounted(async () => {
 }
 @media (max-width: 480px) {
   .card {
-    max-width: 160px;
+    max-width: 180px;
   }
 
   .card-content {
