@@ -450,6 +450,18 @@ watch(
  font-family: 'Helvetica Neue', Arial, sans-serif;
 
 }
+/* similar-section */
+
+
+.similar-section{
+ height: 100px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ text-align: center;
+ font-family: 'Helvetica Neue', Arial, sans-serif;
+
+}
 .similar-section h1{
  color: #2e2d2d;
  width: 92%;
@@ -515,6 +527,67 @@ watch(
  text-align: center;
  border: 1px solid #ddd;
  border-radius: 5px;
+}
+.similar-section {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.similar-section h1 {
+  color: #2e2d2d;
+  width: 92%;
+  font-size: 30px;
+}
+
+.cont_P_relacionados {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  padding: 10px;
+  gap: 25px;
+}
+
+/* Responsive scroll en móviles */
+@media screen and (max-width: 768px) {
+  .cont_P_relacionados {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 10px;
+    padding: 10px 15px;
+  }
+
+  .cont_P_relacionados::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cont_P_relacionados > * {
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    width: 80%;
+  }
+
+  .similar-section h1 {
+    font-size: 24px;
+  }
+}
+
+/* Adaptaciones para pantallas medianas y grandes */
+@media (min-width: 769px) and (max-width: 1440px) {
+  .similar-section h1 {
+    font-size: 28px;
+  }
+
+  .cont_P_relacionados {
+    padding: 20px;
+  }
 }
 
 </style>
