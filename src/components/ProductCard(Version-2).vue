@@ -184,19 +184,29 @@ const productoDetalles = () =>{
 		height: 300px;
 		margin: 8px;
 	}
+
 	.card_content {
-		height: 150px;
-		transform: translateY(55%);
+		height: auto; /* Permite que se ajuste al contenido */
+		transform: translateY(50%);
+		padding: 10px;
+		padding-bottom: 10px; /* Reduce el padding inferior */
 	}
+
 	.card_title, .card_subtitle {
 		font-size: 13px;
 	}
+
 	.card_descripcion {
 		font-size: 12px;
+		white-space: normal;
 	}
+
 	.botoncard {
 		font-size: 12px;
 		padding: 7px;
+		width: 100%;
+		margin-top: 10px; /* Asegura que haya espacio superior */
 	}
 }
+
 </style>
