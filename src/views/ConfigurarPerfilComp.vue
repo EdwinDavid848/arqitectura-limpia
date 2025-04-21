@@ -106,7 +106,7 @@ const opcionesAdministrador = ref(['Inventario Productos', 'Ver Ordenes', 'Permi
 
 const rutas = ref({
   "Inventario Productos": '/inventario_productos',
-  "Ver Ordenes": '/invenPay',
+  "Ver Ordenes": '/inventario_play',
   "Permisos de rol": '/PermisosRol'
 });
 
