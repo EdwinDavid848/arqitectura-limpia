@@ -82,7 +82,8 @@
   <div class="Anuncio">
         <div class="parallax_version2">
             <h1>Explora el Mundo del Tejido</h1>
-            <p>Tejer no es solo una técnica, es una expresión creativa. En nuestra tienda encontrarás todo lo que necesitas para hacer realidad tus proyectos, desde hilos y agujas hasta piezas únicas como ropa, peluches, y accesorios hechos a mano. También ofrecemos clases para que aprendas a tejer como un experto y lleves tus creaciones al siguiente nivel.</p>
+            <p class="texto-grande">Tejer no es solo una técnica, es una expresión creativa. En nuestra tienda encontrarás todo lo que necesitas para hacer realidad tus proyectos, desde hilos y agujas hasta piezas únicas como ropa, peluches, y accesorios hechos a mano. También ofrecemos clases para que aprendas a tejer como un experto y lleves tus creaciones al siguiente nivel.</p>
+            <p class="texto-reducido">Descubre materiales, productos y clases para tejer tus ideas. ¡Inspírate con nosotros!</p>           
             <button> <router-link class="link" to="/mural">¡Unete a Nosotros!</router-link>
             </button>
         </div>
@@ -635,6 +636,90 @@ onUnmounted(() => {});
       }
     }
 
+    @media (max-width: 1024px) {
+  .Anuncio h1 {
+    font-size: 36px;
+  }
+
+  .Anuncio p {
+    font-size: 18px;
+    width: 80%;
+  }
+
+  .Anuncio button {
+    font-size: 22px;
+    padding: 12px 18px;
+    width: 40%;
+  }
+}
+@media (max-width: 768px) {
+  .Anuncio {
+    height: auto;
+    padding: 60px 20px;
+    text-align: center;
+  }
+
+  .parallax_version2 {
+    background-position: center;
+    background-attachment: scroll;
+    padding: 20px 10px;
+  }
+
+  .Anuncio h1 {
+    font-size: 28px;
+    letter-spacing: 1px;
+  }
+
+  .Anuncio p {
+    font-size: 16px;
+    width: 90%;
+  }
+
+  .Anuncio button {
+    font-size: 20px;
+    padding: 10px 16px;
+    width: 60%;
+  }
+}
+@media (max-width: 480px) {
+  .Anuncio h1 {
+    font-size: 22px;
+  }
+
+  .Anuncio p {
+    font-size: 14px;
+  }
+
+  .Anuncio button {
+    font-size: 18px;
+    width: 80%;
+  }
+
+  .link {
+    font-size: 16px;
+  }
+}
+
+.texto-grande {
+  display: block;
+}
+.texto-reducido {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .texto-grande {
+    display: none;
+  }
+
+  .texto-reducido {
+    display: block;
+    font-size: 16px;
+    width: 90%;
+    text-align: center;
+    color: rgb(231, 231, 231);
+  }
+}
 
 
     
