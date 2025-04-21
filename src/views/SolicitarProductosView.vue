@@ -320,94 +320,103 @@ watch(
 /* PRODUCTO SECTION */
 
 
-.product-section {
- margin-top: 50px;
- height: 300px;
- display: flex;
- align-items: flex-start;
- justify-content: center;
- font-family: 'Helvetica Neue', Arial, sans-serif;
-
-}
-.product-section div{
- width:80%;
+.product-section,
+.care-instructions {
+  margin-top: 50px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  padding: 20px 0;
+  flex-wrap: wrap; /* Permite ajustar en móviles */
 }
 
-.product-section h2 {
- font-size: 32px;
- font-weight: bold;
- margin-bottom: 15px;
- color: #333;
+.product-section div,
+.care-instructions div {
+  width: 80%;
+  max-width: 900px;
 }
 
-.product-section p {
- font-size: 20px;
- color: #555;
- line-height: 1.6;
- margin-bottom: 20px;
+.product-section h2,
+.care-instructions h2 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.product-section p,
+.care-instructions p,
+.product-section ul li {
+  font-size: 18px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 15px;
 }
 
 .product-section ul {
- list-style-type: disc;
- margin-left: 20px;
- margin-bottom: 20px;
+  list-style-type: disc;
+  margin-left: 20px;
 }
 
-.product-section ul li {
- font-size: 20px;
- color: #333;
- margin-bottom: 10px;
+.socialMural-section {
+  background-color: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
+  padding: 40px 0;
+  text-align: center;
 }
 
-.care-instructions {
- height: 200px;
- margin-top: 30px;
- display: flex;
- align-items: center;
- justify-content: center;
- font-family: 'Helvetica Neue', Arial, sans-serif;
-
-}
-.care-instructions div{
- width:80%;
+.socialMural-section h2 {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  margin-bottom: 15px;
+  font-size: 25px;
+  color: #555;
 }
 
-.care-instructions h2 {
- font-size: 29px;
- font-weight: bold;
- margin-bottom: 10px;
- color: #333;
+.socialMural-section p {
+  font-size: 18px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  width: 50%;
+  max-width: 700px;
+  color: #555;
 }
 
-.care-instructions p {
- font-size: 20px;
- color: #555;
- line-height: 1.6;
-}
-.socialMural-section{
- background-color: #f9f9f9;
+@media (max-width: 768px) {
 
- display: flex;
- align-items: center;
- justify-content: flex-end;
- flex-direction: column;
- height: 150px;
-}
-.socialMural-section h2{
- font-family: 'Helvetica Neue', Arial, sans-serif;
- margin-bottom: 20px;
- font-size: 25px;
- color: #555;
+    .product-section,
+    .care-instructions {
+    margin-top: 0px;
+    }
 
-}
-.socialMural-section p{
- font-size: 20px;
- font-family: 'Helvetica Neue', Arial, sans-serif;
- width: 50%;
- text-align: center;
- color: #555;
+  .product-section div,
+  .care-instructions div,
+  .socialMural-section p {
+    width: 90%;
+  }
 
+  .product-section h2,
+  .care-instructions h2 {
+    font-size: 24px;
+  }
+
+  .product-section p,
+  .care-instructions p,
+  .product-section ul li,
+  .socialMural-section p {
+    font-size: 16px;
+  }
+
+  .socialMural-section {
+    padding: 30px 10px;
+  }
 }
+
+
+/* SOCIAL SECTION */
+
 
 .social-section{
  display: flex;
