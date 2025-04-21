@@ -654,15 +654,17 @@ onUnmounted(() => {});
 }
 @media (max-width: 768px) {
   .Anuncio {
+    margin-top: 0px;
     height: auto;
-    padding: 60px 20px;
+    padding: 10px 0px;
     text-align: center;
+    margin-bottom: 30px;
   }
 
   .parallax_version2 {
     background-position: center;
     background-attachment: scroll;
-    padding: 20px 10px;
+    padding: 30px 10px;
   }
 
   .Anuncio h1 {
@@ -721,7 +723,7 @@ onUnmounted(() => {});
   }
 }
 
-
+    
     
 
   </style>
