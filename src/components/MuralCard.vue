@@ -277,4 +277,10 @@ onMounted(async () => {
     max-height: 200px;
   }
 }
+@media (max-width: 360px) {
+  
+  .card{
+    max-width: 157px;
+  }
+}
 </style>
