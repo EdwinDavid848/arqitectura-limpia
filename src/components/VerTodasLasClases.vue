@@ -105,10 +105,10 @@ onMounted(async () => {
 .botonagregar{
     margin-bottom: 30px;
 }
-  .prueba1 {
+.prueba1 {
   overflow: hidden;
   width: 420px;
-  height: 26rem;
+  height: 29rem;
   margin-bottom: 40px;
   display: flex;
   flex-direction: column-reverse;
@@ -175,6 +175,9 @@ onMounted(async () => {
     text-align: center;
     margin-top: -1rem;
     margin-bottom: 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
   }
   
   .prex span {
@@ -193,5 +196,46 @@ onMounted(async () => {
     flex-wrap: wrap;
     justify-content: space-around;
   }
-  
+
+
+
+@media (max-width: 768px) {
+  .prueba1 {
+    width: 100%; /* una columna */
+    height: 20rem;
+  }
+
+  .prueba2 {
+    height: auto;
+    padding: 1rem;
+  }
+
+  .prex {
+    font-size: 14px;
+    width: auto;
+    padding: 4px 10px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .dexcrip,
+  .infor {
+    font-size: 14px;
+  }
+
+  .cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .menuButton {
+    top: 10px;
+    left: 10px;
+  }
+}
+
+
 </style>
+
