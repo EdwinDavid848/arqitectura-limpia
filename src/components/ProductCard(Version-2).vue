@@ -142,6 +142,8 @@ const productoDetalles = () =>{
 		background-position: center; 
 	}
 }
+/* ... tu código existente arriba permanece igual ... */
+
 @media (max-width: 1024px) {
 	.mi_card_producto {
 		width: 260px;
@@ -177,12 +179,12 @@ const productoDetalles = () =>{
 		font-size: 13px;
 	}
 }
-
 @media (max-width: 600px) {
 	.mi_card_producto {
 		width: 230px;
 		height: 300px;
-		margin: 8px;
+		margin: 0px;
+		padding: 15px;
 	}
 
 	.card_content {
