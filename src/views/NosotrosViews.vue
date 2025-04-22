@@ -530,6 +530,10 @@ onUnmounted(() => {});
     gap: 10px;
   }
 
+    .TituloProducto {
+    padding: 10px 5px;
+  }
+
   .product::-webkit-scrollbar {
     display: none;
   }
@@ -553,7 +557,7 @@ onUnmounted(() => {});
   }
 
   .TituloProducto h1 {
-    font-size: 28px;
+    font-size: 25px;
   }
 }
 
