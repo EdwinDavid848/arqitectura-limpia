@@ -54,6 +54,15 @@ const isAuthenticated = computed(() => authStore.isAuthenticated);
     isMenuOpen.value = !isMenuOpen.value;
     };
 
+const isMobileScrolled = ref(false);
+
+const handleMobileScroll = () => {
+  if (route.path === "/principa" && window.innerWidth < 768) {
+    isMobileScrolled.value = window.scrollY > 10;
+  } else {
+    isMobileScrolled.value = false;
+  }
+};
 
 
 
@@ -69,31 +78,34 @@ const handleScroll = () => {
 };
 
 const handleResize = () => {
-  // Si se vuelve pequeña la pantalla, desactiva el scroll efecto
-  if (window.innerWidth < 768) {
+  if (route.path === "/principa" && window.innerWidth < 768) {
     isScrolled.value = false;
+    window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleMobileScroll);
+  } else {
+    isMobileScrolled.value = false;
+    window.removeEventListener("scroll", handleMobileScroll);
+    window.addEventListener("scroll", handleScroll);
   }
 };
+
 
 const cerrarMenu = () => {
   isMenuOpen.value = false;
 };
 
 
-const headerEstilos =computed(() =>{
-    if (route.path === "/principa") {
-        return { 'scrolled': isScrolled.value, 'header-principa': true };
+const headerEstilos = computed(() => {
+  return {
+    'scrolled': isScrolled.value,
+    'mobile-scrolled': isMobileScrolled.value,
+    'header-principa': route.path === "/principa",
+    'header-tienda': ["/tienda", "/comprar_producto", "/mural"].includes(route.path) || route.name === "solicitarProducto",
+    'header-inventario': route.path === "/inventario_productos",
+    'header-perfil': route.path === "/dashboard",
+  };
+});
 
-    } else if (route.path === "/tienda"  || route.name === "solicitarProducto"  || route.path === "/comprar_producto" || route.path === "/mural") {
-        return { 'scrolled': isScrolled.value, 'header-tienda': true };
-    } else if (route.path === "/inventario_productos" ){
-        return{  'header-inventario': true}
-    }else if (route.path === "/dashboard"){
-        return{  'header-perfil': true}
-     } else {
-        return { 'scrolled': isScrolled.value };
-    }
-})
 
 const isMenuNegro = computed(() => {
   return (
@@ -107,7 +119,12 @@ const isMenuNegro = computed(() => {
 
 
 onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
+  if (route.path === "/principa" && window.innerWidth < 768) {
+    window.addEventListener("scroll", handleMobileScroll);
+  } else {
+    window.addEventListener("scroll", handleScroll);
+  }
+
   window.addEventListener("resize", handleResize);
 
   authStore.checkTokenExpiration();
@@ -115,8 +132,11 @@ onMounted(() => {
     authStore.checkTokenExpiration();
   }, 10000);
 });
+
+
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("scroll", handleMobileScroll);
   window.removeEventListener("resize", handleResize);
 });
 
@@ -299,8 +319,18 @@ logo-comp {
   color: black;
 }
 
+header.mobile-scrolled {
+  background-color: rgb(0, 0, 0);  
+  transition: background-color 0.3s;
+}
+
+header.mobile-scrolled .menu-toggle.menu-negro {
+  color: white;  
+  
+}
 
 
 </style>
+
 
 
