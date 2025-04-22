@@ -260,7 +260,7 @@ watch(state, async () => {
 @media (max-width: 480px) {
   .compras-table {
     font-size: 13px;
-    width: 320px;
+    width: 100%;
   }
 
   .compras-table thead {
