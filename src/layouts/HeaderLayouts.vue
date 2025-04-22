@@ -1,25 +1,29 @@
 <template>
     <header :class="headerEstilos">
       <logo-comp class="logo" />
-        <button class="menu-toggle" @click="toggleMenu">
+      <button
+        class="menu-toggle"
+        :class="{ 'menu-negro': isMenuNegro }"
+        @click="toggleMenu"
+      >
         ☰
       </button>
   
-      <nav :class="['rutasViwes', { open: isMenuOpen }]">
+      <nav :class="['rutasViwes', { open: isMenuOpen, 'menu-negro': isMenuNegro }]">
         <section class="contRutas">
-          <router-link class="ruta" to="/principa">Nosotros</router-link>
-          <router-link class="ruta" to="/tienda">Productos</router-link>
-          <router-link class="ruta" to="/clases">Clases</router-link>
-          <router-link class="ruta" to="/mural">Mural</router-link>
+            <router-link class="ruta" to="/principa" @click="cerrarMenu">Nosotros</router-link>
+            <router-link class="ruta" to="/tienda" @click="cerrarMenu">Productos</router-link>
+            <router-link class="ruta" to="/clases" @click="cerrarMenu">Clases</router-link>
+            <router-link class="ruta" to="/mural" @click="cerrarMenu">Mural</router-link>
         </section>
   
         <section class="rutasPerfil" v-if="!isAuthenticated">
-          <router-link class="ruta" to="/register">Registro</router-link>
-          <router-link class="ruta" to="/">Login</router-link>
+            <router-link class="ruta" to="/register" @click="cerrarMenu">Registro</router-link>
+            <router-link class="ruta" to="/" @click="cerrarMenu">Login</router-link>
         </section>
   
         <section class="rutasPerfil" v-else>
-          <router-link class="ruta" to="/dashboard">Perfil</router-link>
+            <router-link class="ruta" to="/dashboard" @click="cerrarMenu">Perfil</router-link>
         </section>
       </nav>
     </header>
@@ -51,10 +55,30 @@ const isAuthenticated = computed(() => authStore.isAuthenticated);
     };
 
 
+
+
 const isScrolled = ref(false);
+
+
 const handleScroll = () => {
+  if (window.innerWidth >= 768) {
     isScrolled.value = window.scrollY > 10;
+  } else {
+    isScrolled.value = false; 
+  }
 };
+
+const handleResize = () => {
+  // Si se vuelve pequeña la pantalla, desactiva el scroll efecto
+  if (window.innerWidth < 768) {
+    isScrolled.value = false;
+  }
+};
+
+const cerrarMenu = () => {
+  isMenuOpen.value = false;
+};
+
 
 const headerEstilos =computed(() =>{
     if (route.path === "/principa") {
@@ -71,19 +95,31 @@ const headerEstilos =computed(() =>{
     }
 })
 
-onMounted(() => {
-    window.addEventListener("scroll", handleScroll);
-    
-    authStore.checkTokenExpiration();
-    
-    setInterval(() => {
-        authStore.checkTokenExpiration();
-    }, 10000); 
+const isMenuNegro = computed(() => {
+  return (
+    route.path === "/tienda" ||
+    route.name === "solicitarProducto" ||
+    route.path === "/comprar_producto" ||
+    route.path === "/mural" ||
+    route.path === "/dashboard"
+  );
 });
 
-onUnmounted(() => {
-    window.removeEventListener("scroll", handleScroll);
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+  window.addEventListener("resize", handleResize);
+
+  authStore.checkTokenExpiration();
+  setInterval(() => {
+    authStore.checkTokenExpiration();
+  }, 10000);
 });
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("resize", handleResize);
+});
+
 </script>
 
 
@@ -233,6 +269,24 @@ logo-comp {
   }
 }
 
+.menu-toggle {
+  font-size: 2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white; /* color por defecto */
+  z-index: 999;
+  transition: color 0.5s ease; /* Añadido para la animación de color */
+}
+
+.menu-toggle.menu-negro {
+  color: black;
+}
+
+
+
 </style>
+
+
 
 
