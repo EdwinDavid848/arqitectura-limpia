@@ -480,7 +480,7 @@ th {
 
   .vista-cards {
     display: block;
-    width: 100%;
+    width: 300px;
     margin: 20px auto;
   }
 
