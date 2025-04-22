@@ -312,6 +312,9 @@ onMounted(() => {
 }
 
 @media (max-width: 480px) {
+    #contenedor_img_principal {
+         margin: 0px;
+    }
     .Mural_contenedor {
         width: 100%;
     }
