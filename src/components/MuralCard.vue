@@ -248,6 +248,9 @@ onMounted(async () => {
   transform: translate(2px ,2px);
 }
 @media (max-width: 480px) {
+  #cards-container {
+  margin: 1px;
+  }
   .card {
     max-width: 180px;
   }
