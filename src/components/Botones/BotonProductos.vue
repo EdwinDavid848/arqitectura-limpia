@@ -46,7 +46,7 @@
 
 @media (max-width: 768px) {
   .cont_part1_button {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
   .cont_part1_button .link {
     font-size: 18px;
