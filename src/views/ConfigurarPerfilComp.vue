@@ -294,6 +294,108 @@ const updatePasswordHandler = () => {
   z-index: 1000;
 }
 
+/* RESPONSIVE: hasta 1024px (tablets y móviles) */
+@media screen and (max-width: 1024px) {
+  .cont-info {
+    flex-direction: column;
+    height: auto;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .cont-info img {
+    margin-left: 0;
+    width: 120px;
+    height: 120px;
+  }
+
+  .cont-info div h2 {
+    font-size: 18px;
+    padding: 4px 10px;
+  }
+
+  .cont-datos {
+    width: 100%;
+    padding: 0 10px;
+    gap: 15px;
+  }
+
+  .cont-datos div {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .cont-datos div img {
+    margin-left: 0;
+  }
+
+  .cont-datos div p {
+    font-size: 18px;
+    min-width: unset;
+    width: 100%;
+    text-align: left;
+  }
+
+  .cont-datos div input {
+    font-size: 18px;
+    width: 100%;
+    text-align: left;
+  }
+
+  .image-editar {
+    justify-content: flex-start;
+    padding-right: 0;
+  }
+
+  #image-editar div {
+    width: 100%;
+    text-align: left;
+    padding-left: 10px;
+  }
+
+  .btn-actualizar-password {
+    font-size: 14px;
+    text-align: left;
+    width: 100%;
+  }
+
+  .opciones-administrador {
+    padding: 0 10px;
+    margin-top: 20px;
+  }
+
+  .opciones-administrador select {
+    width: 100%;
+    font-size: 16px;
+  }
+}
+
+
+
+@media screen and (max-width: 1024px) {
+  .image-editar {
+    margin-left: auto;
+    padding-right: 10px;
+  }
+
+  .cont-datos div {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .cont-datos div p,
+  .cont-datos div input {
+    flex: 1;
+  }
+}
+
+
+
+
+
+
 .modal {
   background: rgba(0, 0, 0, 0.5);
   padding: 25px;
@@ -393,3 +495,4 @@ const updatePasswordHandler = () => {
   border-color: #ff6600; /* Cambia el color del borde (puedes usar cualquier color) */
 }
 </style>
+
