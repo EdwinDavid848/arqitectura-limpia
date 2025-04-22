@@ -214,9 +214,9 @@ function toggleSidebar() {
     display: none;
   }
 
-  .btn-toggle-categorias {
+   .btn-toggle-categorias {
     display: block;
-    width: 100%;
+    width: 80%;
     font-size: 18px;
     font-weight: bold;
     padding: 12px 0;
