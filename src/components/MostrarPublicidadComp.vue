@@ -67,7 +67,10 @@ onMounted(() => {
 
     #contenedor_img_principal {
         height: auto;
-        width: 100%;
+        height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .contenedor_imagenes {
@@ -183,7 +186,7 @@ onMounted(() => {
     @media (min-width: 1441px) and (max-width: 1600px) {
         #contenedor_img_principal {
             height: auto;
-            width: 90%;
+            width: 100%;
         }
         .card {
         height: 250px;
@@ -200,10 +203,9 @@ onMounted(() => {
 
         #contenedor_img_principal {
             height: 250px;
-            width: 95%;
+            width: 98%;
             overflow: hidden; 
             position: relative;
-            
         }
 
         .contenedor_imagenes {
@@ -262,6 +264,9 @@ onMounted(() => {
         grid-template-columns: 1fr;
         gap: 30px;
     }
+    #contenedor_img_principal {
+            margin: 10px;
+        }
 
     .contenedor_imagenes {
         grid-template-columns: repeat(2, 1fr);
