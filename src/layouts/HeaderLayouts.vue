@@ -58,11 +58,12 @@ const isMobileScrolled = ref(false);
 
 const handleMobileScroll = () => {
   if (route.path === "/principa" && window.innerWidth < 768) {
-    isMobileScrolled.value = window.scrollY > 10;
+    isMobileScrolled.value = window.scrollY > 0;
   } else {
     isMobileScrolled.value = false;
   }
 };
+
 
 
 
@@ -78,16 +79,15 @@ const handleScroll = () => {
 };
 
 const handleResize = () => {
-  if (route.path === "/principa" && window.innerWidth < 768) {
-    isScrolled.value = false;
-    window.removeEventListener("scroll", handleScroll);
-    window.addEventListener("scroll", handleMobileScroll);
+  if (window.innerWidth < 768) {
+    window.removeEventListener("scroll", handleScroll); 
+    window.addEventListener("scroll", handleMobileScroll); 
   } else {
-    isMobileScrolled.value = false;
     window.removeEventListener("scroll", handleMobileScroll);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll); 
   }
 };
+
 
 
 const cerrarMenu = () => {
@@ -331,6 +331,5 @@ header.mobile-scrolled .menu-toggle.menu-negro {
 
 
 </style>
-
 
 
