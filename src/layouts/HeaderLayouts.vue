@@ -9,7 +9,7 @@
         ☰
       </button>
   
-      <nav :class="['rutasViwes', { open: isMenuOpen, 'menu-negro': isMenuNegro }]">
+      <nav :class="['rutasViwes', { open: isMenuOpen }]">
         <section class="contRutas">
             <router-link class="ruta" to="/principa" @click="cerrarMenu">Nosotros</router-link>
             <router-link class="ruta" to="/tienda" @click="cerrarMenu">Productos</router-link>
@@ -230,6 +230,9 @@ logo-comp {
   .menu-toggle {
     display: block;
   }
+  .header-tienda .rutasViwes .ruta{
+    padding: 9px;
+}
 
   .rutasViwes {
     display: flex;
@@ -248,7 +251,7 @@ logo-comp {
   }
 
   .rutasViwes.open {
-    max-height: 500px; /* Ajusta según tu contenido */
+    max-height: 500px; 
     padding: 10px 0;
   }
 
@@ -267,10 +270,23 @@ logo-comp {
   .scrolled .rutasViwes .ruta {
     color: black;
   }
+
+  .ruta {
+    display: block;
+    font-size: 16px; /* ajusta según necesidad */
+    padding: 8px 16px;
+    color: black ;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+  }
+
+  .ruta:hover {
+    background-color: #f0f0f0;
+  }
 }
 
 .menu-toggle {
-  font-size: 2rem;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -286,7 +302,5 @@ logo-comp {
 
 
 </style>
-
-
 
 
