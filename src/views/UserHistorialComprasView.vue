@@ -1,310 +1,503 @@
 <template>
-  <article class="todareserva">
-    <div class="table-container">
-      <!-- FILTRO DE ESTADO -->
-      <div class="opciones" v-if="permisos.user">
-        <select v-model="state" @change="filterEstado">
-          <option value="" disabled>Opciones de estado</option>
-          <option v-for="option in opciones" :key="option" :value="option">
-            {{ option }}
-          </option>
-        </select>
-      </div>
-      <!-- From Uiverse.io by mrhyddenn --> 
-      <form class="buscar" @submit.prevent="buscar" v-if="permisos.user && (permisos.user.rol === 'administrador' || permisos.user.rol === 'profesor')"  >
-          <input type="input" class="inputbusc" placeholder="Nombre o Correo" required="" v-model="search">
-          <button type="submit" class="gradient-button">Buscar</button>
-      </form>
-      
-      
-      <table class="compras-table">
+  <section class="cont_historial">
+    <!-- Vista en tabla (pantallas grandes) -->
+    <div class="vista-tabla">
+      <table v-if="authStore.historial.length" class="compras-table">
         <thead>
           <tr>
-            <td>ID</td>
-            <th>Clase</th>
-            <th>Usuario</th>
-            <th>Fecha</th>
-            <th>monto</th>
+            <th>Fecha De Pago</th>
             <th>Estado</th>
-            <th>Acción</th>
+            <th>Método de Pago</th>
+            <th>Monto Total</th>
+            <th>Detalles</th>
           </tr>
         </thead>
-        <tbody v-for="clase in reserva" :key="clase.id">
-        <tr>
-          <td data-label="ID">{{ clase.id }}</td>
-          <td data-label="Clase">{{ clase.clase }}</td>
-          <td data-label="Usuario">{{ clase.usuario }}</td>
-          <td data-label="Fecha">{{ clase.fecha }}</td>
-          <td data-label="Monto">{{ clase.monto }}</td>
-          <td data-label="Estado">{{ clase.estado }}</td>
-          <td data-label="Acción">
-            <BotonCancelacion 
-              v-if="clase.estado=='reserved' && permisos.user && permisos.user.rol === 'cliente'" 
-              :data="clase" 
-            />
-            <BotonConfirmacion 
-              v-if="clase.estado=='reserved' && permisos.user && (permisos.user.rol === 'administrador' || permisos.user.rol === 'profesor')" 
-              :data="clase"
-            />
-          </td>
-        </tr>
-      </tbody>
-
+        <tbody>
+          <tr v-for="(compra, index) in authStore.historial" :key="index">
+            <td>{{ compra.fecha_pago }}</td>
+            <td>{{ compra.estado_pedido }}</td>
+            <td>{{ compra.metodo_pago }}</td>
+            <td>{{ currency(compra.monto) }}</td>
+            <td>
+              <button @click="showTicket(compra)" class="btn-detalles">Ver Detalles</button>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
-  </article>
+
+    <!-- Vista en cards (pantallas pequeñas) -->
+    <div class="vista-cards">
+      <div
+        v-for="(compra, index) in authStore.historial"
+        :key="index"
+        class="card-compra"
+      >
+        <p><strong>Fecha de Pago:</strong> {{ compra.fecha_pago }}</p>
+        <p><strong>Estado:</strong> {{ compra.estado_pedido }}</p>
+        <p><strong>Método de Pago:</strong> {{ compra.metodo_pago }}</p>
+        <p><strong>Monto Total:</strong> {{ currency(compra.monto) }}</p>
+        <button @click="showTicket(compra)" class="btn-detalles">Ver Detalles</button>
+      </div>
+    </div>
+
+    <!-- Modal con los detalles (ya lo tienes hecho) -->
+    <div v-if="isTicketVisible" class="ticket-modal" @click.self="closeTicket">
+      <div class="ticket-content">
+        <header class="modal-header">
+          <h3>Detalles del Pedido #{{ currentCompra.pedido_id }}</h3>
+          <button @click="closeTicket" class="btn-close">&times;</button>
+        </header>
+
+
+        <section class="ticket-details">
+          <ul>
+            <li v-for="(producto, idx) in currentCompra.productos" :key="idx">
+              <strong>{{ producto.producto_nombre }}</strong><br />
+              Precio unitario:
+              <span class="precio">{{ currency(producto.precio_unitario) }}</span><br />
+              Cantidad: {{ producto.cantidad }}
+            </li>
+          </ul>
+        </section>
+
+
+        <section class="ticket-summary">
+          <p><strong>Total del Pedido:</strong> {{ currency(currentCompra.monto) }}</p>
+        </section>
+
+
+        <footer class="modal-footer">
+          <button @click="closeTicket" class="btn-close-modal">Cerrar</button>
+        </footer>
+      </div>    </div>
+  </section>
 </template>
 
-<script setup>
-import { ref, onMounted, watch } from 'vue';
-import BotonCancelacion from './Botones/BotonCancelacion.vue';
-import BotonConfirmacion from './Botones/BotonConfirmacion.vue';
-import { VerReservaciones, BuscarReservaciones, ReservacionesUsuario } from '@/services/ReservationClassServices';
-import { useAuthStore } from '@/store/authStore';
 
-const permisos = useAuthStore();
-const Clases = ref([]);
-const reserva=ref([])
-const opciones = ref(['reserved', 'paid', 'cancelled']);
-const state = ref('reserved');
-const search = ref('');
+  <script setup>
+  import { onMounted,ref } from 'vue';
+  import { useAuthStore } from '@/store/authStore';
+  
+  const authStore = useAuthStore();
+  const isTicketVisible = ref(false);
+  const currentCompra = ref(null);
 
-const filterEstado =()=>{
-  const query=state.value.toLowerCase();
-  reserva.value=Clases.value.filter(
-    (clase)=> clase.estado.toLowerCase().includes(query)
-  )
-}
+  const showTicket = (compra) => {
+    currentCompra.value = compra;
+    isTicketVisible.value = true;
+  };
 
-const cargarReservaciones = async () => {
-  try {
-    if (!permisos.user) return;
+  
+  const closeTicket = () => {
+    isTicketVisible.value = false;
+  };
 
-    if (permisos.user.rol === 'cliente') {
-      const data = await BuscarReservaciones(permisos.user.email, state.value);
-      Clases.value = data;
-      reserva.value=data.map( us =>({
-        ...us,
-        estados:us.estado
-      }));
-      console.log(Clases.value)
-    } else {
-      const data = await VerReservaciones();
-      Clases.value = data;
-      reserva.value=data.map( us =>({
-        ...us,
-        estados:us.estado
-      }));
-      console.log(Clases.value)
-    }
-  } catch (error) {
-    console.error('Error al obtener clases:', error);
-  }
-};
-
-const buscar=async()=>{
-  const data = await ReservacionesUsuario(search.value);
-  Clases.value = data;
-};
-
-onMounted(async () => {
-  if (!permisos.isAuthenticated) {
-    console.log('Acceso denegado, redirigiendo al login...');
-    return;
-  }
-
-  await permisos.fetchUserInfo();
-  await cargarReservaciones();
-});
-
-// Solo los clientes cambian de estado
-watch(state, async () => {
-  if (permisos.user && permisos.user.rol === 'cliente') {
-    await cargarReservaciones();
-  }
-});
-</script>
-<style scoped>
-.todareserva {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  width: 100%;  /* Asegura que ocupe todo el espacio disponible */
-  height: 100%; /* Para asegurar que ocupe todo el alto disponible */
-}
-
-.table-container {
-  max-height: 400px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  box-sizing: border-box;
-}
-
-.compras-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background-color: #fcfaf8;
-  border-radius: 8px;
-  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-}
-
-.compras-table th {
-  background-color: #ee8e10;
-  font-weight: bold;
-  color: #000000;
-}
-
-.compras-table td {
-  color: #000000;
-}
-
-.compras-table th,
-.compras-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.opciones {
+  const currency = (value) => {
+    if (typeof value !== 'number') return value;
+    return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(value);
+  };
+  
+  onMounted(() => {
+    authStore.obtenerHistorialCompras();
+  });
+  </script>
+  
+  
+  <style scoped>
+.cont_historial {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
-  flex-wrap: wrap;
+  max-width: 100%; /* previene restricciones */
+  padding: 0 10px; /* opcional: agrega espacio a los lados */
+  box-sizing: border-box; /* asegura que el padding no sume más ancho */
 }
 
-.opciones select {
-  width: 100%;
-  max-width: 300px;
-  padding: 15px;
-  border-radius: 5px;
-  border: 1px solid rgb(245, 187, 27);
-  font-size: 15px;
-  font-weight: bold;
-  box-sizing: border-box;
-}
-
-.buscar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.inputbusc {
-  background-color: white;
-  color: black;
-  border: 2px solid #fd9f47;
-  border-radius: 10px;
-  padding: 10px 15px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-.gradient-button {
-  background: linear-gradient(90deg, #ff6a00 0%, #d14400 100%);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.gradient-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.gradient-button:active {
-  transform: translateY(2px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* ----------------- RESPONSIVE ------------------ */
-
-@media (max-width: 768px) {
-  .compras-table th, .compras-table td {
-    padding: 8px;
-    font-size: 14px;
+  .admin-section {
+    height: 100%;
+    padding: 20px;
+    border-radius: 8px;
   }
 
-  .gradient-button,
-  .inputbusc,
-  .opciones select {
-    width: 100%;
-    font-size: 14px;
+  .section-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000000;
   }
-
-  .buscar {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* Asegura que la tabla ocupe todo el espacio disponible */
-  .table-container {
-    width: 100%;
-    padding: 10px;
-    height: auto;
-  }
-}
-
-@media (max-width: 480px) {
   .compras-table {
-    font-size: 13px;
-    width: 320px;
+    width: 90%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ff940a;
+    border-radius: 8px;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
   }
 
-  .compras-table thead {
-    display: none; /* Oculta encabezado para versión móvil */
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+
   }
 
-  .compras-table tr {
-    display: block;
-    margin-bottom: 15px;
-    border-bottom: 2px solid #ccc;
+  th {
+    background-color: #ff940a;
+    font-weight: bold;
+    color: #000000;
   }
 
-  .compras-table td {
+  td {
+    color: #000000;
+  }
+
+  .no-data-message {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  /* Estilo de los botones */
+  .btn-detalles {
+    padding: 6px 12px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+
+  .btn-detalles:hover {
+    background-color: #2980b9;
+  }
+
+  /* Estilos del modal */
+  .ticket-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .ticket-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  /* Encabezado del modal */
+  .modal-header {
     display: flex;
     justify-content: space-between;
-    padding: 8px;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+
+  .modal-header h3 {
+    font-size: 1.5em;
+    color: #333;
+  }
+
+  .btn-close {
+    background: none;
     border: none;
-    font-size: 13px;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #777;
+    transition: color 0.3s;
   }
 
-  .compras-table td::before {
-    content: attr(data-label);
+  .btn-close:hover {
+    color: #e74c3c;
+  }
+
+  /* Detalles del pedido en el modal */
+  .ticket-details ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ticket-details li {
+    margin-bottom: 15px;
+  }
+
+  .ticket-details li strong {
     font-weight: bold;
-    margin-right: 10px;
+    color: #2c3e50;
   }
 
-  .compras-table td:last-child {
-    justify-content: center;
+  .precio {
+    color: #27ae60;
+    font-weight: bold;
   }
+
+  .total {
+    font-weight: bold;
+    color: #e67e22;
+    display: block;
+    margin-top: 5px;
+  }
+
+  /* Pie del modal */
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .btn-close-modal {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+
+  .btn-close-modal:hover {
+    background-color: #c0392b;
+  }
+
+  /* Animación de desvanecimiento */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
+
+
+
+
+
+  .ticket-content {
+  background: linear-gradient(to bottom right, #fffaf0, #ffffff);
+  padding: 30px 20px;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Líneas curvas decorativas */
+.ticket-content::before,
+.ticket-content::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200px;
+  background: radial-gradient(circle at center, #ff940a 30%, transparent 70%);
+  opacity: 0.1;
+  z-index: 0;
+  transform: rotate(5deg);
+}
+
+.ticket-content::before {
+  top: -120px;
+  left: -50%;
+}
+
+.ticket-content::after {
+  bottom: -120px;
+  right: -50%;
+  transform: rotate(-5deg);
+}
+
+.ticket-details,
+.modal-header,
+.modal-footer {
+  position: relative;
+  z-index: 1; /* Encima de las curvas decorativas */
+}
+
+/* Títulos y textos */
+.modal-header h3 {
+  font-size: 1.6em;
+  color: #333;
+  font-weight: bold;
+}
+
+.ticket-details li strong {
+  font-size: 1.05em;
+  color: #000;
+}
+
+.precio {
+  color: #2ecc71;
+}
+
+.total {
+  color: #ff940a;
+  font-weight: 600;
+}
+
+/* Botones más suaves */
+.btn-close-modal {
+  background-color: #ff940a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-close-modal:hover {
+  background-color: #e07b00;
+}
+
+/* Botón detalles también redondeado */
+.btn-detalles {
+  padding: 8px 16px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9em;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+}
+
+.btn-detalles:hover {
+  background-color: #2980b9;
+}
+
+
+th {
+  background-color: #fff;
+  color: #ff940a;
+  border-bottom: 2px solid #ff940a;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+.ticket-content {
+  transform: scale(0.95);
+  opacity: 0;
+  animation: showUp 0.3s forwards ease;
+}
+
+@keyframes showUp {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.ticket-details li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  background: #fdfdfd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+}
+.ticket-summary {
+  margin-top: 20px;
+  font-size: 1.1em;
+  text-align: right;
+  color: #2c3e50;
+}
+
+
+/* Ocultar/mostrar según dispositivo */
+.desktop-only {
+  display: block;
+}
+.mobile-only {
+  display: none;
+}
+
+/* Tarjetas para historial */
+.compra-card {
+  background: #fff8e6;
+  margin: 15px 10px;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border-left: 5px solid #ff940a;
+}
+
+.compra-card p {
+  margin: 8px 0;
+  color: #333;
+  font-size: 0.95em;
 }
 
 @media (max-width: 768px) {
-  .todareserva {
-    flex-direction: column;
-    align-items: stretch;
-    padding-left: 0;
-    padding-right: 0;
-    width: 100%; /* Asegura que ocupe todo el espacio disponible */
+  .desktop-only {
+    display: none;
   }
 
-  .table-container {
-    width: 100%;
-    padding: 10px;
-    height: auto; /* Asegura que la altura se ajuste */
+  .mobile-only {
+    display: block;
+  }
+
+  .compra-card {
+    font-size: 0.95em;
   }
 }
-</style>
+
+/* Por defecto se muestra la tabla y se ocultan las cards */
+.vista-cards {
+  display: none;
+}
+.vista-tabla {
+  display: block;
+}
+
+/* En pantallas menores a 768px, se ocultan las tablas y se muestran las cards */
+@media (max-width: 768px) {
+  .vista-tabla {
+    display: none;
+  }
+
+  .vista-cards {
+    display: block;
+    width: 320px;
+    margin: 20px auto;
+  }
+
+  .card-compra {
+    background-color: #fff8e6;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-compra p {
+    margin: 5px 0;
+    color: #333;
+  }
+}
+
+
+  </style>
+
