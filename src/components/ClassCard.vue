@@ -165,5 +165,49 @@ onMounted(async () => {
     justify-content: space-around;
   }
   
+  @media (max-width: 1024px) {
+  .prueba1 {
+    width: 90%; /* dos columnas */
+    height: 28rem;
+  }
+  
+}
+
+@media (max-width: 768px) {
+  .prueba1 {
+    width: 100%; /* una columna */
+    height: 20rem;
+  }
+
+  .prueba2 {
+    height: auto;
+    padding: 1rem;
+  }
+
+  .prex {
+    font-size: 14px;
+    width: auto;
+    padding: 4px 10px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .dexcrip,
+  .infor {
+    font-size: 14px;
+  }
+
+  .cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .menuButton {
+    top: 10px;
+    left: 10px;
+  }
+}
   </style>
   
