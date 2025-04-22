@@ -184,7 +184,7 @@ const productoDetalles = () =>{
 		width: 230px;
 		height: 300px;
 		margin: 0px;
-		padding: 15px;
+		padding: 0px;
 	}
 
 	.card_content {
