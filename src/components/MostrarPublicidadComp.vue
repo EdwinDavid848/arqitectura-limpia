@@ -1,67 +1,48 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
     <section class="Mural">
-        <div class="Mural_contenedor">
+      <div class="Mural_contenedor">
         <div class="mural">
-            <div id="contenedor_img_principal" class="card">
-                <img class="img_principal" src="@/assets/Producto(Papa Noel).jpeg" alt="">
-                <div id="inf_principal" class="inf">
-                    <h1>Papa Noel</h1>
-                    <p>Lorem,  Consectetur ex architecto ipsum excepturi atque, sapiente soluta voluptas odit consequatur nemo? Beatae deserunt veniam molestias vero! Nesciunt, mollitia exercitationem.</p>
-                    <router-link to="/mural">Saber mas</router-link>
-                </div>
+          <div id="contenedor_img_principal" class="card">
+            <img class="img_principal" src="@/assets/78950467_l_normal_none.jpg" alt="">
+            <div id="inf_principal" class="inf">
+              <h1>Mural</h1>
+              <p>Descubre a más personas que como tú, son aficionados al tejido. Verás diseños creativos como estos en la sección del mural. Esta sección es para esta linda comunidad, ¡te invitamos a unirte a nosotros!</p>
+              <router-link to="/mural">Saber más</router-link>
             </div>
-            <div class="contenedor_imagenes">
-                <div class="card">
-                    <img src="@/assets/Producto(Papa Noel).jpeg"   alt="">
-                    <div class="inf">
-                        <h1>Papa Noel</h1>
-                        <p>Lorem,  Consectetur ex architecto ipsum excepturi atque, sapiente soluta voluptas odit consequatur nemo? Beatae deserunt veniam molestias vero! Nesciunt, mollitia exercitationem.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="@/assets/Producto(Papa Noel).jpeg"  alt="">
-                    <div  class="inf">
-                        <h1>Papa Noel</h1>
-                        <p>Lorem,  Consectetur ex architecto ipsum excepturi atque, sapiente soluta voluptas odit consequatur nemo? Beatae deserunt veniam molestias vero! Nesciunt, mollitia exercitationem.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="@/assets/Producto(Papa Noel).jpeg"   alt="">
-                    <div class="inf">
-                        <h1>Papa Noel</h1>
-                        <p>Lorem,  Consectetur ex architecto ipsum excepturi atque, sapiente soluta voluptas odit consequatur nemo? Beatae deserunt veniam molestias vero! Nesciunt, mollitia exercitationem.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="@/assets/Producto(Papa Noel).jpeg"   alt="">
-                    <div class="inf">
-                        <h1>Papa Noel</h1>
-                        <p>Lorem,  Consectetur ex architecto ipsum excepturi atque, sapiente soluta voluptas odit consequatur nemo? Beatae deserunt veniam molestias vero! Nesciunt, mollitia exercitationem.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="@/assets/Producto(Papa Noel).jpeg"   alt="">
-                    <div class="inf">
-                        <h1>Papa Noel</h1>
-                        <p>Lorem,  Consectetur ex architecto ipsum excepturi atque, sapiente soluta voluptas odit consequatur nemo? Beatae deserunt veniam molestias vero! Nesciunt, mollitia exercitationem.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="@/assets/Producto(Papa Noel).jpeg"   alt="">
-                    <div class="inf">
-                        <h1>Papa Noel</h1>
-                        <p>Lorem,  Consectetur ex architecto ipsum excepturi atque, sapiente soluta voluptas odit consequatur nemo? Beatae deserunt veniam molestias vero! Nesciunt, mollitia exercitationem.</p>
-                    </div>
-                </div>
+          </div>
+  
+          <div class="contenedor_imagenes">
+            <div class="card" v-for="(dato, index) in datos.slice(0, 6)" :key="dato.id || index">
+              <img :src="dato.foto" alt="">
+              <div class="inf">
+                <h1>{{ dato.titulo }}</h1>
+                <p>{{ dato.descripcion }}</p>
+              </div>
             </div>
+          </div>
+  
         </div>
-    </div>
+      </div>
     </section>
 </template>
+  
+<script setup >
+import { ref, onMounted } from "vue";
+import { fetchPublications } from '@/services/MuralServices';
+const datos=ref([]);
+const recibirdatos = async () =>{
+    try {
+       console.log("Cargando todas las publicaciones");
+        datos.value= await fetchPublications(); 
+    } catch (error) {
+        console.log(error)
+    }
+    
+}
+onMounted(() => {
+    recibirdatos()
+})
+</script>
 <style scoped>
     .Mural {
         display: flex;
