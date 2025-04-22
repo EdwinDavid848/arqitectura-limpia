@@ -632,5 +632,62 @@ onMounted(async () => {
   }
 
 }
+  
+@media (max-width: 360px) {
+  .nuestrasclas{
+    font-size: 1.8rem;      /* Reducir texto principal */
 
+  }
+  .informacionClass {
+    height: auto;           /* Que crezca según contenido */
+    padding: 10px 10px;     /* Espacio interior */
+    margin-top: 0;
+    padding-top: 100px;
+  }
+
+  .welcome-section {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .welcome-title {
+    font-size: 1.8rem;      /* Reducir texto principal */
+    text-align: center;
+    margin-bottom: 8px;
+    
+  }
+
+  .welcome-title span {
+    display: block;         /* Asegura que el span baje línea */
+    font-size: 1.2rem;
+  }
+
+  .cardAnuncio {
+    
+    padding: 0.5rem 1rem;   /* Menos padding para la animación */
+  }
+  
+  .loader {
+    font-size: 18px;
+    padding: 1px 1px;
+    height: 40px;
+  }
+
+  .word {
+    font-size: 18px;        /* Ajusta el tamaño de las palabras */
+  }
+
+  .welcome-description {
+    font-size: 1rem;        /* Reducir descripción */
+    margin-top: 12px;
+  }
+
+  .cssbuttons-io {
+    width: 100%;            /* Botón a todo ancho */
+    font-size: 1rem;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+  }
+}
 </style>
