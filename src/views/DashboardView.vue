@@ -1,31 +1,41 @@
 <template>
   <div class="Contenedor_Perfil">
       <div class="mostrarInformacion">
-        <nav class="header_perfil">
-          <button
-            @click="mostrarDiv('Shopping Cart')"
-            :class="['links_Perfil', seccionActiva === 'Shopping Cart' ? 'activo' : '']"
-          >
-            Shopping Cart
-          </button>
-          <button
-            @click="mostrarDiv('Class History')"
-            :class="['links_Perfil', seccionActiva === 'Class History' ? 'activo' : '']"
-          >
-            Class History
-          </button>
-          <router-link
-            to="/mural"
-            :class="['links_Perfil', seccionActiva === 'Publications' ? 'activo' : '']"
-          >
-            Publications
-          </router-link>          <button
-            @click="mostrarDiv('Configuration')"
-            :class="['links_Perfil', seccionActiva === 'Configuration' ? 'activo' : '']"
-          >
-            Configuration
-          </button>
-        </nav>
+<!-- BOTÓN PARA MOSTRAR EL MENÚ EN PANTALLAS PEQUEÑAS -->
+        <button class="boton-toggle-menu" @click="mostrarMenu = !mostrarMenu" v-if="isMobile">
+          Menú
+        </button>
+
+        <!-- MENÚ DE NAVEGACIÓN -->
+        <transition name="desplegar-menu">
+          <nav class="header_perfil" v-if="mostrarMenu">
+            <button
+              @click="mostrarDiv('Shopping Cart')"
+              :class="['links_Perfil', seccionActiva === 'Shopping Cart' ? 'activo' : '']"
+            >
+              Shopping Cart
+            </button>
+            <button
+              @click="mostrarDiv('Class History')"
+              :class="['links_Perfil', seccionActiva === 'Class History' ? 'activo' : '']"
+            >
+              Class History
+            </button>
+            <router-link
+              to="/mural"
+              :class="['links_Perfil', seccionActiva === 'Publications' ? 'activo' : '']"
+            >
+              Publications
+            </router-link>
+            <button
+              @click="mostrarDiv('Configuration')"
+              :class="['links_Perfil', seccionActiva === 'Configuration' ? 'activo' : '']"
+            >
+              Configuration
+            </button>
+          </nav>
+        </transition>
+
           <div class="info_perfil"> 
               <div v-if="isLoading">
                   <p>Cargando información del perfil...</p>
@@ -90,6 +100,23 @@
   const cartStore = useCartStore();
   const router = useRouter();
   
+  const mostrarMenu = ref(false);
+  const isMobile = ref(false);
+
+  onMounted(() => {
+  const verificarTamaño = () => {
+    isMobile.value = window.innerWidth <= 768;
+    if (isMobile.value) {
+      mostrarMenu.value = false;
+    } else {
+      mostrarMenu.value = true;
+    }
+  };
+
+  verificarTamaño();
+  window.addEventListener('resize', verificarTamaño);
+});
+
   const logout = () => {
     cartStore.limpiarCarrito();
     authStore.logout();
@@ -391,5 +418,112 @@
     }
 
   }
+
+
+  @media (max-width: 768px) {
+  .Contenedor_Perfil {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    padding: 20px;
+    margin-top: 90px;
+
+  }
+
+  .header_perfil {
+    flex-direction: column;
+    gap: 10px;
+    height: auto;
+    padding: 10px;
+  }
+
+  .info_perfil {
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .mostrarPerfil {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 20px;
+    grid-template-rows: auto auto;
+    padding: 20px;
+  }
+
+  .cont_img {
+    height: auto;
+  }
+
+  .cont_img img {
+    height: 120px;
+    width: 120px;
+    object-fit: cover;
+  }
+
+  .opciones_Perfil h1,
+  .opciones_Perfil h2 {
+    font-size: 18px;
+  }
+
+  .correo {
+    font-size: 16px;
+  }
+
+  .buttongestion {
+    margin-left: 0;
+    width: 100%;
+    font-size: 16px;
+    padding: 12px;
+  }
+}
+
+.boton-toggle-menu {
+  display: none;
+  margin-bottom: 10px;
+  padding: 10px 15px;
+  background-color: #f2a007;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .boton-toggle-menu {
+    display: block;
+  }
+
+  .header_perfil {
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+  }
+}
+
+
+.desplegar-menu-enter-active,
+.desplegar-menu-leave-active {
+  transition: all 0.3s ease;
+}
+
+.desplegar-menu-enter-from,
+.desplegar-menu-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.desplegar-menu-enter-to,
+.desplegar-menu-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
 
 </style>
