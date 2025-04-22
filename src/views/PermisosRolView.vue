@@ -21,22 +21,23 @@
       </thead>
       <tbody>
         <tr v-for="(usuarioss, index) in Usu" :key="index">
-          <td>{{ usuarioss.nombre }}</td>
-          <td>{{ usuarioss.email }}</td>
-          <td>{{ usuarioss.telefono }}</td>
-          <td>
-            <div class="opciones-administradorr">
-              <select v-model="usuarioss.nuevoRol">
-                <option value="" disabled>Opciones de Rol</option>
-                <option v-for="option in opcionesAdministrador" :key="option" :value="option">
-                  {{ option }}
-                </option>
-              </select>
-            </div>
-          </td>
-          <td>
-            <button @click="editRol(usuarioss)" class="btn">Guardar</button>
-          </td>
+          <td data-label="Nombre">{{ usuarioss.nombre }}</td>
+<td data-label="Correo">{{ usuarioss.email }}</td>
+<td data-label="Teléfono">{{ usuarioss.telefono }}</td>
+<td data-label="Rol">
+  <div class="opciones-administradorr">
+    <select v-model="usuarioss.nuevoRol">
+      <option value="" disabled>Opciones de Rol</option>
+      <option v-for="option in opcionesAdministrador" :key="option" :value="option">
+        {{ option }}
+      </option>
+    </select>
+  </div>
+</td>
+<td data-label="Acciones">
+  <button @click="editRol(usuarioss)" class="btn">Guardar</button>
+</td>
+
         </tr>
       </tbody>
     </table>
@@ -310,4 +311,54 @@ onMounted(() => {
 .btn:active {
  transform: scale(0.9);
 }
+  @media (max-width: 768px) {
+  .Usu-table,
+  .Usu-table thead,
+  .Usu-table tbody,
+  .Usu-table th,
+  .Usu-table td,
+  .Usu-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .Usu-table thead {
+    display: none; /* Oculta el encabezado en móviles */
+  }
+
+  .Usu-table tr {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #fff;
+    padding: 10px;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .Usu-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    text-align: left;
+    position: relative;
+  }
+
+  .Usu-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #333;
+  }
+
+  .opciones-administradorr select {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .search-bar {
+    width: 90%;
+  }
+}
+
   </style>
