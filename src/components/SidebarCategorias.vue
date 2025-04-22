@@ -31,8 +31,6 @@ const selectedCategory = ref(null);
 function selectCategory(category) {
   selectedCategory.value = category;
   emit('cambiarCategoria', category);
-
-  // Solo cerrar sidebar si es pantalla pequeña (ej: menor a 768px)
   if (window.innerWidth < 768) {
     emit('cerrarSidebar');
   }
