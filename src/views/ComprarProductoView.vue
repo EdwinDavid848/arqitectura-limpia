@@ -1,6 +1,6 @@
 <template>
     <div class="box gradDynamic">
-      <div>
+      <div class="cont-tab-section">
         <div class="div-contenido" id="cont-pren">
           <div class="tab-section">
             <div class="tab-inf">
@@ -455,5 +455,117 @@ onMounted(async () => {
   color: #555;
 }
 
+@media (max-width: 1024px) {
+  .box {
+    grid-template-columns: 1fr;
+    padding-top: 100px;
+  }
+  .div-contenido{
+    height: 10xp;
+  }
+  .cont-tab-section{
+    height: 350px;
+  }
+
+  .result-section {
+    padding: 20px 10px;
+  }
+
+  .tab-result,
+  .tab-precio,
+  .result-section button {
+    width: 100%;
+  }
+
+  .tab-result > div {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .item-compra {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .item-compra img {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .info-item {
+    align-items: center;
+    text-align: center;
+  }
+
+  .nombre-precio {
+    align-items: center;
+  }
+
+  .nombre-precio .nombre,
+  .nombre-precio .precio,
+  .amounts {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  #cont-pren div {
+    width: 90%;
+    height: auto;
+  }
+
+  .tab-result p {
+    text-align: center;
+  }
+
+  .result-section button {
+    font-size: 20px;
+    height: 45px;
+  }
+
+  .tab-result h2,
+  .tab-result h3,
+  .tab-result p {
+    font-size: 16px;
+  }
+
+  .nombre-precio .nombre {
+    font-size: 18px;
+  }
+
+  .nombre-precio .precio {
+    font-size: 16px;
+  }
+
+  .amounts {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tab-inf h2,
+  .tab-precio h2,
+  .tit-resul {
+    font-size: 20px;
+  }
+
+  .result-section button {
+    font-size: 18px;
+    height: 40px;
+  }
+
+  .item-compra img {
+    max-width: 100%;
+  }
+
+  .tab-result {
+    padding: 15px;
+  }
+
+  .infoCompraUsuario {
+    font-size: 16px;
+  }
+}
 
 </style>
