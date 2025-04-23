@@ -213,6 +213,11 @@ function toggleSidebar() {
   .cont_botones {
     display: none;
   }
+ .cont-btn-categorias{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
    .btn-toggle-categorias {
     display: block;
