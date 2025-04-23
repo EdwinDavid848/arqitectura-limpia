@@ -15,7 +15,6 @@
     </div>
   </transition>
 </template>
-
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue';
 
@@ -31,11 +30,11 @@ const selectedCategory = ref(null);
 function selectCategory(category) {
   selectedCategory.value = category;
   emit('cambiarCategoria', category);
+
   if (window.innerWidth < 768) {
     emit('cerrarSidebar');
   }
 }
-
 </script>
 
 <style scoped>
@@ -89,5 +88,6 @@ function selectCategory(category) {
   opacity: 0;
   transform: translateX(-100%);
 }
-</style>
 
+
+</style>
