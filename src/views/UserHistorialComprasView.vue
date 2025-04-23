@@ -105,6 +105,12 @@
   
   
   <style scoped>
+  .vista-tabla{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 .cont_historial {
   display: flex;
   justify-content: center;
@@ -126,7 +132,7 @@
     color: #000000;
   }
   .compras-table {
-    width: 90%;
+    width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     background-color: #ff940a;
@@ -480,7 +486,7 @@ th {
 
   .vista-cards {
     display: block;
-    width: 280px;
+    width: 320px;
     margin: 20px auto;
   }
 
