@@ -1,143 +1,161 @@
 <template>
   <div class="Contenedor_Perfil">
-      <div class="mostrarInformacion">
-<!-- BOTÓN PARA MOSTRAR EL MENÚ EN PANTALLAS PEQUEÑAS -->
-        <button class="boton-toggle-menu" @click="mostrarMenu = !mostrarMenu" v-if="isMobile">
-          Menú
-        </button>
+    <div class="mostrarInformacion">
+      <!-- BOTÓN PARA MOSTRAR EL MENÚ EN PANTALLAS PEQUEÑAS -->
+      <button class="boton-toggle-menu" @click="mostrarMenu = !mostrarMenu" v-if="isMobile">
+        Menú
+      </button>
 
-        <!-- MENÚ DE NAVEGACIÓN -->
-        <transition name="desplegar-menu">
-          <nav class="header_perfil" v-if="mostrarMenu">
-            <button
-              @click="mostrarDiv('Shopping Cart')"
-              :class="['links_Perfil', seccionActiva === 'Shopping Cart' ? 'activo' : '']"
-            >
-              Shopping Cart
-            </button>
-            <button
-              @click="mostrarDiv('Class History')"
-              :class="['links_Perfil', seccionActiva === 'Class History' ? 'activo' : '']"
-            >
-              Class History
-            </button>
-            <router-link
-              to="/mural"
-              :class="['links_Perfil', seccionActiva === 'Publications' ? 'activo' : '']"
-            >
-              Publications
-            </router-link>
-            <button
-              @click="mostrarDiv('Configuration')"
-              :class="['links_Perfil', seccionActiva === 'Configuration' ? 'activo' : '']"
-            >
-              Configuration
-            </button>
-          </nav>
-        </transition>
+      <!-- MENÚ DE NAVEGACIÓN -->
+      <transition name="desplegar-menu">
+        <nav class="header_perfil" v-if="mostrarMenu">
+          <button
+            @click="mostrarDiv('Shopping Cart')"
+            :class="['links_Perfil', seccionActiva === 'Shopping Cart' ? 'activo' : '']"
+          >
+            Shopping Cart
+          </button>
+          <button
+            @click="mostrarDiv('Class History')"
+            :class="['links_Perfil', seccionActiva === 'Class History' ? 'activo' : '']"
+          >
+            Class History
+          </button>
+          <router-link
+            to="/mural"
+            :class="['links_Perfil', seccionActiva === 'Publications' ? 'activo' : '']"
+            @click="seleccionarOpcion('Publications')"
+          >
+            Publications
+          </router-link>
+          <button
+            @click="mostrarDiv('Configuration')"
+            :class="['links_Perfil', seccionActiva === 'Configuration' ? 'activo' : '']"
+          >
+            Configuration
+          </button>
+        </nav>
+      </transition>
 
-          <div class="info_perfil"> 
-              <div v-if="isLoading">
-                  <p>Cargando información del perfil...</p>
-              </div>
-              <div v-else>
-                  <div v-if="divActual === 'Shopping Cart'">
-                    <UserHistorialComprasView/>
-                  </div>
-                  <div v-if="divActual === 'Class History'">
-                    <button class="buttongestion" @click="cambio" v-if="authStore.user && (authStore.user.rol == 'administrador' || authStore.user.rol == 'profesor' )">Gestion de clases</button>
-                    <h2 class="reservaciones">Reservaciones</h2>
-                    <PayClass></PayClass>
-                  </div>
-                  <router-link v-else-if="divActual === 'Publications'" to="/mural"></router-link>
-                  <div v-else-if="divActual === 'Configuration'" >
-                    <ConfigurarPerfilComp  v-if="authStore.user"  :nombre="authStore.user.nombre" :email="authStore.user.email" :rol="authStore.user.rol" :telefono="authStore.user.telefono" :password="authStore.user.password"/>
-                  </div>
-                  <div v-else>
-                  </div>
-              </div>
+      <!-- CONTENIDO PRINCIPAL -->
+      <div class="info_perfil">
+        <div v-if="isLoading">
+          <p>Cargando información del perfil...</p>
+        </div>
+        <div v-else>
+          <div v-if="divActual === 'Shopping Cart'">
+            <UserHistorialComprasView />
           </div>
+
+          <div v-if="divActual === 'Class History'">
+            <button
+              class="buttongestion"
+              @click="cambio"
+              v-if="authStore.user && (authStore.user.rol === 'administrador' || authStore.user.rol === 'profesor')"
+            >
+              Gestión de clases
+            </button>
+            <h2 class="reservaciones">Reservaciones</h2>
+            <PayClass />
+          </div>
+
+          <router-link v-else-if="divActual === 'Publications'" to="/mural"></router-link>
+
+          <div v-else-if="divActual === 'Configuration'">
+            <ConfigurarPerfilComp
+              v-if="authStore.user"
+              :nombre="authStore.user.nombre"
+              :email="authStore.user.email"
+              :rol="authStore.user.rol"
+              :telefono="authStore.user.telefono"
+              :password="authStore.user.password"
+            />
+          </div>
+
+          <div v-else></div>
+        </div>
       </div>
-      <div class="mostrarPerfil">
-          <div class="cont_img">
-              <img src="@/assets/perfil.png" alt="">
-          </div>
-          <div v-if="authStore.user" class="opciones_Perfil">
-              <h1 style="text-transform: uppercase;">{{authStore.user.nombre}}</h1>
-              <h1 class="correo">{{authStore.user.email}}</h1>
-              <h2>Info</h2>
-              <button id="logout" @click="logout">Logout</button>
-          </div>
+    </div>
+
+    <!-- PERFIL DEL USUARIO -->
+    <div class="mostrarPerfil">
+      <div class="cont_img">
+        <img src="@/assets/perfil.png" alt="Perfil" />
       </div>
+      <div v-if="authStore.user" class="opciones_Perfil">
+        <h1 style="text-transform: uppercase;">{{ authStore.user.nombre }}</h1>
+        <h1 class="correo">{{ authStore.user.email }}</h1>
+        <h2>Info</h2>
+        <button id="logout" @click="logout">Logout</button>
+      </div>
+    </div>
   </div>
 </template>
 
-  
-  <script setup>
-  import { onMounted } from "vue";
-  import { useAuthStore } from '@/store/authStore';
-  import { useCartStore } from "@/store/cartStore";
-  import { useRouter } from 'vue-router';
-  import ConfigurarPerfilComp from "@/views/ConfigurarPerfilComp.vue";
-  import PayClass from "@/components/PayClass.vue";
-  import UserHistorialComprasView from "./UserHistorialComprasView.vue";
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useAuthStore } from '@/store/authStore';
+import { useCartStore } from '@/store/cartStore';
+import { useRouter } from 'vue-router';
+import ConfigurarPerfilComp from '@/views/ConfigurarPerfilComp.vue';
+import PayClass from '@/components/PayClass.vue';
+import UserHistorialComprasView from './UserHistorialComprasView.vue';
 
-  import { ref } from 'vue';
+const router = useRouter();
+const authStore = useAuthStore();
+const cartStore = useCartStore();
 
-  const divActual = ref('Configuration');
+const mostrarMenu = ref(false);
+const isMobile = ref(false);
+const divActual = ref('Configuration');
+const seccionActiva = ref('');
+const isLoading = ref(false); // Puedes controlarlo si necesitas cargar datos del backend
 
-  const seccionActiva = ref('');
-
-
-  const mostrarDiv = (div) => {
+const mostrarDiv = (div) => {
   divActual.value = div;
   seccionActiva.value = div;
+  if (isMobile.value) {
+    mostrarMenu.value = false;
+  }
 };
 
+const seleccionarOpcion = (opcion) => {
+  seccionActiva.value = opcion;
+  divActual.value = opcion;
+  if (isMobile.value) {
+    mostrarMenu.value = false;
+  }
+};
 
-    
-  const authStore = useAuthStore();
-  const cartStore = useCartStore();
-  const router = useRouter();
-  
-  const mostrarMenu = ref(false);
-  const isMobile = ref(false);
+const logout = () => {
+  cartStore.limpiarCarrito();
+  authStore.logout();
+  router.push('/');
+};
 
-  onMounted(() => {
+const cambio = () => {
+  router.push('/TodaClase');
+};
+
+onMounted(() => {
   const verificarTamaño = () => {
     isMobile.value = window.innerWidth <= 768;
-    if (isMobile.value) {
-      mostrarMenu.value = false;
-    } else {
-      mostrarMenu.value = true;
-    }
+    mostrarMenu.value = !isMobile.value;
   };
 
   verificarTamaño();
   window.addEventListener('resize', verificarTamaño);
-});
 
-  const logout = () => {
-    cartStore.limpiarCarrito();
-    authStore.logout();
+  if (!authStore.isAuthenticated) {
+    console.log('Acceso denegado, redirigiendo al login...');
     router.push('/');
-    console.log
-  };
-  const cambio=()=>{
-    router.push('/TodaClase');
+  } else {
+    authStore.fetchUserInfo();
   }
-  
-  onMounted(() => {
-    if (!authStore.isAuthenticated) {
-        console.log("Acceso denegado, redirigiendo al login...");
-        router.push("/");
-      }else{
-        authStore.fetchUserInfo();
-      }
-  });
+});
+</script>
 
 
-  </script>
 
 <style scoped>
 /* From Uiverse.io by adamgiebl */ 
