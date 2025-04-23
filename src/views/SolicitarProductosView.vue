@@ -1,5 +1,5 @@
 <template>
-    <div class="contedor_detalleProducto">
+<div class="contedor_detalleProducto">
      <div class="contenedor_img">
          <img :src="producto.imagen_url " alt="">
      </div>
@@ -70,17 +70,18 @@
          </div>
      </div>
  </div>
- <div class="similar-section">
+ <div class="similar-section ocultar-en-movil">
      <h1>Productos Similares</h1>
  </div>
- <div class="cont_P_relacionados">
-     <ProductCardVersion2 
-         v-for="(producto, index) in producto_similares.slice(0, 10)" 
-         :key="index" 
-         :producto="producto" 
-         :estilo="estilo" 
-     />
+ <div class="cont_P_relacionados ocultar-en-movil">
+  <ProductCardVersion2 
+    v-for="(producto, index) in producto_similares.slice(0, 10)" 
+    :key="index" 
+    :producto="producto" 
+    :estilo="estilo" 
+  />
 </div>
+
 </template>
 <script setup>
 import { ref, onMounted, watch } from 'vue'; // ⬅️ aquí agregas watch
@@ -157,6 +158,7 @@ watch(
 
 
 <style scoped>
+
 .contedor_detalleProducto {
  background-color: #f1f0f0;
  display: grid;
@@ -317,8 +319,9 @@ watch(
 }
 
 
-/* PRODUCTO SECTION */
 
+
+/* PRODUCTO SECTION */
 
 .product-section,
 .care-instructions {
@@ -417,6 +420,8 @@ watch(
 
 /* SOCIAL SECTION */
 
+
+/* SOCIAL SECTION */
 .social-section {
   display: flex;
   align-items: center;
@@ -450,6 +455,7 @@ watch(
   }
 }
 
+/* Móvil (pantallas pequeñas) */
 @media screen and (max-width: 768px) {
   .socialIMG-mural {
     grid-template-columns: repeat(2, 1fr);
@@ -479,16 +485,16 @@ watch(
  font-size: 30px;
 }
 
-.cont_P_relacionados{
-     display: flex;
-     flex-wrap: wrap;
-     align-items: center;
-     justify-content: center;
-     margin-bottom: 40px;
-     padding: 10px;
-     gap: 25px; 
-     
- }
+.cont_P_relacionados {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /* justify-content: center; 👈 esto hace que todo esté centrado incluso en horizontal scroll */
+  margin-bottom: 40px;
+  padding: 10px;
+  gap: 25px;
+}
+
 
 
  .botones_comprar {
@@ -572,7 +578,7 @@ watch(
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 10px;
-    padding: 10px 15px;
+    padding: 10px 0 10px 20px; /* 👈 importante: padding-left */
   }
 
   .cont_P_relacionados::-webkit-scrollbar {
@@ -581,8 +587,9 @@ watch(
 
   .cont_P_relacionados > * {
     flex: 0 0 auto;
-    scroll-snap-align: center;
+    scroll-snap-align: start; /* 👈 mejor "start" en lugar de "center" */
     width: 80%;
+    min-width: 250px; /* 👈 ajusta al tamaño de tus tarjetas */
   }
 
   .similar-section h1 {
@@ -598,6 +605,16 @@ watch(
 
   .cont_P_relacionados {
     padding: 20px;
+  }
+}
+
+.ocultar-en-movil {
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .ocultar-en-movil {
+    display: none;
   }
 }
 
