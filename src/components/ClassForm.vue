@@ -1,7 +1,7 @@
 <template>
   <section class="ingresar-overlay">
     <div class="ingresar-modal">
-      <h1 class="insertpub">Agregar Clase</h1>
+      <h1 class="insertpub">Form De Clase</h1>
       <form @submit.prevent="submitForm">
         <!-- Título -->
         <div class="inputsect">
@@ -59,6 +59,7 @@
 
         <!-- Botón para guardar -->
         <button class="btn-curso" type="submit">Guardar Cambios</button>
+        <button class="btn-curso" @click="$emit('closeForm')">Cancelar</button>
       </form>
     </div>
   </section>
@@ -174,6 +175,7 @@ const submitForm = async () => {
   left: 0;
   width: 100%;
   height: 100%;
+  padding:50px;
   background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semi-transparente */
   display: flex;
   justify-content: center;
@@ -183,13 +185,12 @@ const submitForm = async () => {
 
 /* Contenedor del modal */
 .ingresar-modal {
-  background-color: #252525;
+  background-color: #ffffff;
   padding: 30px;
   border-radius: 15px;
-  width: 90%;
   max-width: 500px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  color: #fff;
+  color: #070707;
   position: relative;
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -202,11 +203,11 @@ const submitForm = async () => {
 
 .input {
   width: 100%;
-  background: #333;
+  background: #f1f0f0;
   border: 1px solid #555;
   border-radius: 5px;
   padding: 10px;
-  color: #fff;
+  color: #080808;
   outline: none;
 }
 
@@ -218,8 +219,8 @@ const submitForm = async () => {
   position: absolute;
   top: -10px;
   left: 10px;
-  background: #252525;
-  color: #d69457;
+  background: #fafafa;
+  color: #ff9837;
   font-size: 0.8rem;
   padding: 0 5px;
 }
@@ -241,7 +242,7 @@ const submitForm = async () => {
 .file-label {
   display: inline-block;
   font-size: 1rem;
-  background: #333;
+  background: #fffefe;
   color: #e9a526;
   padding: 10px;
   border-radius: 5px;
@@ -253,7 +254,7 @@ const submitForm = async () => {
   text-align: center;
   font-size: 1.5rem;
   margin-bottom: 20px;
-  color: #ffffff;
+  color: #0c0c0c;
 }
 .btn-curso {
     padding: 12px 25px;
@@ -267,6 +268,7 @@ const submitForm = async () => {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     margin-top: 25px;
+    margin-left: 5px;
 }
 
 .btn-curso:hover {
