@@ -2,7 +2,9 @@
   <div class="contenedor-Hilos-Lanas">
     <div>
       <!-- Botón para pantallas pequeñas -->
-      <button class="btn-toggle-categorias" @click="toggleSidebar" v-if="isMobile">Categorías</button>
+      <div class="cont-btn-categorias">
+        <button class="btn-toggle-categorias" @click="toggleSidebar" v-if="isMobile">Categorías</button>
+      </div>
 
       <div class="conts_opcione">
         <div class="cont_botones">
@@ -30,7 +32,6 @@
 
     <div class="cont_grid" v-if="estilo == 'grid'" @scroll="handleScroll">
       <div class="contendroProductos">
-        <!-- Sidebar con transición -->
         <SidebarCategorias
           :categories="categories"
           :selectedCategory="selectedCategory"
@@ -92,7 +93,6 @@ function toggleSidebar() {
 .contendroProductos {
   display: grid;
   grid-template-columns: 250px 1fr;
-  gap: 20px;
 }
 
 .product-card {
@@ -104,10 +104,9 @@ function toggleSidebar() {
 
 .product {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* valor por defecto */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
   gap: 20px;
   background-color: rgba(0, 255, 255, 0);
-  padding: 10px;
 }
 
 @media (min-width: 1200px) {
@@ -205,21 +204,23 @@ function toggleSidebar() {
 
   .contendroProductos {
     grid-template-columns: 1fr; /* Modifica para dispositivos móviles */
+    margin: 0px;
+    padding: 0px;
   }
 }
 
-
+/* Ocultar botones de columna/fila en pantallas pequeñas */
 @media (max-width: 768px) {
   .cont_botones {
     display: none;
   }
- .cont-btn-categorias{
+  .cont-btn-categorias{
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-   .btn-toggle-categorias {
+  .btn-toggle-categorias {
     display: block;
     width: 80%;
     font-size: 18px;
@@ -237,11 +238,48 @@ function toggleSidebar() {
 
   .contendroProductos {
     grid-template-columns: 1fr; /* Forzar una sola columna */
+    margin: 0px;
+    padding: 0px;
+
+  }
+}
+
+
+.product {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 20px;
+  background-color: rgba(0, 255, 255, 0);
+  padding: 15px;
+}
+
+@media (min-width: 600px) {
+  .product {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+  }
+}
+
+@media (min-width: 768px) {
+  .product {
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+  }
+}
+
+@media (min-width: 1200px) {
+  .product {
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+  }
+}
+
+@media (min-width: 1600px) {
+  .product {
+    grid-template-columns: repeat(5, 1fr); /* 5 columnas */
   }
 }
 
 
 </style>
+
 
 
 
