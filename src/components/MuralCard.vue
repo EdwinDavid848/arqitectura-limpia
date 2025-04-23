@@ -97,6 +97,7 @@ onMounted(async () => {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-around;
+  align-items: center;
 }
 /* Tarjeta individual */
 .card {
