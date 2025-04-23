@@ -1,20 +1,21 @@
 <template>
     <!-- From Uiverse.io by gharsh11032000 -->
     <section class="ingresar-overlay" >
-      <div class="form-container" >
-          <form class="form" @submit.prevent="submitForm">
-            <div class="form-group">
-              <label for="email">Titulo</label>
-              <input type="text"  required="" v-model="title">
+      <div class="ingresar-modal">
+        <form @submit.prevent="submitForm">
+            <div class="inputsect">
+              <input type="text"  required="" v-model="title" class="input" >
+              <label for="email" class="label">Titulo</label>
             </div>
-            <div class="form-group">
-              <label for="textarea">Descripcion</label>
-              <textarea name="textarea" id="textarea" rows="10" cols="50" required="" v-model="description"></textarea>
+            <div class="inputsect">
+              <textarea name="textarea" id="textarea" rows="10" cols="50" required="" class="input" v-model="description"></textarea>
+              <label for="textarea" class="label">Descripcion</label>
             </div>
-            <div class="form-group">
+            <div class="inputsect">
               <input type="file" @change="onFileChange" required />
             </div>
-            <button class="form-submit-btn" type="submit">Submit</button>
+            <button class="btn-curso" type="submit">Submit</button>
+            <button class="btn-curso" @click="$emit('close')">Cancelar</button>
           </form>
       </div>
     </section>  
@@ -105,124 +106,111 @@ const submitForm = async () => {
 </script>
 
 <style scoped>
-
-/**diseño de form */
-/* From Uiverse.io by gharsh11032000 */ 
 .ingresar-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  padding:50px;
   background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semi-transparente */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999; /* Encima de todo */
 }
-.form-container {
-  width: 400px;
-  background: linear-gradient(#212121, #212121) padding-box,
-              linear-gradient(145deg, transparent 35%,#e81cff, #40c9ff) border-box;
-  border: 2px solid transparent;
-  padding: 32px 24px;
-  font-size: 14px;
-  font-family: inherit;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box;
-  border-radius: 16px;
+
+/* Contenedor del modal */
+.ingresar-modal {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color: #070707;
   position: relative;
   animation: fadeIn 0.3s ease-in-out;
 }
 
-.form-container button:active {
-  scale: 0.95;
+/* Reutiliza los estilos de input, botón, etc. del ejemplo anterior */
+.inputsect {
+  position: relative;
+  margin-bottom: 20px;
 }
 
-.form-container .form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.form-container .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.form-container .form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #717171;
-  font-weight: 600;
-  font-size: 12px;
-}
-
-.form-container .form-group input {
+.input {
   width: 100%;
-  padding: 12px 16px;
-  border-radius: 8px;
-  color: #fff;
-  font-family: inherit;
-  background-color: transparent;
-  border: 1px solid #414141;
-}
-
-.form-container .form-group textarea {
-  width: 100%;
-  padding: 12px 16px;
-  border-radius: 8px;
-  resize: none;
-  color: #fff;
-  height: 96px;
-  border: 1px solid #414141;
-  background-color: transparent;
-  font-family: inherit;
-}
-
-.form-container .form-group input::placeholder {
-  opacity: 0.5;
-}
-
-.form-container .form-group input:focus {
+  background: #f1f0f0;
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 10px;
+  color: #080808;
   outline: none;
-  border-color: #e81cff;
 }
 
-.form-container .form-group textarea:focus {
-  outline: none;
-  border-color: #e81cff;
+.input:focus {
+  border-color: #5b5fc7;
 }
 
-.form-container .form-submit-btn {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  align-self: flex-start;
-  font-family: inherit;
-  color: #717171;
-  font-weight: 600;
-  width: 40%;
-  background: #313131;
-  border: 1px solid #414141;
-  padding: 12px 16px;
-  font-size: inherit;
-  gap: 8px;
-  margin-top: 8px;
+.label {
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  background: #fafafa;
+  color: #ff9837;
+  font-size: 1rem;
+  padding: 0 5px;
+}
+
+
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.file-label {
+  display: inline-block;
+  font-size: 1rem;
+  background: #fffefe;
+  color: #e9a526;
+  padding: 10px;
+  border-radius: 5px;
   cursor: pointer;
-  border-radius: 6px;
+  text-align: center;
 }
 
-.form-container .form-submit-btn:hover {
-  background-color: #fff;
-  border-color: #fff;
+.insertpub {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #0c0c0c;
+}
+.btn-curso {
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #f7c200, #ec9513);
+    color: white;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin-top: 25px;
+    margin-left: 5px;
 }
 
-
-
+.btn-curso:hover {
+    background: linear-gradient(90deg, #ec9513, #f7c200);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
 
 </style>
