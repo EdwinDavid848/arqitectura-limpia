@@ -62,7 +62,7 @@
         />
       </div>
     </div>
-    <h2 class="titulos">Piedras</h2>
+    <h2 class="titulos">Peluches</h2>
     <div >
       <div class="product">
         <ProductCardVersion2  
