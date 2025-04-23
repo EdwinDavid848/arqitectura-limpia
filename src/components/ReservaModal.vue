@@ -13,6 +13,7 @@
       <p style="color: white;">Fecha seleccionada: {{ fechaSeleccionada }}</p>
 
       <button @click="AgregarReserva()" class="btn-curso">Reservar</button>
+      <button class="btn-curso" @click="$emit('closeForm')">Cancelar</button>
     </div>
   </section>
 </template>
