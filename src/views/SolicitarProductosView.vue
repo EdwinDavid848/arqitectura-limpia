@@ -50,30 +50,15 @@
  </div>
  <div class="social-section">
      <div class="socialIMG-mural">
-         <div>
-             <img src="@/assets/Producto 1 part1.jpeg" alt="">
-         </div>
-         <div>
-             <img src="@/assets/Producto 1 part1.jpeg" alt="">
-         </div>
-         <div>
-             <img src="@/assets/Producto 1 part1.jpeg" alt="">
-         </div>
-         <div>
-             <img src="@/assets/Producto 1 part1.jpeg" alt="">
-         </div>
-         <div>
-             <img src="@/assets/Producto 1 part1.jpeg" alt="">
-         </div>
-         <div>
-             <img src="@/assets/Producto 1 part1.jpeg" alt="">
-         </div>
+          <div v-for="(dato, index) in datos.slice(0, 6)" :key="dato.id || index">
+          <img :src="dato.foto" alt=""> 
+        </div>
      </div>
  </div>
  <div class="similar-section ocultar-en-movil">
      <h1>Productos Similares</h1>
  </div>
- <div class="cont_P_relacionados ocultar-en-movil">
+ <div class="cont_P_relacionados ">
   <ProductCardVersion2 
     v-for="(producto, index) in producto_similares.slice(0, 10)" 
     :key="index" 
@@ -91,6 +76,17 @@ import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
 import ProductCardVersion2 from '@/components/ProductCard(Version-2).vue';
 import Swal from 'sweetalert2';
+import { fetchPublications } from '@/services/MuralServices';
+const datos=ref([]);
+const recibirdatos = async () =>{
+    try {
+       console.log("Cargando todas las publicaciones");
+        datos.value= await fetchPublications(); 
+    } catch (error) {
+        console.log(error)
+    }
+    
+}
 
 const cartStore = useCartStore();
 const authStore = useAuthStore();
@@ -140,6 +136,7 @@ onMounted(async () => {
     if (producto.value && producto.value.category) {
         await obtenerProductosSimilares(producto.value.category);
     }
+    recibirdatos();
 });
 
 // ✅ Reaccionar a cambios en el ID del producto (cuando el usuario da clic en producto similar)
