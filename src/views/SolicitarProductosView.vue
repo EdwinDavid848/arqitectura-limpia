@@ -570,6 +570,7 @@ watch(
 /* Responsive scroll en móviles */
 @media screen and (max-width: 768px) {
   .cont_P_relacionados {
+     display: none;
     flex-wrap: nowrap;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
