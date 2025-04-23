@@ -26,11 +26,9 @@
             <div class="text">Eliminar</div>
         </button>
       </div>
-        
-        <MuralForms v-show="hability" @close="hability = false" :publications="props.data"></MuralForms>
-        
       </div>
     </div>
+     <MuralForms v-show="hability" @close="hability = false" :publications="props.data"></MuralForms>
   </div>
 </template>
 
